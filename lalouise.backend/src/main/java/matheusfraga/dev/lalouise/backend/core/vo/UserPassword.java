@@ -1,5 +1,7 @@
 package matheusfraga.dev.lalouise.backend.core.vo;
 
+import matheusfraga.dev.lalouise.backend.core.exception.DomainException;
+
 import java.util.regex.Pattern;
 
 public class UserPassword {
@@ -20,14 +22,14 @@ public class UserPassword {
     }
 
     public static UserPassword fromRawPassword(String value) {
-        if (value == null || value.isBlank()) throw new IllegalArgumentException();
-        if (!RAW_PASSWORD_PATTERN.matcher(value).matches()) throw new IllegalArgumentException();
+        if (value == null || value.isBlank()) throw new DomainException("Password cannot be null or blank");
+        if (!RAW_PASSWORD_PATTERN.matcher(value).matches()) throw new DomainException("Password is not valid");
 
         return new UserPassword(value);
     }
 
     public static UserPassword fromHashPassword(String hashPassword) {
-        if (!HASH_PASSWORD_PATTERN.matcher(hashPassword).matches()) throw new IllegalArgumentException();
+        if (!HASH_PASSWORD_PATTERN.matcher(hashPassword).matches()) throw new DomainException("Password is not valid");
         return new UserPassword(hashPassword);
     }
 
