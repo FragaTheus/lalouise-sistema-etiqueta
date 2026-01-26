@@ -1,5 +1,6 @@
 package matheusfraga.dev.lalouise.backend.vo;
 
+import matheusfraga.dev.lalouise.backend.core.exception.DomainException;
 import matheusfraga.dev.lalouise.backend.core.vo.UserPassword;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class UserPasswordTest {
+class UserPasswordVoTest {
 
     @Test
     @DisplayName("Deve criar UserPassword a partir de uma senha raw válida")
@@ -34,7 +35,7 @@ class UserPasswordTest {
     @DisplayName("Deve lançar exceção para senhas raw que não seguem o padrão")
     void shouldThrowExceptionForInvalidRawPasswords(String invalidRaw) {
         assertThatThrownBy(() -> UserPassword.fromRawPassword(invalidRaw))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(DomainException.class);
     }
 
     @Test
@@ -57,6 +58,6 @@ class UserPasswordTest {
     @DisplayName("Deve lançar exceção para hashes inválidos")
     void shouldThrowExceptionForInvalidHash(String invalidHash) {
         assertThatThrownBy(() -> UserPassword.fromHashPassword(invalidHash))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(DomainException.class);
     }
 }
