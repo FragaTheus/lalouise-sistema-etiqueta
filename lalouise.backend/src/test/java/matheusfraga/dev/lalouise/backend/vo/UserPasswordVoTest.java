@@ -15,37 +15,11 @@ class UserPasswordVoTest {
     @Test
     @DisplayName("Deve criar UserPassword a partir de uma senha raw válida")
     void shouldCreateFromValidRawPassword() {
-        String validRaw = "Senha@123";
-        UserPassword password = UserPassword.fromRawPassword(validRaw);
-
-        assertThat(password).isNotNull();
-        assertThat(password.getValue()).isEqualTo(validRaw);
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "short",
-            "longpassword123@",
-            "senhasemnumero@",
-            "SENHASEMMINUSCULA1!",
-            "senhasemmaiuscula1!",
-            "SenhaSemEspecial1",
-            "    "
-    })
-    @DisplayName("Deve lançar exceção para senhas raw que não seguem o padrão")
-    void shouldThrowExceptionForInvalidRawPasswords(String invalidRaw) {
-        assertThatThrownBy(() -> UserPassword.fromRawPassword(invalidRaw))
-                .isInstanceOf(DomainException.class);
-    }
-
-    @Test
-    @DisplayName("Deve criar UserPassword a partir de um hash BCrypt válido")
-    void shouldCreateFromValidHash() {
         String validHash = "$2a$12$R9h/lIPz0bouIzCu6slgOKS7LeBnMh9Gj31I/yI.8vH7/P.T8/L5.";
-        UserPassword password = UserPassword.fromHashPassword(validHash);
+        UserPassword password = new UserPassword(validHash);
 
         assertThat(password).isNotNull();
-        assertThat(password.getValue()).isEqualTo(validHash);
+        assertThat(password.password()).isEqualTo(validHash);
     }
 
     @ParameterizedTest
@@ -57,7 +31,7 @@ class UserPasswordVoTest {
     })
     @DisplayName("Deve lançar exceção para hashes inválidos")
     void shouldThrowExceptionForInvalidHash(String invalidHash) {
-        assertThatThrownBy(() -> UserPassword.fromHashPassword(invalidHash))
+        assertThatThrownBy(() -> new UserPassword(invalidHash))
                 .isInstanceOf(DomainException.class);
     }
 }

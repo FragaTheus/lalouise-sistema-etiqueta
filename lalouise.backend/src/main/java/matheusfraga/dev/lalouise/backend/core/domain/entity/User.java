@@ -33,19 +33,19 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    public User(UUID id, String nickname, String email, UserPassword password, Role role) {
+    public User(UUID id, String nickname, String email, String password, Role role) {
         this.id = id;
         this.nickname = new UserNickname(nickname);
         this.email = new UserEmail(email);
-        this.password = password;
+        this.password = new UserPassword(password);
         this.role = role;
     }
 
-    public User(String nickname, String email, UserPassword password,  Role role) {
+    public User(String nickname, String email, String password,  Role role) {
         this.id = UUID.randomUUID();
         this.nickname = new UserNickname(nickname);
         this.email = new UserEmail(email);
-        this.password = password;
+        this.password = new UserPassword(password);
         this.role = role;
     }
 

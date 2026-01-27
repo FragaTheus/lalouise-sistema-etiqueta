@@ -3,7 +3,6 @@ package matheusfraga.dev.lalouise.backend.repository;
 import matheusfraga.dev.lalouise.backend.core.domain.entity.User;
 import matheusfraga.dev.lalouise.backend.core.domain.enums.Role;
 import matheusfraga.dev.lalouise.backend.core.domain.repository.UserRepository;
-import matheusfraga.dev.lalouise.backend.core.domain.vo.UserPassword;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +73,7 @@ class UserRepositoryTest {
     }
 
     private void createUser(String email, String nickname, Role role) {
-        var password = UserPassword.fromRawPassword("Senha@123");
+        var password = "$2a$12$R9h/lIPz0bouIzCu6slgOKS7LeBnMh9Gj31I/yI.8vH7/P.T8/L5.";
 
         User user = new User(
                 nickname,
