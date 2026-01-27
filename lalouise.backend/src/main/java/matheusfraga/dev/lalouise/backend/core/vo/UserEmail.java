@@ -1,10 +1,16 @@
 package matheusfraga.dev.lalouise.backend.core.vo;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import matheusfraga.dev.lalouise.backend.core.exception.DomainException;
 
 import java.util.regex.Pattern;
 
-public record UserEmail(String value) {
+@Embeddable
+public record UserEmail(
+        @Column(name = "email", nullable = false, unique = true)
+        String value
+) {
 
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);

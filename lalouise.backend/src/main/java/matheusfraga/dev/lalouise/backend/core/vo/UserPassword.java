@@ -1,12 +1,23 @@
 package matheusfraga.dev.lalouise.backend.core.vo;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 import matheusfraga.dev.lalouise.backend.core.exception.DomainException;
 
 import java.util.regex.Pattern;
 
 @Value
+@Embeddable
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 public class UserPassword {
+
+    @Column(name = "password", nullable = false)
+    String value;
 
     private static final String RAW_PASSWORD_REGEX =
             "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,12}$";
@@ -16,12 +27,6 @@ public class UserPassword {
 
     private static final Pattern RAW_PASSWORD_PATTERN = Pattern.compile(RAW_PASSWORD_REGEX);
     private static final Pattern HASH_PASSWORD_PATTERN = Pattern.compile(HASH_PASSWORD_REGEX);
-
-    String value;
-
-    private UserPassword(String value) {
-        this.value = value;
-    }
 
     public static UserPassword fromRawPassword(String value) {
         if (value == null || value.isBlank()) throw new DomainException("Password cannot be null or blank");
@@ -35,4 +40,8 @@ public class UserPassword {
         return new UserPassword(hashPassword);
     }
 
+    @Override
+    public String toString() {
+        return "********";
+    }
 }

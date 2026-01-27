@@ -1,10 +1,16 @@
 package matheusfraga.dev.lalouise.backend.core.vo;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import matheusfraga.dev.lalouise.backend.core.exception.DomainException;
 
 import java.util.regex.Pattern;
 
-public record UserNickname(String value) {
+@Embeddable
+public record UserNickname(
+        @Column(name = "nickname",  nullable = false)
+        String value
+) {
 
     private static final String NICKNAME_REGEX = "^[\\p{L}\\s]{3,20}$";
     private static final Pattern NICKNAME_PATTERN = Pattern.compile(NICKNAME_REGEX);
