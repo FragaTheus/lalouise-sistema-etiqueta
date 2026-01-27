@@ -14,9 +14,9 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
 
-    public String login(LoginRequest loginRequest) {
+    public String login(String email, String password) {
 
-        var usernamePassword = new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password());
+        var usernamePassword = new UsernamePasswordAuthenticationToken(email, password);
         var auth = this.authenticationManager.authenticate(usernamePassword);
         return tokenService.generateToken((UserDetailsImpl) auth.getPrincipal());
 
