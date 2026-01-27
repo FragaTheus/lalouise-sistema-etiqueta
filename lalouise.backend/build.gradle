@@ -36,6 +36,8 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 	implementation 'com.auth0:java-jwt:4.4.0'
+
+	testRuntimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
