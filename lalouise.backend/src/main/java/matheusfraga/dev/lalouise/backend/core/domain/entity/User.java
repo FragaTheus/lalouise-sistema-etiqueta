@@ -17,14 +17,12 @@ public class User {
     @Id
     private UUID id;
 
-    @Setter
     @Embedded
     private UserNickname nickname;
 
     @Embedded
     private UserEmail email;
 
-    @Setter
     @Embedded
     private UserPassword password;
 
@@ -49,5 +47,11 @@ public class User {
         this.role = role;
     }
 
+    public void setNickname(String nickname) {
+        this.nickname = new  UserNickname(nickname);
+    }
 
+    public void setPassword(String hashedPassword) {
+        this.password = new UserPassword(hashedPassword);
+    }
 }
