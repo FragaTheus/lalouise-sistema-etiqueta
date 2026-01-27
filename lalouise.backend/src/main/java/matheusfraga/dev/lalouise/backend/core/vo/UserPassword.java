@@ -1,9 +1,11 @@
 package matheusfraga.dev.lalouise.backend.core.vo;
 
+import lombok.Value;
 import matheusfraga.dev.lalouise.backend.core.exception.DomainException;
 
 import java.util.regex.Pattern;
 
+@Value
 public class UserPassword {
 
     private static final String RAW_PASSWORD_REGEX =
@@ -15,7 +17,7 @@ public class UserPassword {
     private static final Pattern RAW_PASSWORD_PATTERN = Pattern.compile(RAW_PASSWORD_REGEX);
     private static final Pattern HASH_PASSWORD_PATTERN = Pattern.compile(HASH_PASSWORD_REGEX);
 
-    private final String value;
+    String value;
 
     private UserPassword(String value) {
         this.value = value;
@@ -33,7 +35,4 @@ public class UserPassword {
         return new UserPassword(hashPassword);
     }
 
-    public String getValue() {
-        return value;
-    }
 }
