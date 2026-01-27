@@ -1,7 +1,7 @@
 package matheusfraga.dev.lalouise.backend.vo;
 
-import matheusfraga.dev.lalouise.backend.core.exception.DomainException;
-import matheusfraga.dev.lalouise.backend.core.vo.UserEmail;
+import matheusfraga.dev.lalouise.backend.core.domain.exception.DomainException;
+import matheusfraga.dev.lalouise.backend.core.domain.vo.UserEmail;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

@@ -1,7 +1,7 @@
-package matheusfraga.dev.lalouise.backend.core.repository;
+package matheusfraga.dev.lalouise.backend.core.domain.repository;
 
-import matheusfraga.dev.lalouise.backend.core.entity.User;
-import matheusfraga.dev.lalouise.backend.core.enums.Role;
+import matheusfraga.dev.lalouise.backend.core.domain.entity.User;
+import matheusfraga.dev.lalouise.backend.core.domain.enums.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

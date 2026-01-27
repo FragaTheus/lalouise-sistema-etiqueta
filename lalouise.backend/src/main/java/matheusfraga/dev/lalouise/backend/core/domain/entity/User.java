@@ -1,11 +1,11 @@
-package matheusfraga.dev.lalouise.backend.core.entity;
+package matheusfraga.dev.lalouise.backend.core.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import matheusfraga.dev.lalouise.backend.core.enums.Role;
-import matheusfraga.dev.lalouise.backend.core.vo.UserEmail;
-import matheusfraga.dev.lalouise.backend.core.vo.UserNickname;
-import matheusfraga.dev.lalouise.backend.core.vo.UserPassword;
+import matheusfraga.dev.lalouise.backend.core.domain.enums.Role;
+import matheusfraga.dev.lalouise.backend.core.domain.vo.UserEmail;
+import matheusfraga.dev.lalouise.backend.core.domain.vo.UserNickname;
+import matheusfraga.dev.lalouise.backend.core.domain.vo.UserPassword;
 import java.util.UUID;
 
 @Entity

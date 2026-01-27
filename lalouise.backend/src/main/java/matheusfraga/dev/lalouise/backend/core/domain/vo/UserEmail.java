@@ -1,8 +1,8 @@
-package matheusfraga.dev.lalouise.backend.core.vo;
+package matheusfraga.dev.lalouise.backend.core.domain.vo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import matheusfraga.dev.lalouise.backend.core.exception.DomainException;
+import matheusfraga.dev.lalouise.backend.core.domain.exception.DomainException;
 
 import java.util.regex.Pattern;
 

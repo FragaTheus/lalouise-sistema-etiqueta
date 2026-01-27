@@ -1,4 +1,4 @@
-package matheusfraga.dev.lalouise.backend.core.exception;
+package matheusfraga.dev.lalouise.backend.core.domain.exception;
 
 public class DomainException extends RuntimeException {
     public DomainException(String message) {
