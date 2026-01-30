@@ -1,4 +1,4 @@
-package matheusfraga.dev.lalouise.backend.core.aplication;
+package matheusfraga.dev.lalouise.backend.core.application;
 
 import lombok.RequiredArgsConstructor;
 import matheusfraga.dev.lalouise.backend.infra.security.TokenService;

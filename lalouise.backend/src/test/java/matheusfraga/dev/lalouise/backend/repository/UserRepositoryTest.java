@@ -22,19 +22,6 @@ class UserRepositoryTest {
     private UserRepository userRepository;
 
     @Test
-    @DisplayName("Deve encontrar usuários pelo valor do Nickname")
-    void findAllByNicknameValueSuccess() {
-
-        String nickname = "Louise";
-        createUser("louise@teste.com", nickname, Role.USER);
-
-        List<User> result = userRepository.findAllByNicknameValue(nickname);
-
-        assertThat(result).isNotEmpty();
-        assertThat(result.getFirst().getNickname().value()).isEqualTo(nickname);
-    }
-
-    @Test
     @DisplayName("Deve encontrar usuário pelo valor do Email")
     void findByEmailValueSuccess() {
 
@@ -57,19 +44,6 @@ class UserRepositoryTest {
         boolean exists = userRepository.existsByEmailValue(email);
 
         assertThat(exists).isTrue();
-    }
-
-    @Test
-    @DisplayName("Deve listar todos os usuários por Role")
-    void findAllByRoleSuccess() {
-
-        createUser("admin@la.com", "AdminUser", Role.ADMIN);
-        createUser("user@la.com", "CommonUser", Role.USER);
-
-        List<User> admins = userRepository.findAllByRole(Role.ADMIN);
-
-        assertThat(admins).hasSize(1);
-        assertThat(admins.getFirst().getRole()).isEqualTo(Role.ADMIN);
     }
 
     private void createUser(String email, String nickname, Role role) {

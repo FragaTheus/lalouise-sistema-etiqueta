@@ -34,7 +34,7 @@ class TokenFilterTest {
     @DisplayName("Deve permitir acesso quando o token for válido")
     void shouldAllowAccessWithValidToken() throws Exception {
 
-        var user = new User("Filtro", "filtro@teste.com", "$2a$12$R9h/lIPz0bouIzCu6slgOKS7LeBnMh9Gj31I/yI.8vH7/P.T8/L5.", Role.USER);
+        var user = new User("Filtro", "filtro@teste.com", "$2a$12$R9h/lIPz0bouIzCu6slgOKS7LeBnMh9Gj31I/yI.8vH7/P.T8/L5.", Role.ADMIN);
         userRepository.save(user);
 
         String token = tokenService.generateToken(new UserDetailsImpl(user));

@@ -1,10 +1,9 @@
-package matheusfraga.dev.lalouise.backend.infra.controller.user;
+package matheusfraga.dev.lalouise.backend.infra.controller.user.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-public record UpdateUserRequest(
-
+public record CreateUserRequest(
 
         @NotBlank
         @Pattern(
@@ -15,9 +14,15 @@ public record UpdateUserRequest(
 
         @NotBlank
         @Pattern(
+                regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+                message = "Formato de email invalido"
+        )
+        String email,
+
+        @NotBlank
+        @Pattern(
                 regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,12}$",
-                message =
-                        "Confirmacao deve ter entre 08 e 12 caracteres, uma letra maiúscula, uma minúscula, um numero e um caractere especial"
+                message = "Senha deve ter entre 08 e 12 caracteres, uma letra maiúscula, uma minúscula, um numero e um caractere especial"
         )
         String password,
 
@@ -28,5 +33,6 @@ public record UpdateUserRequest(
                         "Confirmacao deve ter entre 08 e 12 caracteres, uma letra maiúscula, uma minúscula, um numero e um caractere especial"
         )
         String confirmPassword
+
 ) {
 }
