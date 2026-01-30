@@ -13,14 +13,16 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 
-    Optional<User> findByEmailValue(String email);
+    Optional<User> findByEmailValueIgnoreCase(String email);
 
-    boolean existsByEmailValue(String email);
+    boolean existsByEmailValueIgnoreCase(String email);
 
-    @Query("SELECT u FROM User u WHERE " +
-            "(:nickname IS NULL OR u.nickname.value LIKE %:nickname%) AND " +
-            "(:email IS NULL OR u.email.value = :email) AND " +
-            "(:role IS NULL OR u.role = :role)")
+    @Query("""
+    SELECT u FROM User u 
+    WHERE (:nickname IS NULL OR u.nickname.value LIKE %:nickname%) 
+    AND (:email IS NULL OR u.email.value = :email) 
+    AND (:role IS NULL OR u.role = :role)
+    """)
     List<User> findByFilters(
             @Param("nickname") String nickname,
             @Param("email") String email,

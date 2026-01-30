@@ -1,4 +1,4 @@
-package matheusfraga.dev.lalouise.backend.core.application.commands;
+package matheusfraga.dev.lalouise.backend.core.application.user.command;
 
 import lombok.Builder;
 

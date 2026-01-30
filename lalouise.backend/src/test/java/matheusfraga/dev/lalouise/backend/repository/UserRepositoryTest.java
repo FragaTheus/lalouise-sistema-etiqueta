@@ -28,7 +28,7 @@ class UserRepositoryTest {
         String email = "find@me.com";
         createUser(email, "Unique", Role.ADMIN);
 
-        Optional<User> result = userRepository.findByEmailValue(email);
+        Optional<User> result = userRepository.findByEmailValueIgnoreCase(email);
 
         assertThat(result).isPresent();
         assertThat(result.get().getEmail().value()).isEqualTo(email);
@@ -41,7 +41,7 @@ class UserRepositoryTest {
         String email = "exists@teste.com";
         createUser(email, "Exists", Role.USER);
 
-        boolean exists = userRepository.existsByEmailValue(email);
+        boolean exists = userRepository.existsByEmailValueIgnoreCase(email);
 
         assertThat(exists).isTrue();
     }

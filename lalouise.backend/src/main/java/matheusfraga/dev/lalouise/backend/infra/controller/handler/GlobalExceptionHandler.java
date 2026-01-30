@@ -1,6 +1,6 @@
 package matheusfraga.dev.lalouise.backend.infra.controller.handler;
 
-import matheusfraga.dev.lalouise.backend.core.domain.exception.*;
+import matheusfraga.dev.lalouise.backend.core.domain.exception.user.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;

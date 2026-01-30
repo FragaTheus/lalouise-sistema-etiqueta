@@ -1,13 +1,13 @@
-package matheusfraga.dev.lalouise.backend.core.application;
+package matheusfraga.dev.lalouise.backend.core.application.user;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import matheusfraga.dev.lalouise.backend.core.application.commands.CreateUserInputCommand;
-import matheusfraga.dev.lalouise.backend.core.application.commands.UpdateUserInputCommand;
-import matheusfraga.dev.lalouise.backend.core.application.commands.UserFilterQueryCommand;
+import matheusfraga.dev.lalouise.backend.core.application.user.command.CreateUserInputCommand;
+import matheusfraga.dev.lalouise.backend.core.application.user.command.UpdateUserInputCommand;
+import matheusfraga.dev.lalouise.backend.core.application.user.command.UserFilterQueryCommand;
 import matheusfraga.dev.lalouise.backend.core.domain.entity.User;
 import matheusfraga.dev.lalouise.backend.core.domain.enums.Role;
-import matheusfraga.dev.lalouise.backend.core.domain.exception.*;
+import matheusfraga.dev.lalouise.backend.core.domain.exception.user.*;
 import matheusfraga.dev.lalouise.backend.core.domain.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,7 +32,7 @@ public class UserService {
 
         passwordIsMatch(command.password(), command.confirmPassword());
 
-        boolean userAlreadyExists = userRepository.existsByEmailValue(command.email());
+        boolean userAlreadyExists = userRepository.existsByEmailValueIgnoreCase(command.email());
         if(userAlreadyExists) throw new EmailAlreadyExists();
 
         String hashedPassword = encoder.encode(command.password());
@@ -73,7 +73,7 @@ public class UserService {
     @Transactional
     public void deleteUser(UUID id, String password){
         String loggedEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        User admin = userRepository.findByEmailValue(loggedEmail).orElseThrow(UserNotFoundException::new);
+        User admin = userRepository.findByEmailValueIgnoreCase(loggedEmail).orElseThrow(UserNotFoundException::new);
         boolean isRightPassword = encoder.matches(password, admin.getPassword().password());
         if(!isRightPassword) throw new WrongPasswordException();
         userRepository.deleteById(id);
@@ -85,6 +85,10 @@ public class UserService {
 
     public List<User> getAllUsers(UserFilterQueryCommand command){
         return  userRepository.findByFilters(command.nickname(), command.email(), command.role());
+    }
+
+    public User getUserByEmail(String email){
+        return userRepository.findByEmailValueIgnoreCase(email).orElseThrow(UserNotFoundException::new);
     }
 
 }

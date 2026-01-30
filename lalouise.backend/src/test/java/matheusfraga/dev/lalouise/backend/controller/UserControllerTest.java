@@ -1,10 +1,10 @@
 package matheusfraga.dev.lalouise.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import matheusfraga.dev.lalouise.backend.core.application.UserService;
-import matheusfraga.dev.lalouise.backend.core.application.commands.CreateUserInputCommand;
-import matheusfraga.dev.lalouise.backend.core.application.commands.UpdateUserInputCommand;
-import matheusfraga.dev.lalouise.backend.core.application.commands.UserFilterQueryCommand;
+import matheusfraga.dev.lalouise.backend.core.application.user.UserService;
+import matheusfraga.dev.lalouise.backend.core.application.user.command.CreateUserInputCommand;
+import matheusfraga.dev.lalouise.backend.core.application.user.command.UpdateUserInputCommand;
+import matheusfraga.dev.lalouise.backend.core.application.user.command.UserFilterQueryCommand;
 import matheusfraga.dev.lalouise.backend.core.domain.entity.User;
 import matheusfraga.dev.lalouise.backend.core.domain.enums.Role;
 import matheusfraga.dev.lalouise.backend.infra.controller.user.UserController;

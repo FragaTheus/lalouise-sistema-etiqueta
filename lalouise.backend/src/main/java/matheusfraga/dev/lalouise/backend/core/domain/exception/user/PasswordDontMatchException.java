@@ -1,4 +1,4 @@
-package matheusfraga.dev.lalouise.backend.core.domain.exception;
+package matheusfraga.dev.lalouise.backend.core.domain.exception.user;
 
 public class PasswordDontMatchException extends RuntimeException {
     public PasswordDontMatchException() {

@@ -1,12 +1,12 @@
 package matheusfraga.dev.lalouise.backend.service;
 
-import matheusfraga.dev.lalouise.backend.core.application.commands.CreateUserInputCommand;
-import matheusfraga.dev.lalouise.backend.core.application.commands.UpdateUserInputCommand;
-import matheusfraga.dev.lalouise.backend.core.application.UserService;
-import matheusfraga.dev.lalouise.backend.core.application.commands.UserFilterQueryCommand;
+import matheusfraga.dev.lalouise.backend.core.application.user.command.CreateUserInputCommand;
+import matheusfraga.dev.lalouise.backend.core.application.user.command.UpdateUserInputCommand;
+import matheusfraga.dev.lalouise.backend.core.application.user.UserService;
+import matheusfraga.dev.lalouise.backend.core.application.user.command.UserFilterQueryCommand;
 import matheusfraga.dev.lalouise.backend.core.domain.entity.User;
 import matheusfraga.dev.lalouise.backend.core.domain.enums.Role;
-import matheusfraga.dev.lalouise.backend.core.domain.exception.*;
+import matheusfraga.dev.lalouise.backend.core.domain.exception.user.*;
 import matheusfraga.dev.lalouise.backend.core.domain.repository.UserRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,7 +48,7 @@ class UserServiceTest {
         @Test
         @DisplayName("Deve criar USER com sucesso")
         void shouldCreateUser() {
-            when(userRepository.existsByEmailValue(anyString())).thenReturn(false);
+            when(userRepository.existsByEmailValueIgnoreCase(anyString())).thenReturn(false);
             when(encoder.encode(anyString())).thenReturn("$2a$10$vI8vh95Fm9W8Y.LBY295uO6Y8P9YI4.z0Y5A6K5G3C5.K5G3C5.K5");
             when(userRepository.save(any(User.class))).thenAnswer(i -> i.getArgument(0));
 
@@ -63,7 +63,7 @@ class UserServiceTest {
         @Test
         @DisplayName("Deve lançar EmailAlreadyExists se e-mail já estiver em uso")
         void shouldThrowEmailAlreadyExists() {
-            when(userRepository.existsByEmailValue(anyString())).thenReturn(true);
+            when(userRepository.existsByEmailValueIgnoreCase(anyString())).thenReturn(true);
             assertThrows(EmailAlreadyExists.class, () -> userService.createUser(createCommand));
         }
 
@@ -112,7 +112,7 @@ class UserServiceTest {
             mockSecurityContext("admin@email.com");
             User admin = new User("name", "email@email.com",  "$2a$10$vI8vh95Fm9W8Y.LBY295uO6Y8P9YI4.z0Y5A6K5G3C5.K5G3C5.K5", Role.USER);
 
-            when(userRepository.findByEmailValue("admin@email.com")).thenReturn(Optional.of(admin));
+            when(userRepository.findByEmailValueIgnoreCase("admin@email.com")).thenReturn(Optional.of(admin));
             when(encoder.matches(anyString(), anyString())).thenReturn(true);
 
             userService.deleteUser(userId, "senhaAdmin");
@@ -126,7 +126,7 @@ class UserServiceTest {
             mockSecurityContext("admin@email.com");
             User admin = new User("name", "email@email.com",  "$2a$10$vI8vh95Fm9W8Y.LBY295uO6Y8P9YI4.z0Y5A6K5G3C5.K5G3C5.K5", Role.USER);
 
-            when(userRepository.findByEmailValue("admin@email.com")).thenReturn(Optional.of(admin));
+            when(userRepository.findByEmailValueIgnoreCase("admin@email.com")).thenReturn(Optional.of(admin));
             when(encoder.matches(anyString(), anyString())).thenReturn(false);
 
             assertThrows(WrongPasswordException.class, () -> userService.deleteUser(userId, "errada"));

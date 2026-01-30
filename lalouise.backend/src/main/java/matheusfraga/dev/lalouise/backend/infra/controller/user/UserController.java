@@ -2,7 +2,7 @@ package matheusfraga.dev.lalouise.backend.infra.controller.user;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import matheusfraga.dev.lalouise.backend.core.application.UserService;
+import matheusfraga.dev.lalouise.backend.core.application.user.UserService;
 import matheusfraga.dev.lalouise.backend.core.domain.entity.User;
 import matheusfraga.dev.lalouise.backend.core.domain.enums.Role;
 import matheusfraga.dev.lalouise.backend.infra.controller.user.dto.request.CreateUserRequest;
