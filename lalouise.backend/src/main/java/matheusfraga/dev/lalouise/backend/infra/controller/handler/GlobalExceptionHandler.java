@@ -1,5 +1,7 @@
 package matheusfraga.dev.lalouise.backend.infra.controller.handler;
 
+import matheusfraga.dev.lalouise.backend.core.domain.exception.storage.SameStorageNameException;
+import matheusfraga.dev.lalouise.backend.core.domain.exception.storage.StorageNotFoundException;
 import matheusfraga.dev.lalouise.backend.core.domain.exception.user.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,6 +69,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<HandlerResponse<Void>> handleWrongPasswordException(WrongPasswordException ex){
         var response = HandlerResponse.withoutData(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
+
+    @ExceptionHandler(SameStorageNameException.class)
+    public ResponseEntity<HandlerResponse<Void>> handleSameStorageNameException(SameStorageNameException ex){
+        var response = HandlerResponse.withoutData(HttpStatus.CONFLICT.value(), ex.getMessage());
+        return  ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(StorageNotFoundException.class)
+    public  ResponseEntity<HandlerResponse<Void>> handleStorageNotFoundException(StorageNotFoundException ex){
+        var response = HandlerResponse.withoutData(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
 }

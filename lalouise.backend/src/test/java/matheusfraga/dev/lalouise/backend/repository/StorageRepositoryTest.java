@@ -4,12 +4,13 @@ import matheusfraga.dev.lalouise.backend.core.domain.entity.Sector;
 import matheusfraga.dev.lalouise.backend.core.domain.entity.Storage;
 import matheusfraga.dev.lalouise.backend.core.domain.enums.StorageType;
 import matheusfraga.dev.lalouise.backend.core.domain.repository.StorageRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,6 +18,8 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@ActiveProfiles("test")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class StorageRepositoryTest {
 
     @Autowired
@@ -25,57 +28,43 @@ class StorageRepositoryTest {
     @Autowired
     private TestEntityManager entityManager;
 
-    private Sector sectorA;
+    @Test
+    @DisplayName("Deve retornar todos os storages vinculados a um setor específico")
+    void shouldFindAllBySectorId() {
 
-    @BeforeEach
-    void setUp() {
-        sectorA = new Sector("cozinha");
-        entityManager.persist(sectorA);
+        Sector cozinha = new Sector("Cozinha");
+        Sector deposito = new Sector("Depósito");
+        entityManager.persist(cozinha);
+        entityManager.persist(deposito);
 
-        Sector sectorB = new Sector("cozinha");
-        sectorB.setName("Depósito");
-        entityManager.persist(sectorB);
+        Storage s1 = new Storage("Freezer", StorageType.CONGELADO, cozinha);
+        Storage s2 = new Storage("Prateleira", StorageType.AMBIENTE, cozinha);
+        Storage s3 = new Storage("Estante", StorageType.AMBIENTE, deposito);
 
-        entityManager.persist(new Storage("Freezer Vertical", StorageType.AMBIENTE, sectorA));
-        entityManager.persist(new Storage("Geladeira Bebidas", StorageType.CONGELADO, sectorA));
-        entityManager.persist(new Storage("Estante Grãos", StorageType.REFRIGERADO, sectorA));
-
+        entityManager.persist(s1);
+        entityManager.persist(s2);
+        entityManager.persist(s3);
         entityManager.flush();
+
+        List<Storage> result = storageRepository.findAllBySectorId(cozinha.getId());
+
+        assertThat(result).hasSize(2);
+        assertThat(result).extracting(Storage::getName)
+                .containsExactlyInAnyOrder("Freezer", "Prateleira");
+
+        assertThat(result).allMatch(s -> s.getSector().getId().equals(cozinha.getId()));
     }
 
     @Test
-    @DisplayName("Deve retornar todos os registros quando todos os filtros forem nulos")
-    void shouldReturnAllWhenFiltersAreNull() {
-        List<Storage> result = storageRepository.findByFilters(null, null, null);
-        assertThat(result).hasSize(3);
-    }
+    @DisplayName("Deve retornar lista vazia quando o setor não possui storages")
+    void shouldReturnEmptyListWhenSectorHasNoStorages() {
 
-    @Test
-    @DisplayName("Deve filtrar apenas por parte do nome (ignore case)")
-    void shouldFilterByName() {
-        List<Storage> result = storageRepository.findByFilters("FREEZER", null, null);
-        assertThat(result).hasSize(1);
-        assertThat(result.getFirst().getName()).isEqualTo("Freezer Vertical");
-    }
-
-    @Test
-    @DisplayName("Deve filtrar por tipo e setor simultaneamente")
-    void shouldFilterByTypeAndSector() {
-
-        UUID targetSectorId = sectorA.getId();
-
+        Sector setorVazio = new Sector("Vazio");
+        entityManager.persist(setorVazio);
         entityManager.flush();
-        entityManager.clear();
 
-        List<Storage> result = storageRepository.findByFilters(null, StorageType.REFRIGERADO, targetSectorId);
+        List<Storage> result = storageRepository.findAllBySectorId(setorVazio.getId());
 
-        assertThat(result).hasSize(1);
-    }
-
-    @Test
-    @DisplayName("Deve retornar lista vazia quando nenhum registro corresponder")
-    void shouldReturnEmptyListWhenNoMatches() {
-        List<Storage> result = storageRepository.findByFilters("NomeInexistente", StorageType.CONGELADO, UUID.randomUUID());
         assertThat(result).isEmpty();
     }
 }

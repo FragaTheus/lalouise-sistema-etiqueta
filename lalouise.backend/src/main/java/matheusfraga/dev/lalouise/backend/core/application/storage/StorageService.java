@@ -3,16 +3,11 @@ package matheusfraga.dev.lalouise.backend.core.application.storage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import matheusfraga.dev.lalouise.backend.core.application.sector.SectorService;
-import matheusfraga.dev.lalouise.backend.core.application.user.UserService;
 import matheusfraga.dev.lalouise.backend.core.domain.entity.Sector;
 import matheusfraga.dev.lalouise.backend.core.domain.entity.Storage;
-import matheusfraga.dev.lalouise.backend.core.domain.entity.User;
 import matheusfraga.dev.lalouise.backend.core.domain.exception.storage.SameStorageNameException;
 import matheusfraga.dev.lalouise.backend.core.domain.exception.storage.StorageNotFoundException;
-import matheusfraga.dev.lalouise.backend.core.domain.exception.user.WrongPasswordException;
 import matheusfraga.dev.lalouise.backend.core.domain.repository.StorageRepository;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,8 +19,6 @@ public class StorageService {
 
     private final StorageRepository repository;
     private final SectorService sectorService;
-    private final UserService userService;
-    private final BCryptPasswordEncoder encoder;
 
     public Storage createStorage(CreateStorageCommand command) {
         Sector sector = sectorService.getSector(command.sectorId());
@@ -42,21 +35,15 @@ public class StorageService {
         return repository.save(storage);
     }
 
-    public void deleteStorage(UUID id, String password){
-        String adminEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userService.getUserByEmail(adminEmail);
-
-        boolean isRightPassword = encoder.matches(password, user.getPassword().password());
-        if(!isRightPassword) throw new WrongPasswordException();
-
+    public void deleteStorage(UUID id){
         repository.deleteById(id);
-    }
-
-    public List<Storage> listStorages(StorageQueryFilterCommand command) {
-        return repository.findByFilters(command.name(), command.type(), command.sectorId());
     }
 
     public Storage getStorage(UUID id) {
         return repository.findById(id).orElseThrow(StorageNotFoundException::new);
+    }
+
+    public List<Storage> findAllStorage(UUID sectorId){
+        return repository.findAllBySectorId(sectorId);
     }
 }
