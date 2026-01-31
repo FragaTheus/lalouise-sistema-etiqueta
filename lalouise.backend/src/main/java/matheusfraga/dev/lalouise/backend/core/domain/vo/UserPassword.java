@@ -1,12 +1,17 @@
 package matheusfraga.dev.lalouise.backend.core.domain.vo;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import matheusfraga.dev.lalouise.backend.core.domain.exception.DomainException;
 
 import java.util.regex.Pattern;
 
 @Embeddable
-public record UserPassword(String password) {
+public record UserPassword(
+
+        @Column(name = "password",  nullable = false)
+        String value
+) {
 
     private static final String RAW_PASSWORD_REGEX =
             "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,12}$";
@@ -18,7 +23,7 @@ public record UserPassword(String password) {
     private static final Pattern HASH_PASSWORD_PATTERN = Pattern.compile(HASH_PASSWORD_REGEX);
 
     public UserPassword{
-        if (!HASH_PASSWORD_PATTERN.matcher(password).matches()) throw new DomainException("Password is not valid");
+        if (!HASH_PASSWORD_PATTERN.matcher(value).matches()) throw new DomainException("Password is not valid");
     }
 
     @Override

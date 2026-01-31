@@ -19,7 +19,7 @@ class UserPasswordVoTest {
         UserPassword password = new UserPassword(validHash);
 
         assertThat(password).isNotNull();
-        assertThat(password.password()).isEqualTo(validHash);
+        assertThat(password.value()).isEqualTo(validHash);
     }
 
     @ParameterizedTest

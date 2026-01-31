@@ -3,6 +3,7 @@ package matheusfraga.dev.lalouise.backend.core.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import matheusfraga.dev.lalouise.backend.core.domain.enums.StorageType;
+import matheusfraga.dev.lalouise.backend.core.domain.vo.StorageName;
 
 import java.util.UUID;
 
@@ -17,8 +18,8 @@ public class Storage {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Setter
-    private String name;
+    @Embedded
+    private StorageName name;
 
     @Enumerated(EnumType.STRING)
     private StorageType type;
@@ -28,8 +29,16 @@ public class Storage {
     private Sector sector;
 
     public Storage(String name, StorageType type, Sector sector) {
-        this.name = name;
+        this.name = new StorageName(name);
         this.type = type;
         this.sector = sector;
+    }
+
+    public void setName(String name) {
+        this.name = new  StorageName(name);
+    }
+
+    public String getName() {
+        return name.value();
     }
 }

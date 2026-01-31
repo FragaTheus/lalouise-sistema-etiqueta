@@ -35,7 +35,7 @@ class SectorServiceTest {
         String name = "Cozinha";
         String description = "Setor de produção";
 
-        when(sectorRepository.existsByNameIgnoreCase(name)).thenReturn(false);
+        when(sectorRepository.existsByNameValueIgnoreCase(name)).thenReturn(false);
         when(sectorRepository.save(any(Sector.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Sector result = sectorService.createSector(name, description);
@@ -49,7 +49,7 @@ class SectorServiceTest {
     @DisplayName("Deve lançar exceção ao criar setor com nome já existente")
     void shouldThrowExceptionWhenSectorNameAlreadyExists() {
         String name = "Cozinha";
-        when(sectorRepository.existsByNameIgnoreCase(name)).thenReturn(true);
+        when(sectorRepository.existsByNameValueIgnoreCase(name)).thenReturn(true);
 
         assertThrows(SectorAlreadyExistsException.class, () ->
                 sectorService.createSector(name, "Descrição")
@@ -72,7 +72,7 @@ class SectorServiceTest {
         assertEquals("Nova Descrição", result.getDescription());
         assertEquals("Cozinha", result.getName());
         // Não deve validar se o nome existe, pois o nome não mudou
-        verify(sectorRepository, never()).existsByNameIgnoreCase(anyString());
+        verify(sectorRepository, never()).existsByNameValueIgnoreCase(anyString());
     }
 
     @Test
@@ -83,7 +83,7 @@ class SectorServiceTest {
         UpdateSectorInputCommand command = new UpdateSectorInputCommand(id, "Estoque", "Desc");
 
         when(sectorRepository.findById(id)).thenReturn(Optional.of(existingSector));
-        when(sectorRepository.existsByNameIgnoreCase("Estoque")).thenReturn(true);
+        when(sectorRepository.existsByNameValueIgnoreCase("Estoque")).thenReturn(true);
 
         assertThrows(SectorAlreadyExistsException.class, () -> sectorService.updateSector(command));
     }

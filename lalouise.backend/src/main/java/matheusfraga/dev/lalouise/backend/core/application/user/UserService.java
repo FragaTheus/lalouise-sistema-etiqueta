@@ -74,7 +74,7 @@ public class UserService {
     public void deleteUser(UUID id, String password){
         String loggedEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         User admin = userRepository.findByEmailValueIgnoreCase(loggedEmail).orElseThrow(UserNotFoundException::new);
-        boolean isRightPassword = encoder.matches(password, admin.getPassword().password());
+        boolean isRightPassword = encoder.matches(password, admin.getPassword().value());
         if(!isRightPassword) throw new WrongPasswordException();
         userRepository.deleteById(id);
     }
