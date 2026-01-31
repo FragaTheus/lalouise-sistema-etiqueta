@@ -32,8 +32,8 @@ class StorageRepositoryTest {
     @DisplayName("Deve retornar todos os storages vinculados a um setor específico")
     void shouldFindAllBySectorId() {
 
-        Sector cozinha = new Sector("Cozinha");
-        Sector deposito = new Sector("Depósito");
+        Sector cozinha = new Sector("Cozinha", "Desc");
+        Sector deposito = new Sector("Depósito", "Desc");
         entityManager.persist(cozinha);
         entityManager.persist(deposito);
 
@@ -59,7 +59,7 @@ class StorageRepositoryTest {
     @DisplayName("Deve retornar lista vazia quando o setor não possui storages")
     void shouldReturnEmptyListWhenSectorHasNoStorages() {
 
-        Sector setorVazio = new Sector("Vazio");
+        Sector setorVazio = new Sector("Vazio", "Desc");
         entityManager.persist(setorVazio);
         entityManager.flush();
 

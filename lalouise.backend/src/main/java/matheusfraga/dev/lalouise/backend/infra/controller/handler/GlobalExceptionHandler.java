@@ -1,5 +1,7 @@
 package matheusfraga.dev.lalouise.backend.infra.controller.handler;
 
+import matheusfraga.dev.lalouise.backend.core.domain.exception.sector.SectorAlreadyExistsException;
+import matheusfraga.dev.lalouise.backend.core.domain.exception.sector.SectorNotFoundException;
 import matheusfraga.dev.lalouise.backend.core.domain.exception.storage.SameStorageNameException;
 import matheusfraga.dev.lalouise.backend.core.domain.exception.storage.StorageNotFoundException;
 import matheusfraga.dev.lalouise.backend.core.domain.exception.user.*;
@@ -83,4 +85,15 @@ public class GlobalExceptionHandler {
         return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
+    @ExceptionHandler(SectorAlreadyExistsException.class)
+    public ResponseEntity<HandlerResponse<Void>> handleSectorAlreadyExistsException(SectorAlreadyExistsException ex){
+        var response = HandlerResponse.withoutData(HttpStatus.CONFLICT.value(), ex.getMessage());
+        return  ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(SectorNotFoundException.class)
+    public ResponseEntity<HandlerResponse<Void>> handleSectorNotFoundException(SectorNotFoundException ex){
+        var response = HandlerResponse.withoutData(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
 }

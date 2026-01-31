@@ -64,7 +64,7 @@ class StorageControllerTest {
     @DisplayName("Deve retornar 200 e uma lista ao buscar por setor")
     void shouldReturnOkAndListWhenGetAllBySector() throws Exception {
         UUID sectorId = UUID.randomUUID();
-        Sector sector = new Sector("Cozinha");
+        Sector sector = new Sector("Cozinha", "Desc");
         Storage storage = new Storage("Freezer", StorageType.CONGELADO, sector);
 
         when(storageService.findAllStorage(sectorId)).thenReturn(List.of(storage));
@@ -99,7 +99,7 @@ class StorageControllerTest {
     @DisplayName("Deve retornar 200 e detalhes ao buscar por ID")
     void shouldReturnOkAndDetailsWhenGetById() throws Exception {
         UUID storageId = UUID.randomUUID();
-        Sector sector = new Sector("Cozinha");
+        Sector sector = new Sector("Cozinha", "Desc");
         Storage storage = new Storage("Freezer", StorageType.CONGELADO, sector);
 
         when(storageService.getStorage(storageId)).thenReturn(storage);
