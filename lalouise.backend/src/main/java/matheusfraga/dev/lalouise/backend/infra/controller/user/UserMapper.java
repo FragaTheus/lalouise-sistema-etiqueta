@@ -1,9 +1,9 @@
 package matheusfraga.dev.lalouise.backend.infra.controller.user;
 
-import matheusfraga.dev.lalouise.backend.core.application.user.command.CreateUserInputCommand;
-import matheusfraga.dev.lalouise.backend.core.application.user.command.UpdateUserInputCommand;
-import matheusfraga.dev.lalouise.backend.core.application.user.command.UserFilterQueryCommand;
-import matheusfraga.dev.lalouise.backend.core.domain.entity.User;
+import matheusfraga.dev.lalouise.backend.core.application.user.command.AccountFilterQueryCommand;
+import matheusfraga.dev.lalouise.backend.core.application.user.command.CreateAccountCommand;
+import matheusfraga.dev.lalouise.backend.core.application.user.command.UpdateAccountCommand;
+import matheusfraga.dev.lalouise.backend.core.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.core.domain.enums.Role;
 import matheusfraga.dev.lalouise.backend.infra.controller.user.dto.request.CreateUserRequest;
 import matheusfraga.dev.lalouise.backend.infra.controller.user.dto.response.*;
@@ -13,8 +13,8 @@ import java.util.UUID;
 
 public record UserMapper() {
 
-    public static CreateUserInputCommand toCreateUserInputCommand(CreateUserRequest request){
-        return CreateUserInputCommand.builder()
+    public static CreateAccountCommand toCreateUserInputCommand(CreateUserRequest request){
+        return CreateAccountCommand.builder()
                 .nickname(request.nickname())
                 .email(request.email())
                 .password(request.password())
@@ -22,8 +22,8 @@ public record UserMapper() {
                 .build();
     }
 
-    public static UpdateUserInputCommand toUpdateUserInputCommand(UUID id, UpdateUserRequest request){
-        return UpdateUserInputCommand.builder()
+    public static UpdateAccountCommand toUpdateUserInputCommand(UUID id, UpdateUserRequest request){
+        return UpdateAccountCommand.builder()
                 .id(id)
                 .nickname(request.nickname())
                 .password(request.password())
@@ -31,52 +31,52 @@ public record UserMapper() {
                 .build();
     }
 
-    public static CreateUserResponse toCreateUserResponse(User user) {
+    public static CreateUserResponse toCreateUserResponse(Account account) {
         String message = "Usuario criado com sucesso!";
         return CreateUserResponse.builder()
-                .nickname(user.getNickname().value())
-                .email(user.getEmail().value())
-                .role(user.getRole().name())
+                .nickname(account.getNickname())
+                .email(account.getEmail())
+                .role(account.getRole().name())
                 .message(message)
                 .build();
     }
 
-    public static UpdateUserResponse toUpdateUserResponse(User user) {
+    public static UpdateUserResponse toUpdateUserResponse(Account account) {
         String message =  "Usuario atualizado com sucesso!";
         return UpdateUserResponse.builder()
-                .id(user.getId())
-                .nickname(user.getNickname().value())
-                .email(user.getEmail().value())
+                .id(account.getId())
+                .nickname(account.getNickname())
+                .email(account.getEmail())
                 .message(message)
                 .build();
     }
 
-    public static DeleteUserResponse toDeleteUserResponse(User user) {
+    public static DeleteUserResponse toDeleteUserResponse(Account account) {
         String message = "Usuário excluído com sucesso!";
         return DeleteUserResponse.builder()
-                .nickname(user.getNickname().value())
-                .email(user.getEmail().value())
+                .nickname(account.getNickname())
+                .email(account.getEmail())
                 .message(message)
                 .build();
     }
 
-    public static UserInfo toUserInfo(User user) {
+    public static UserInfo toUserInfo(Account account) {
         return UserInfo.builder()
-                .nickname(user.getNickname().value())
-                .email(user.getEmail().value())
-                .role(user.getRole().name())
+                .nickname(account.getNickname())
+                .email(account.getEmail())
+                .role(account.getRole().name())
                 .build();
     }
 
-    public static UserSummary toUserSummary(User user){
+    public static UserSummary toUserSummary(Account acount){
         return UserSummary.builder()
-                .id(user.getId())
-                .nickname(user.getNickname().value())
+                .id(acount.getId())
+                .nickname(acount.getNickname())
                 .build();
     }
 
-    public static UserFilterQueryCommand toFilterQueryCommand(String nickname, String email, Role role){
-        return UserFilterQueryCommand.builder()
+    public static AccountFilterQueryCommand toFilterQueryCommand(String nickname, String email, Role role){
+        return AccountFilterQueryCommand.builder()
                 .nickname(nickname)
                 .email(email)
                 .role(role)

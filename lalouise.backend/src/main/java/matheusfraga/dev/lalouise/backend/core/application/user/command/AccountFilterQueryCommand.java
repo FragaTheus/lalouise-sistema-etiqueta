@@ -4,5 +4,5 @@ import lombok.Builder;
 import matheusfraga.dev.lalouise.backend.core.domain.enums.Role;
 
 @Builder
-public record UserFilterQueryCommand(String nickname, String email, Role role) {
+public record AccountFilterQueryCommand(String nickname, String email, Role role) {
 }

@@ -1,25 +1,25 @@
 package matheusfraga.dev.lalouise.backend.repository;
 
-import matheusfraga.dev.lalouise.backend.core.domain.entity.User;
+import matheusfraga.dev.lalouise.backend.core.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.core.domain.enums.Role;
-import matheusfraga.dev.lalouise.backend.core.domain.repository.UserRepository;
+import matheusfraga.dev.lalouise.backend.core.domain.repository.AccountRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
-import java.util.List;
+
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class UserRepositoryTest {
+class AccountRepositoryTest {
 
     @Autowired
-    private UserRepository userRepository;
+    private AccountRepository accountRepository;
 
     @Test
     @DisplayName("Deve encontrar usuário pelo valor do Email")
@@ -28,10 +28,10 @@ class UserRepositoryTest {
         String email = "find@me.com";
         createUser(email, "Unique", Role.ADMIN);
 
-        Optional<User> result = userRepository.findByEmailValueIgnoreCase(email);
+        Optional<Account> result = accountRepository.findByEmailIgnoreCase(email);
 
         assertThat(result).isPresent();
-        assertThat(result.get().getEmail().value()).isEqualTo(email);
+        assertThat(result.get().getEmail()).isEqualTo(email);
     }
 
     @Test
@@ -41,7 +41,7 @@ class UserRepositoryTest {
         String email = "exists@teste.com";
         createUser(email, "Exists", Role.USER);
 
-        boolean exists = userRepository.existsByEmailValueIgnoreCase(email);
+        boolean exists = accountRepository.existsByEmailIgnoreCase(email);
 
         assertThat(exists).isTrue();
     }
@@ -49,12 +49,12 @@ class UserRepositoryTest {
     private void createUser(String email, String nickname, Role role) {
         var password = "$2a$12$R9h/lIPz0bouIzCu6slgOKS7LeBnMh9Gj31I/yI.8vH7/P.T8/L5.";
 
-        User user = new User(
+        Account account = new Account(
                 nickname,
                 email,
                 password,
                 role
         );
-        userRepository.save(user);
+        accountRepository.save(account);
     }
 }

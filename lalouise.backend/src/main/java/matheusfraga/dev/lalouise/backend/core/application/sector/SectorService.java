@@ -21,7 +21,7 @@ public class SectorService {
     }
 
     public Sector createSector(String name, String description){
-        boolean exists = sectorRepository.existsByNameValueIgnoreCase(name);
+        boolean exists = sectorRepository.existsByNameIgnoreCase(name);
         if(exists) throw new SectorAlreadyExistsException();
         Sector sector = new Sector(name, description);
         return sectorRepository.save(sector);
@@ -37,7 +37,7 @@ public class SectorService {
 
         if(command.name() != null && !command.name().isBlank()){
             if(!command.name().equals(sector.getName())){
-                if(sectorRepository.existsByNameValueIgnoreCase(command.name())){
+                if(sectorRepository.existsByNameIgnoreCase(command.name())){
                     throw new SectorAlreadyExistsException();
                 }
                 sector.setName(command.name());

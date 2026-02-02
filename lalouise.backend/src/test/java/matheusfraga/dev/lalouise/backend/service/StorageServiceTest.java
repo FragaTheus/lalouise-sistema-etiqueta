@@ -3,7 +3,7 @@ package matheusfraga.dev.lalouise.backend.service;
 import matheusfraga.dev.lalouise.backend.core.application.sector.SectorService;
 import matheusfraga.dev.lalouise.backend.core.application.storage.CreateStorageCommand;
 import matheusfraga.dev.lalouise.backend.core.application.storage.StorageService;
-import matheusfraga.dev.lalouise.backend.core.application.user.UserService;
+import matheusfraga.dev.lalouise.backend.core.application.user.AccountService;
 import matheusfraga.dev.lalouise.backend.core.domain.entity.Sector;
 import matheusfraga.dev.lalouise.backend.core.domain.entity.Storage;
 import matheusfraga.dev.lalouise.backend.core.domain.enums.StorageType;
@@ -34,7 +34,7 @@ class StorageServiceTest {
     @Mock
     private SectorService sectorService;
     @Mock
-    private UserService userService;
+    private AccountService accountService;
     @Mock
     private BCryptPasswordEncoder encoder;
 

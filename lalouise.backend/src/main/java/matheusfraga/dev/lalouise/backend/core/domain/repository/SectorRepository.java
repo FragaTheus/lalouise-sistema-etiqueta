@@ -13,11 +13,11 @@ import java.util.UUID;
 @Repository
 public interface SectorRepository extends JpaRepository<Sector, UUID>{
 
-    boolean existsByNameValueIgnoreCase(String name);
+    boolean existsByNameIgnoreCase(String name);
 
     @Query("""
         SELECT s FROM Sector s
-        WHERE (:name IS NULL OR LOWER(s.name.value) = LOWER(:name))
+        WHERE (:name IS NULL OR LOWER(s.name) = LOWER(:name))
         """)
     List<Sector> findAllByFilter(@Param("name") String name);
 

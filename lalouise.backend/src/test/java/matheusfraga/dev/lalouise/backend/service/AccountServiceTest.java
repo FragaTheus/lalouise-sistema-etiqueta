@@ -1,13 +1,13 @@
 package matheusfraga.dev.lalouise.backend.service;
 
-import matheusfraga.dev.lalouise.backend.core.application.user.command.CreateUserInputCommand;
-import matheusfraga.dev.lalouise.backend.core.application.user.command.UpdateUserInputCommand;
-import matheusfraga.dev.lalouise.backend.core.application.user.UserService;
-import matheusfraga.dev.lalouise.backend.core.application.user.command.UserFilterQueryCommand;
-import matheusfraga.dev.lalouise.backend.core.domain.entity.User;
+import matheusfraga.dev.lalouise.backend.core.application.user.command.CreateAccountCommand;
+import matheusfraga.dev.lalouise.backend.core.application.user.command.UpdateAccountCommand;
+import matheusfraga.dev.lalouise.backend.core.application.user.AccountService;
+import matheusfraga.dev.lalouise.backend.core.application.user.command.AccountFilterQueryCommand;
+import matheusfraga.dev.lalouise.backend.core.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.core.domain.enums.Role;
 import matheusfraga.dev.lalouise.backend.core.domain.exception.user.*;
-import matheusfraga.dev.lalouise.backend.core.domain.repository.UserRepository;
+import matheusfraga.dev.lalouise.backend.core.domain.repository.AccountRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,19 +27,19 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Testes do Serviço de Usuário")
-class UserServiceTest {
+class AccountServiceTest {
 
-    @Mock private UserRepository userRepository;
+    @Mock private AccountRepository accountRepository;
     @Mock private BCryptPasswordEncoder encoder;
-    @InjectMocks private UserService userService;
+    @InjectMocks private AccountService accountService;
 
     private UUID userId;
-    private CreateUserInputCommand createCommand;
+    private CreateAccountCommand createCommand;
 
     @BeforeEach
     void setUp() {
         userId = UUID.randomUUID();
-        createCommand = new CreateUserInputCommand("Matheus", "teste@email.com", "senha123", "senha123");
+        createCommand = new CreateAccountCommand("Matheus", "teste@email.com", "senha123", "senha123");
     }
 
     @Nested
@@ -48,30 +48,30 @@ class UserServiceTest {
         @Test
         @DisplayName("Deve criar USER com sucesso")
         void shouldCreateUser() {
-            when(userRepository.existsByEmailValueIgnoreCase(anyString())).thenReturn(false);
+            when(accountRepository.existsByEmailIgnoreCase(anyString())).thenReturn(false);
             when(encoder.encode(anyString())).thenReturn("$2a$10$vI8vh95Fm9W8Y.LBY295uO6Y8P9YI4.z0Y5A6K5G3C5.K5G3C5.K5");
-            when(userRepository.save(any(User.class))).thenAnswer(i -> i.getArgument(0));
+            when(accountRepository.save(any(Account.class))).thenAnswer(i -> i.getArgument(0));
 
-            User user = userService.createUser(createCommand);
+            Account account = accountService.createUser(createCommand);
 
             assertAll(
-                    () -> assertEquals(Role.USER, user.getRole()),
-                    () -> verify(userRepository).save(any())
+                    () -> assertEquals(Role.USER, account.getRole()),
+                    () -> verify(accountRepository).save(any())
             );
         }
 
         @Test
         @DisplayName("Deve lançar EmailAlreadyExists se e-mail já estiver em uso")
         void shouldThrowEmailAlreadyExists() {
-            when(userRepository.existsByEmailValueIgnoreCase(anyString())).thenReturn(true);
-            assertThrows(EmailAlreadyExists.class, () -> userService.createUser(createCommand));
+            when(accountRepository.existsByEmailIgnoreCase(anyString())).thenReturn(true);
+            assertThrows(EmailAlreadyExists.class, () -> accountService.createUser(createCommand));
         }
 
         @Test
         @DisplayName("Deve lançar PasswordDontMatchException se senhas forem diferentes")
         void shouldThrowPasswordMismatch() {
-            var cmd = new CreateUserInputCommand("M", "e@e.com", "123", "321");
-            assertThrows(PasswordDontMatchException.class, () -> userService.createUser(cmd));
+            var cmd = new CreateAccountCommand("M", "e@e.com", "123", "321");
+            assertThrows(PasswordDontMatchException.class, () -> accountService.createUser(cmd));
         }
     }
 
@@ -83,23 +83,23 @@ class UserServiceTest {
         void shouldUpdateAllFields() {
             String plainPassword = "Senha123";
             String hashedPassword = "$2a$10$vI8vh95Fm9W8Y.LBY295uO6Y8P9YI4.z0Y5A6K5G3C5.K5G3C5.K5";
-            User user = new User("name", "email@email.com",  hashedPassword, Role.USER);
-            var cmd = new UpdateUserInputCommand(userId, "New", plainPassword, plainPassword);
+            Account account = new Account("name", "email@email.com",  hashedPassword, Role.USER);
+            var cmd = new UpdateAccountCommand(userId, "New", plainPassword, plainPassword);
 
-            when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-            when(userRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+            when(accountRepository.findById(userId)).thenReturn(Optional.of(account));
+            when(accountRepository.save(any())).thenAnswer(i -> i.getArgument(0));
             when(encoder.encode(plainPassword)).thenReturn(hashedPassword);
-            User updated = userService.updateUser(cmd);
+            Account updated = accountService.updateUser(cmd);
 
-            assertEquals("New", updated.getNickname().value());
+            assertEquals("New", updated.getNickname());
             verify(encoder).encode(plainPassword);
         }
 
         @Test
         @DisplayName("Deve lançar NoDataForUpdateException se comando for vazio")
         void shouldThrowNoData() {
-            var cmd = new UpdateUserInputCommand(userId, null, null, null);
-            assertThrows(NoDataForUpdateException.class, () -> userService.updateUser(cmd));
+            var cmd = new UpdateAccountCommand(userId, null, null, null);
+            assertThrows(NoDataForUpdateException.class, () -> accountService.updateUser(cmd));
         }
     }
 
@@ -110,26 +110,26 @@ class UserServiceTest {
         @DisplayName("Deve deletar usuário quando senha do administrador estiver correta")
         void shouldDeleteUser() {
             mockSecurityContext("admin@email.com");
-            User admin = new User("name", "email@email.com",  "$2a$10$vI8vh95Fm9W8Y.LBY295uO6Y8P9YI4.z0Y5A6K5G3C5.K5G3C5.K5", Role.USER);
+            Account admin = new Account("name", "email@email.com",  "$2a$10$vI8vh95Fm9W8Y.LBY295uO6Y8P9YI4.z0Y5A6K5G3C5.K5G3C5.K5", Role.USER);
 
-            when(userRepository.findByEmailValueIgnoreCase("admin@email.com")).thenReturn(Optional.of(admin));
+            when(accountRepository.findByEmailIgnoreCase("admin@email.com")).thenReturn(Optional.of(admin));
             when(encoder.matches(anyString(), anyString())).thenReturn(true);
 
-            userService.deleteUser(userId, "senhaAdmin");
+            accountService.deleteUser(userId, "senhaAdmin");
 
-            verify(userRepository).deleteById(userId);
+            verify(accountRepository).deleteById(userId);
         }
 
         @Test
         @DisplayName("Deve lançar WrongPasswordException se senha do admin falhar")
         void shouldThrowWrongPassword() {
             mockSecurityContext("admin@email.com");
-            User admin = new User("name", "email@email.com",  "$2a$10$vI8vh95Fm9W8Y.LBY295uO6Y8P9YI4.z0Y5A6K5G3C5.K5G3C5.K5", Role.USER);
+            Account admin = new Account("name", "email@email.com",  "$2a$10$vI8vh95Fm9W8Y.LBY295uO6Y8P9YI4.z0Y5A6K5G3C5.K5G3C5.K5", Role.USER);
 
-            when(userRepository.findByEmailValueIgnoreCase("admin@email.com")).thenReturn(Optional.of(admin));
+            when(accountRepository.findByEmailIgnoreCase("admin@email.com")).thenReturn(Optional.of(admin));
             when(encoder.matches(anyString(), anyString())).thenReturn(false);
 
-            assertThrows(WrongPasswordException.class, () -> userService.deleteUser(userId, "errada"));
+            assertThrows(WrongPasswordException.class, () -> accountService.deleteUser(userId, "errada"));
         }
 
         private void mockSecurityContext(String email) {
@@ -147,29 +147,29 @@ class UserServiceTest {
         @Test
         @DisplayName("Deve buscar usuário por ID")
         void shouldFindById() {
-            when(userRepository.findById(userId)).thenReturn(Optional.of(new User(
+            when(accountRepository.findById(userId)).thenReturn(Optional.of(new Account(
                     "name", "email@email.com",  "$2a$10$vI8vh95Fm9W8Y.LBY295uO6Y8P9YI4.z0Y5A6K5G3C5.K5G3C5.K5", Role.USER
             )));
-            assertNotNull(userService.getUserById(userId));
+            assertNotNull(accountService.getUserById(userId));
         }
 
         @Test
         @DisplayName("Deve lançar UserNotFoundException se ID não existir")
         void shouldThrowNotFound() {
-            when(userRepository.findById(userId)).thenReturn(Optional.empty());
-            assertThrows(UserNotFoundException.class, () -> userService.getUserById(userId));
+            when(accountRepository.findById(userId)).thenReturn(Optional.empty());
+            assertThrows(UserNotFoundException.class, () -> accountService.getUserById(userId));
         }
 
         @Test
         @DisplayName("Deve chamar filtros do repositório corretamente")
         void shouldCallFilters() {
-            var filter = UserFilterQueryCommand.builder()
+            var filter = AccountFilterQueryCommand.builder()
                             .nickname("nickname")
                             .email("email@email")
                             .role(Role.USER)
                             .build();
-            userService.getAllUsers(filter);
-            verify(userRepository).findByFilters("nickname", "email@email", Role.USER);
+            accountService.getAllUsers(filter);
+            verify(accountRepository).findByFilters("nickname", "email@email", Role.USER);
         }
     }
 

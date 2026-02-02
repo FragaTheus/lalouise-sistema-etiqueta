@@ -1,11 +1,11 @@
 package matheusfraga.dev.lalouise.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import matheusfraga.dev.lalouise.backend.core.application.user.UserService;
-import matheusfraga.dev.lalouise.backend.core.application.user.command.CreateUserInputCommand;
-import matheusfraga.dev.lalouise.backend.core.application.user.command.UpdateUserInputCommand;
-import matheusfraga.dev.lalouise.backend.core.application.user.command.UserFilterQueryCommand;
-import matheusfraga.dev.lalouise.backend.core.domain.entity.User;
+import matheusfraga.dev.lalouise.backend.core.application.user.AccountService;
+import matheusfraga.dev.lalouise.backend.core.application.user.command.CreateAccountCommand;
+import matheusfraga.dev.lalouise.backend.core.application.user.command.UpdateAccountCommand;
+import matheusfraga.dev.lalouise.backend.core.application.user.command.AccountFilterQueryCommand;
+import matheusfraga.dev.lalouise.backend.core.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.core.domain.enums.Role;
 import matheusfraga.dev.lalouise.backend.infra.controller.user.UserController;
 import matheusfraga.dev.lalouise.backend.infra.controller.user.UserMapper;
@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(UserController.class)
 @AutoConfigureMockMvc(addFilters = false)
-class UserControllerTest {
+class AccountControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,7 +44,7 @@ class UserControllerTest {
     private ObjectMapper objectMapper;
 
     @MockitoBean
-    private UserService service;
+    private AccountService service;
 
     @MockitoBean
     private TokenService tokenService;
@@ -59,8 +59,8 @@ class UserControllerTest {
                 "Senha@123"
         );
 
-        User user = Mockito.mock(User.class);
-        CreateUserInputCommand command = Mockito.mock(CreateUserInputCommand.class);
+        Account account = Mockito.mock(Account.class);
+        CreateAccountCommand command = Mockito.mock(CreateAccountCommand.class);
         CreateUserResponse response = CreateUserResponse.builder()
                 .nickname("Matheus")
                 .email("matheus@email.com")
@@ -74,9 +74,9 @@ class UserControllerTest {
                     .thenReturn(command);
 
             Mockito.when(service.createUser(command))
-                    .thenReturn(user);
+                    .thenReturn(account);
 
-            mapper.when(() -> UserMapper.toCreateUserResponse(user))
+            mapper.when(() -> UserMapper.toCreateUserResponse(account))
                     .thenReturn(response);
 
             mockMvc.perform(post("/api/v1/users")
@@ -100,8 +100,8 @@ class UserControllerTest {
                 "Senha@123"
         );
 
-        User user = Mockito.mock(User.class);
-        UpdateUserInputCommand command = Mockito.mock(UpdateUserInputCommand.class);
+        Account account = Mockito.mock(Account.class);
+        UpdateAccountCommand command = Mockito.mock(UpdateAccountCommand.class);
 
         UpdateUserResponse response = UpdateUserResponse.builder()
                 .id(id)
@@ -116,9 +116,9 @@ class UserControllerTest {
                     .thenReturn(command);
 
             Mockito.when(service.updateUser(command))
-                    .thenReturn(user);
+                    .thenReturn(account);
 
-            mapper.when(() -> UserMapper.toUpdateUserResponse(user))
+            mapper.when(() -> UserMapper.toUpdateUserResponse(account))
                     .thenReturn(response);
 
             mockMvc.perform(patch("/api/v1/users/{id}", id)
@@ -152,7 +152,7 @@ class UserControllerTest {
     void shouldGetUserById() throws Exception {
         UUID id = UUID.randomUUID();
 
-        User user = Mockito.mock(User.class);
+        Account account = Mockito.mock(Account.class);
         UserInfo response = UserInfo.builder()
                 .nickname("Matheus")
                 .email("email@email.com")
@@ -162,9 +162,9 @@ class UserControllerTest {
         try (MockedStatic<UserMapper> mapper = Mockito.mockStatic(UserMapper.class)) {
 
             Mockito.when(service.getUserById(id))
-                    .thenReturn(user);
+                    .thenReturn(account);
 
-            mapper.when(() -> UserMapper.toUserInfo(user))
+            mapper.when(() -> UserMapper.toUserInfo(account))
                     .thenReturn(response);
 
             mockMvc.perform(get("/api/v1/users/{id}", id))
@@ -177,13 +177,13 @@ class UserControllerTest {
 
     @Test
     void shouldGetAllUsers() throws Exception {
-        User user = Mockito.mock(User.class);
+        Account account = Mockito.mock(Account.class);
         UserSummary summary = UserSummary.builder()
                 .id(UUID.randomUUID())
                 .nickname("Matheus")
                 .build();
 
-        UserFilterQueryCommand command = Mockito.mock(UserFilterQueryCommand.class);
+        AccountFilterQueryCommand command = Mockito.mock(AccountFilterQueryCommand.class);
 
         try (MockedStatic<UserMapper> mapper = Mockito.mockStatic(UserMapper.class)) {
 
@@ -191,9 +191,9 @@ class UserControllerTest {
                     .thenReturn(command);
 
             Mockito.when(service.getAllUsers(command))
-                    .thenReturn(List.of(user));
+                    .thenReturn(List.of(account));
 
-            mapper.when(() -> UserMapper.toUserSummary(user))
+            mapper.when(() -> UserMapper.toUserSummary(account))
                     .thenReturn(summary);
 
             mockMvc.perform(get("/api/v1/users")

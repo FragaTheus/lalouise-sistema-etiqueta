@@ -6,18 +6,14 @@ import jakarta.validation.constraints.Pattern;
 
 public record LoginRequest(
 
-        @NotBlank
-        @Email
-        @Pattern(
-                regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-                message = "Formato de email invalido"
-        )
+        @NotBlank(message = "Email nao pode estar vazio")
+        @Email(message = "Formato de email invalido.")
         String email,
 
-        @NotBlank
+        @NotBlank(message = "Senha nao pode estar vazia")
         @Pattern(
                 regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,12}$",
-                message = "Senha deve ter entre 08 e 12 caracteres, com no minimo, uma letra maiuscula, uma minuscula, um numero e um caractere especial"
+                message = "Senha deve ter entre 08 e 12 caracteres, com no mínimo, uma letra maiúscula, uma minúscula, um numero e um caractere especial"
         )
         String password
 ){

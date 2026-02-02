@@ -2,8 +2,8 @@ package matheusfraga.dev.lalouise.backend.infra.controller.user;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import matheusfraga.dev.lalouise.backend.core.application.user.UserService;
-import matheusfraga.dev.lalouise.backend.core.domain.entity.User;
+import matheusfraga.dev.lalouise.backend.core.application.user.AccountService;
+import matheusfraga.dev.lalouise.backend.core.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.core.domain.enums.Role;
 import matheusfraga.dev.lalouise.backend.infra.controller.user.dto.request.CreateUserRequest;
 import matheusfraga.dev.lalouise.backend.infra.controller.user.dto.response.CreateUserResponse;
@@ -23,7 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService service;
+    private final AccountService service;
 
     @PostMapping
     public ResponseEntity<CreateUserResponse> createUser(@Valid @RequestBody CreateUserRequest request){
@@ -71,8 +71,8 @@ public class UserController {
             @RequestParam(required = false) Role role
     ) {
         var command = UserMapper.toFilterQueryCommand(nickname, email, role);
-        List<User> users = service.getAllUsers(command);
-        List<UserSummary> response = users.stream()
+        List<Account> accounts = service.getAllUsers(command);
+        List<UserSummary> response = accounts.stream()
                 .map(UserMapper::toUserSummary)
                 .toList();
 

@@ -1,7 +1,7 @@
 package matheusfraga.dev.lalouise.backend.infra.security;
 
 import lombok.RequiredArgsConstructor;
-import matheusfraga.dev.lalouise.backend.core.domain.entity.User;
+import matheusfraga.dev.lalouise.backend.core.domain.entity.Account;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,21 +12,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
-    private final User user;
+    private final Account account;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + account.getRole().name()));
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword().value();
+        return account.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail().value();
+        return account.getEmail();
     }
 
 }

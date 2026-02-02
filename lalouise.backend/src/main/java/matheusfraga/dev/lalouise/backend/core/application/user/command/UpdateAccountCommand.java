@@ -2,10 +2,12 @@ package matheusfraga.dev.lalouise.backend.core.application.user.command;
 
 import lombok.Builder;
 
+import java.util.UUID;
+
 @Builder
-public record CreateUserInputCommand(
+public record UpdateAccountCommand(
+        UUID id,
         String nickname,
-        String email,
         String password,
         String confirmPassword
 ) {

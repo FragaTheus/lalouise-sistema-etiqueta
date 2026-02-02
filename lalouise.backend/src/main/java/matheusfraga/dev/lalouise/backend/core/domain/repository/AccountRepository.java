@@ -1,6 +1,6 @@
 package matheusfraga.dev.lalouise.backend.core.domain.repository;
 
-import matheusfraga.dev.lalouise.backend.core.domain.entity.User;
+import matheusfraga.dev.lalouise.backend.core.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.core.domain.enums.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,19 +11,19 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, UUID> {
+public interface AccountRepository extends JpaRepository<Account, UUID> {
 
-    Optional<User> findByEmailValueIgnoreCase(String email);
+    Optional<Account> findByEmailIgnoreCase(String email);
 
-    boolean existsByEmailValueIgnoreCase(String email);
+    boolean existsByEmailIgnoreCase(String email);
 
     @Query("""
-    SELECT u FROM User u 
-    WHERE (:nickname IS NULL OR u.nickname.value LIKE %:nickname%) 
-    AND (:email IS NULL OR u.email.value = :email) 
+    SELECT u FROM Account u 
+    WHERE (:nickname IS NULL OR u.nickname LIKE %:nickname%) 
+    AND (:email IS NULL OR u.email = :email) 
     AND (:role IS NULL OR u.role = :role)
     """)
-    List<User> findByFilters(
+    List<Account> findByFilters(
             @Param("nickname") String nickname,
             @Param("email") String email,
             @Param("role") Role role

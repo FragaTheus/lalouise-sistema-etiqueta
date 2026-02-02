@@ -1,8 +1,8 @@
 package matheusfraga.dev.lalouise.backend.security;
 
-import matheusfraga.dev.lalouise.backend.core.domain.entity.User;
+import matheusfraga.dev.lalouise.backend.core.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.core.domain.enums.Role;
-import matheusfraga.dev.lalouise.backend.core.domain.repository.UserRepository;
+import matheusfraga.dev.lalouise.backend.core.domain.repository.AccountRepository;
 import matheusfraga.dev.lalouise.backend.infra.security.TokenService;
 import matheusfraga.dev.lalouise.backend.infra.security.UserDetailsImpl;
 import org.junit.jupiter.api.DisplayName;
@@ -28,14 +28,14 @@ class TokenFilterTest {
     private TokenService tokenService;
 
     @Autowired
-    private UserRepository userRepository;
+    private AccountRepository accountRepository;
 
     @Test
     @DisplayName("Deve permitir acesso quando o token for válido")
     void shouldAllowAccessWithValidToken() throws Exception {
 
-        var user = new User("Filtro", "filtro@teste.com", "$2a$12$R9h/lIPz0bouIzCu6slgOKS7LeBnMh9Gj31I/yI.8vH7/P.T8/L5.", Role.ADMIN);
-        userRepository.save(user);
+        var user = new Account("Filtro", "filtro@teste.com", "$2a$12$R9h/lIPz0bouIzCu6slgOKS7LeBnMh9Gj31I/yI.8vH7/P.T8/L5.", Role.ADMIN);
+        accountRepository.save(user);
 
         String token = tokenService.generateToken(new UserDetailsImpl(user));
 
