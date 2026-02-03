@@ -1,7 +1,7 @@
 package matheusfraga.dev.lalouise.backend.infra.security;
 
 import lombok.RequiredArgsConstructor;
-import matheusfraga.dev.lalouise.backend.core.domain.entity.Account;
+import matheusfraga.dev.lalouise.backend.domain.entity.Account;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

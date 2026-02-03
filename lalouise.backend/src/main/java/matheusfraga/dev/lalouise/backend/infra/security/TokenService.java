@@ -27,12 +27,22 @@ public class TokenService {
 
     public String generateToken(UserDetails user) {
         try {
+            var authorities = user.getAuthorities();
+
+            // ✅ VALIDAÇÃO ADICIONADA
+            if (authorities == null || authorities.isEmpty()) {
+                throw new IllegalStateException("Usuário sem role");
+            }
+
+            String role = authorities.iterator().next().getAuthority(); // ✅ Mudado para .getAuthority()
+
             return JWT.create()
                     .withIssuer("lalouise-api")
                     .withSubject(user.getUsername())
+                    .withClaim("role", role)
                     .withExpiresAt(genExpiration())
                     .sign(algorithm());
-        }catch (JWTCreationException e){
+        } catch (JWTCreationException e) {
             throw new RuntimeException("Erro ao gerar token", e);
         }
     }
@@ -44,11 +54,8 @@ public class TokenService {
                     .build()
                     .verify(token)
                     .getSubject();
-        }catch (JWTVerificationException e){
+        } catch (JWTVerificationException e) {
             return null;
         }
     }
-
-
-
 }

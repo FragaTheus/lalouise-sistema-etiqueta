@@ -1,7 +1,7 @@
 package matheusfraga.dev.lalouise.backend.infra.config;
 
 import lombok.RequiredArgsConstructor;
-import matheusfraga.dev.lalouise.backend.core.domain.repository.AccountRepository;
+import matheusfraga.dev.lalouise.backend.domain.repository.AccountRepository;
 import matheusfraga.dev.lalouise.backend.infra.security.UserDetailsImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,9 +1,9 @@
 package matheusfraga.dev.lalouise.backend.infra.config;
 
 import lombok.RequiredArgsConstructor;
-import matheusfraga.dev.lalouise.backend.core.domain.entity.Account;
-import matheusfraga.dev.lalouise.backend.core.domain.enums.Role;
-import matheusfraga.dev.lalouise.backend.core.domain.repository.AccountRepository;
+import matheusfraga.dev.lalouise.backend.domain.entity.Account;
+import matheusfraga.dev.lalouise.backend.domain.enums.Role;
+import matheusfraga.dev.lalouise.backend.domain.repository.AccountRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,8 +1,8 @@
 package matheusfraga.dev.lalouise.backend.security;
 
-import matheusfraga.dev.lalouise.backend.core.domain.entity.Account;
-import matheusfraga.dev.lalouise.backend.core.domain.enums.Role;
-import matheusfraga.dev.lalouise.backend.core.domain.repository.AccountRepository;
+import matheusfraga.dev.lalouise.backend.domain.entity.Account;
+import matheusfraga.dev.lalouise.backend.domain.enums.Role;
+import matheusfraga.dev.lalouise.backend.domain.repository.AccountRepository;
 import matheusfraga.dev.lalouise.backend.infra.security.TokenService;
 import matheusfraga.dev.lalouise.backend.infra.security.UserDetailsImpl;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +39,7 @@ class TokenFilterTest {
 
         String token = tokenService.generateToken(new UserDetailsImpl(user));
 
-        mockMvc.perform(get("/api/v1/users")
+        mockMvc.perform(get("/api/v1/accounts")
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk());
     }
@@ -47,7 +47,7 @@ class TokenFilterTest {
     @Test
     @DisplayName("Deve barrar acesso (403) quando não houver token")
     void shouldDenyAccessWithoutToken() throws Exception {
-        mockMvc.perform(get("/api/v1/users"))
+        mockMvc.perform(get("/api/v1/accounts"))
                 .andExpect(status().isForbidden());
     }
 }

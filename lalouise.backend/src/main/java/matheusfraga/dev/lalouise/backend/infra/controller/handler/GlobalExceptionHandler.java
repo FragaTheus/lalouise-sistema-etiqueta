@@ -1,10 +1,8 @@
 package matheusfraga.dev.lalouise.backend.infra.controller.handler;
 
-import matheusfraga.dev.lalouise.backend.core.domain.exception.sector.SectorAlreadyExistsException;
-import matheusfraga.dev.lalouise.backend.core.domain.exception.sector.SectorNotFoundException;
-import matheusfraga.dev.lalouise.backend.core.domain.exception.storage.SameStorageNameException;
-import matheusfraga.dev.lalouise.backend.core.domain.exception.storage.StorageNotFoundException;
-import matheusfraga.dev.lalouise.backend.core.domain.exception.user.*;
+import matheusfraga.dev.lalouise.backend.domain.exception.sector.*;
+import matheusfraga.dev.lalouise.backend.domain.exception.user.*;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -73,18 +71,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
-    @ExceptionHandler(SameStorageNameException.class)
-    public ResponseEntity<HandlerResponse<Void>> handleSameStorageNameException(SameStorageNameException ex){
-        var response = HandlerResponse.withoutData(HttpStatus.CONFLICT.value(), ex.getMessage());
-        return  ResponseEntity.status(HttpStatus.CONFLICT).body(response);
-    }
-
-    @ExceptionHandler(StorageNotFoundException.class)
-    public  ResponseEntity<HandlerResponse<Void>> handleStorageNotFoundException(StorageNotFoundException ex){
-        var response = HandlerResponse.withoutData(HttpStatus.NOT_FOUND.value(), ex.getMessage());
-        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-    }
-
     @ExceptionHandler(SectorAlreadyExistsException.class)
     public ResponseEntity<HandlerResponse<Void>> handleSectorAlreadyExistsException(SectorAlreadyExistsException ex){
         var response = HandlerResponse.withoutData(HttpStatus.CONFLICT.value(), ex.getMessage());
@@ -95,5 +81,23 @@ public class GlobalExceptionHandler {
     public ResponseEntity<HandlerResponse<Void>> handleSectorNotFoundException(SectorNotFoundException ex){
         var response = HandlerResponse.withoutData(HttpStatus.NOT_FOUND.value(), ex.getMessage());
         return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(SameSectorNameException.class)
+    public ResponseEntity<HandlerResponse<Void>> handleSameSectorNameException(SameSectorNameException ex){
+        var response = HandlerResponse.withoutData(HttpStatus.CONFLICT.value(), ex.getMessage());
+        return  ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(UserAlreadyHasSectorException.class)
+    public ResponseEntity<HandlerResponse<Void>> handleUserAlreadyHasSectorException(UserAlreadyHasSectorException ex){
+        var response = HandlerResponse.withoutData(HttpStatus.CONFLICT.value(), ex.getMessage());
+        return  ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(SameResponsibleException.class)
+    public ResponseEntity<HandlerResponse<Void>> handleSameResponsibleException(SameResponsibleException ex){
+        var response = HandlerResponse.withoutData(HttpStatus.CONFLICT.value(), ex.getMessage());
+        return  ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 }

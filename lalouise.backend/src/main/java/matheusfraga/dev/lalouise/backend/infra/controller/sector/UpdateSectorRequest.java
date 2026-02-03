@@ -2,22 +2,29 @@ package matheusfraga.dev.lalouise.backend.infra.controller.sector;
 
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import matheusfraga.dev.lalouise.backend.domain.enums.StorageType;
+
+import java.util.List;
+import java.util.UUID;
 
 public record UpdateSectorRequest(
 
-        @Size(max = 50)
+        @Size(min = 5, max = 50)
         @Pattern(
-                regexp = "^[a-zA-Z0-9]+$",
-                message = "Formato de nome invalido."
+                regexp = "^[\\p{L} ]+$",
+                message = "Nome deve conter apenas letras e espaços"
         )
         String name,
 
         @Size(max = 200)
         @Pattern(
-                regexp = "^[a-zA-ZÀ-ÿ\\s]+$",
-                message = "Descrição nao pode ter caracteres especiais nem números"
+                regexp = "^[\\p{L} ]+$",
+                message = "Descrição deve conter apenas letras e espaços"
         )
-        String description
+        String description,
 
-) {
-}
+        @Size(min = 1, message = "Deve ter pelo menos um tipo de armazenamento")
+        List<StorageType> storages,
+
+        UUID responsibleId
+) {}
