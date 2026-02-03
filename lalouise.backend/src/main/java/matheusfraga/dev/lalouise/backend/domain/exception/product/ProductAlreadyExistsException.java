@@ -1,6 +1,4 @@
-package matheusfraga.dev.lalouise.backend.domain.exception;
-
-import java.util.UUID;
+package matheusfraga.dev.lalouise.backend.domain.exception.product;
 
 public class ProductAlreadyExistsException extends RuntimeException {
     public ProductAlreadyExistsException() {
