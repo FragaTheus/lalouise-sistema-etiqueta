@@ -1,4 +1,4 @@
-package matheusfraga.dev.lalouise.backend.application.command;
+package matheusfraga.dev.lalouise.backend.application.command.sector;
 
 import lombok.Builder;
 import matheusfraga.dev.lalouise.backend.domain.enums.StorageType;

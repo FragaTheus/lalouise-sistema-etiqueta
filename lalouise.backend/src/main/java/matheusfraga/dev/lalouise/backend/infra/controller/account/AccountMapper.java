@@ -1,8 +1,8 @@
 package matheusfraga.dev.lalouise.backend.infra.controller.account;
 
-import matheusfraga.dev.lalouise.backend.application.command.AccountFilterQueryCommand;
-import matheusfraga.dev.lalouise.backend.application.command.CreateAccountCommand;
-import matheusfraga.dev.lalouise.backend.application.command.UpdateAccountCommand;
+import matheusfraga.dev.lalouise.backend.application.command.account.AccountFilterQueryCommand;
+import matheusfraga.dev.lalouise.backend.application.command.account.CreateAccountCommand;
+import matheusfraga.dev.lalouise.backend.application.command.account.UpdateAccountCommand;
 import matheusfraga.dev.lalouise.backend.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.domain.enums.Role;
 

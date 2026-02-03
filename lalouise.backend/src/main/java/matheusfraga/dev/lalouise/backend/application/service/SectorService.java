@@ -2,8 +2,8 @@ package matheusfraga.dev.lalouise.backend.application.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import matheusfraga.dev.lalouise.backend.application.command.CreateSectorCommand;
-import matheusfraga.dev.lalouise.backend.application.command.UpdateSectorInputCommand;
+import matheusfraga.dev.lalouise.backend.application.command.sector.CreateSectorCommand;
+import matheusfraga.dev.lalouise.backend.application.command.sector.UpdateSectorInputCommand;
 import matheusfraga.dev.lalouise.backend.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.domain.entity.Sector;
 import matheusfraga.dev.lalouise.backend.domain.enums.StorageType;
