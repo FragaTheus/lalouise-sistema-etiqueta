@@ -1,10 +1,14 @@
-package matheusfraga.dev.lalouise.backend.infra.controller.account;
+package matheusfraga.dev.lalouise.backend.infra.in.controller.account;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import matheusfraga.dev.lalouise.backend.application.service.AccountService;
 import matheusfraga.dev.lalouise.backend.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.domain.enums.Role;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.CreateUserRequest;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UpdateUserRequest;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UserInfo;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UserSummary;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

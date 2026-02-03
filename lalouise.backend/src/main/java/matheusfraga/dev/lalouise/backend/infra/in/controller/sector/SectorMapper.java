@@ -1,8 +1,12 @@
-package matheusfraga.dev.lalouise.backend.infra.controller.sector;
+package matheusfraga.dev.lalouise.backend.infra.in.controller.sector;
 
 import matheusfraga.dev.lalouise.backend.application.command.sector.CreateSectorCommand;
 import matheusfraga.dev.lalouise.backend.application.command.sector.UpdateSectorInputCommand;
 import matheusfraga.dev.lalouise.backend.domain.entity.Sector;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.sector.dto.CreateSectorRequest;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.sector.dto.SectorInfo;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.sector.dto.SectorSummary;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.sector.dto.UpdateSectorRequest;
 
 import java.util.UUID;
 

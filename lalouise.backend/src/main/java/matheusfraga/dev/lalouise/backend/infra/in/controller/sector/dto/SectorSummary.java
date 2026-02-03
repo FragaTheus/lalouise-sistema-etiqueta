@@ -1,4 +1,4 @@
-package matheusfraga.dev.lalouise.backend.infra.controller.sector;
+package matheusfraga.dev.lalouise.backend.infra.in.controller.sector.dto;
 
 import lombok.Builder;
 

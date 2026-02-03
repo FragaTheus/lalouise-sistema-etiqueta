@@ -1,6 +1,5 @@
-package matheusfraga.dev.lalouise.backend.infra.controller.account;
+package matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 public record UpdateUserRequest(

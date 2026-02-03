@@ -1,10 +1,14 @@
-package matheusfraga.dev.lalouise.backend.infra.controller.account;
+package matheusfraga.dev.lalouise.backend.infra.in.controller.account;
 
 import matheusfraga.dev.lalouise.backend.application.command.account.AccountFilterQueryCommand;
 import matheusfraga.dev.lalouise.backend.application.command.account.CreateAccountCommand;
 import matheusfraga.dev.lalouise.backend.application.command.account.UpdateAccountCommand;
 import matheusfraga.dev.lalouise.backend.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.domain.enums.Role;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.CreateUserRequest;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UpdateUserRequest;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UserInfo;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UserSummary;
 
 import java.util.UUID;
 

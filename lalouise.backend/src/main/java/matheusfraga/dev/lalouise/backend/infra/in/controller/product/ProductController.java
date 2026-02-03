@@ -1,4 +1,4 @@
-package matheusfraga.dev.lalouise.backend.infra.controller.product;
+package matheusfraga.dev.lalouise.backend.infra.in.controller.product;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

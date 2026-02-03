@@ -1,4 +1,4 @@
-package matheusfraga.dev.lalouise.backend.infra.controller.auth;
+package matheusfraga.dev.lalouise.backend.infra.in.controller.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

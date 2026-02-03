@@ -1,4 +1,4 @@
-package matheusfraga.dev.lalouise.backend.infra.controller.account;
+package matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto;
 
 import lombok.Builder;
 

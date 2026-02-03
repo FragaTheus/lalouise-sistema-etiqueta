@@ -1,4 +1,4 @@
-package matheusfraga.dev.lalouise.backend.infra.controller.handler;
+package matheusfraga.dev.lalouise.backend.infra.in.handler;
 
 import java.time.Instant;
 

@@ -1,15 +1,17 @@
-package matheusfraga.dev.lalouise.backend.infra.controller.sector;
+package matheusfraga.dev.lalouise.backend.infra.in.controller.sector;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import matheusfraga.dev.lalouise.backend.application.service.SectorService;
 import matheusfraga.dev.lalouise.backend.domain.enums.StorageType;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.sector.dto.CreateSectorRequest;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.sector.dto.SectorInfo;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.sector.dto.SectorSummary;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.sector.dto.UpdateSectorRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
