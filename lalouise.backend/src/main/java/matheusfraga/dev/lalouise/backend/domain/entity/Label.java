@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import matheusfraga.dev.lalouise.backend.domain.enums.LabelStatus;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -28,26 +28,35 @@ public class Label {
     @ManyToOne(fetch = FetchType.LAZY)
     private Account responsible;
 
+    @Setter
     @Column(name = "issue_date", nullable = false)
-    private LocalDateTime issueDate;
+    private LocalDate issueDate;
 
     @Setter
     @Column(name = "expiration_date", nullable = false)
-    private LocalDateTime expirationDate;
+    private LocalDate expirationDate;
 
     @Setter
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private LabelStatus status;
 
-
-
-    public Label(Product product, Sector sector, Account responsible, LocalDateTime expirationDate, LabelStatus status) {
+    public Label(Product product, Sector sector, Account responsible, LocalDate issueDate,LocalDate expirationDate, LabelStatus status) {
         this.product = product;
         this.sector = sector;
         this.responsible = responsible;
-        this.issueDate = LocalDateTime.now();
+        this.issueDate = issueDate;
         this.expirationDate = expirationDate;
         this.status = status;
+    }
+
+    public Label(UUID labelId, Product product, Sector sector, Account responsible, LocalDate issueDate,LocalDate expirationDate, LabelStatus labelStatus) {
+        this.id = labelId;
+        this.product = product;
+        this.sector = sector;
+        this.responsible = responsible;
+        this.issueDate = issueDate;
+        this.expirationDate = expirationDate;
+        this.status = labelStatus;
     }
 }
