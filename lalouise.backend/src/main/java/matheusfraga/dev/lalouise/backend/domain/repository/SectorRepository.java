@@ -23,7 +23,7 @@ public interface SectorRepository extends JpaRepository<Sector, UUID>{
 
     @Query("""
         SELECT s FROM Sector s
-        WHERE (:name IS NULL OR LOWER(s.name) = LOWER(:name))
+        WHERE (:name IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%',:name,'%')))
         """)
     List<Sector> findAllByFilter(@Param("name") String name);
 

@@ -12,7 +12,7 @@ import java.util.UUID;
 public record CreateSectorRequest(
 
         @NotBlank(message = "Nome não pode estar vazio")
-        @Size(min = 5, max = 50)
+        @Size(min = 3, max = 50)
         @Pattern(
                 regexp = "^[\\p{L} ]+$",
                 message = "Nome deve conter apenas letras e espaços"
