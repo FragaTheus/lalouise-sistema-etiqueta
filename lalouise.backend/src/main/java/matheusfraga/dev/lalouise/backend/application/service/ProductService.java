@@ -37,10 +37,6 @@ public class ProductService {
     public void updateProduct(UUID id, String newName) {
         Product product = getProduct(id);
 
-        if (product.getName().equalsIgnoreCase(newName)) {
-            throw new NoDataForUpdateException();
-        }
-
         if (repository.existsByNameIgnoreCase(newName)) {
             throw new ProductAlreadyExistsException();
         }

@@ -11,8 +11,8 @@ public record ProductRequest(
         @NotBlank(message = "Nome do produto nao pode ser vazio")
         @Size(min = 5, max = 30, message = "Nome do produto tem que ter entre 05 e 30 caracteres")
         @Pattern(
-                regexp = "^[\\p{L}0-9\\s]+$",
-                message = "Nome deve conter apenas letras, números e espaços"
+                regexp = "^[\\p{L}\\s]+$",
+                message = "Nome deve conter apenas letras e espaços"
         )
         String name
 ) {

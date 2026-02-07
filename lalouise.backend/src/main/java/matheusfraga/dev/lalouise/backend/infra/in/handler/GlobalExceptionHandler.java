@@ -1,5 +1,6 @@
 package matheusfraga.dev.lalouise.backend.infra.in.handler;
 
+import matheusfraga.dev.lalouise.backend.domain.exception.product.ProductAlreadyExistsException;
 import matheusfraga.dev.lalouise.backend.domain.exception.sector.*;
 import matheusfraga.dev.lalouise.backend.domain.exception.user.*;
 import org.springframework.http.HttpStatus;
@@ -96,6 +97,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SameResponsibleException.class)
     public ResponseEntity<HandlerResponse<Void>> handleSameResponsibleException(SameResponsibleException ex){
+        var response = HandlerResponse.withoutData(HttpStatus.CONFLICT.value(), ex.getMessage());
+        return  ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(ProductAlreadyExistsException.class)
+    public ResponseEntity<HandlerResponse<Void>> handleProductAlreadyExistsException(ProductAlreadyExistsException ex){
         var response = HandlerResponse.withoutData(HttpStatus.CONFLICT.value(), ex.getMessage());
         return  ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
