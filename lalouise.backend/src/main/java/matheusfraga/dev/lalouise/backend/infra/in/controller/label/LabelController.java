@@ -4,7 +4,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import matheusfraga.dev.lalouise.backend.application.command.label.PageFilterQueryCommand;
 import matheusfraga.dev.lalouise.backend.application.service.LabelService;
+import matheusfraga.dev.lalouise.backend.application.service.PrintService;
 import matheusfraga.dev.lalouise.backend.domain.enums.LabelStatus;
+import matheusfraga.dev.lalouise.backend.domain.enums.StorageType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,11 +23,13 @@ import java.util.UUID;
 public class LabelController {
 
     private final LabelService labelService;
+    private final PrintService printService;
 
-    @PostMapping
+    @PostMapping("print")
     public ResponseEntity<Void> create(@RequestBody @Valid CreateLabelRequest request) {
         var command = LabelMapper.toCreateLabelInputCommand(request);
-        labelService.createLabel(command);
+        var label = labelService.createLabel(command);
+        printService.printLabel(label);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -60,10 +64,22 @@ public class LabelController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{id}/status")
-    public ResponseEntity<Void> updateStatus(@PathVariable UUID id, @RequestParam LabelStatus status) {
-        labelService.updateStatus(id, status);
-        return ResponseEntity.noContent().build();
+    @GetMapping("/{id}/reprint-data")
+    public ResponseEntity<LabelReprintResponse> reprintData(@PathVariable UUID id) {
+        var label = labelService.getLabel(id);
+        var response = LabelMapper.toLabelReprintResponse(label);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/{oldLabelId}/reprint")
+    public ResponseEntity<Void> reprint(
+            @PathVariable UUID oldLabelId,
+            @Valid @RequestBody LabelReprintRequest request
+            ) {
+        var command = LabelMapper.toLabelReprintCommand(oldLabelId, request);
+        var newLabel = labelService.updateLabelStatus(command);
+        printService.printLabel(newLabel);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/maintenance/run-jobs")

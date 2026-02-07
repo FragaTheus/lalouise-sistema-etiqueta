@@ -4,9 +4,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matheusfraga.dev.lalouise.backend.application.command.label.CreateLabelInputCommand;
+import matheusfraga.dev.lalouise.backend.application.command.label.LabelReprintCommand;
 import matheusfraga.dev.lalouise.backend.application.command.label.PageFilterQueryCommand;
 import matheusfraga.dev.lalouise.backend.domain.entity.Label;
 import matheusfraga.dev.lalouise.backend.domain.enums.LabelStatus;
+import matheusfraga.dev.lalouise.backend.domain.exception.label.LabelAlreadyDiscardedException;
 import matheusfraga.dev.lalouise.backend.domain.exception.label.LabelNotFoundException;
 import matheusfraga.dev.lalouise.backend.domain.exception.sector.StorageTypeNotAllowedInSectorException;
 import matheusfraga.dev.lalouise.backend.domain.repository.LabelRepository;
@@ -61,11 +63,24 @@ public class LabelService {
     }
 
     @Transactional
-    public void updateStatus(UUID id, LabelStatus newStatus) {
-        Label label = labelRepository.findById(id)
+    public Label updateLabelStatus(LabelReprintCommand command) {
+
+        Label oldLabel = labelRepository.findById(command.oldLabelId())
                 .orElseThrow(LabelNotFoundException::new);
 
-        label.setStatus(newStatus);
+        if (oldLabel.getStatus() == LabelStatus.DESCARTADA) {
+            throw new LabelAlreadyDiscardedException();
+        }
+
+        CreateLabelInputCommand createCommand = CreateLabelInputCommand.builder()
+                .productId(oldLabel.getProduct().getId())
+                .responsibleId(command.newResponsibleId())
+                .sectorId(command.newSectorId())
+                .storageType(command.newStorage())
+                .build();
+
+        oldLabel.setStatus(LabelStatus.DESCARTADA);
+        return createLabel(createCommand);
     }
 
     public Label getLabel(UUID id) {

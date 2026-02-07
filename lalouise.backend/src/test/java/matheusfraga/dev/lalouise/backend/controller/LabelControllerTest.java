@@ -3,10 +3,13 @@ package matheusfraga.dev.lalouise.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import matheusfraga.dev.lalouise.backend.application.service.LabelService;
+import matheusfraga.dev.lalouise.backend.application.service.PrintService;
+import matheusfraga.dev.lalouise.backend.domain.entity.Label;
 import matheusfraga.dev.lalouise.backend.domain.enums.LabelStatus;
 import matheusfraga.dev.lalouise.backend.domain.enums.StorageType;
 import matheusfraga.dev.lalouise.backend.infra.in.controller.label.CreateLabelRequest;
 import matheusfraga.dev.lalouise.backend.infra.in.controller.label.LabelController;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.label.LabelReprintRequest;
 import matheusfraga.dev.lalouise.backend.infra.security.TokenService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,8 +22,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
 
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(LabelController.class)
@@ -38,6 +42,9 @@ class LabelControllerTest {
     private LabelService labelService;
 
     @MockitoBean
+    private PrintService printService;
+
+    @MockitoBean
     private TokenService tokenService;
 
     @Test
@@ -50,7 +57,7 @@ class LabelControllerTest {
                 .storageType(StorageType.REFRIGERADO)
                 .build();
 
-        mockMvc.perform(post("/api/v1/labels")
+        mockMvc.perform(post("/api/v1/labels/print")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
@@ -66,14 +73,26 @@ class LabelControllerTest {
     }
 
     @Test
-    @DisplayName("Deve retornar 204 ao atualizar status")
-    void shouldReturnNoContentWhenUpdateStatus() throws Exception {
-        UUID labelId = UUID.randomUUID();
-        LabelStatus status = LabelStatus.DESCARTADA;
+    @DisplayName("Deve retornar 201 ao solicitar a reimpressão de uma etiqueta")
+    void shouldReturnCreatedWhenReprintIsSuccessful() throws Exception {
+        UUID oldLabelId = UUID.randomUUID();
 
-        mockMvc.perform(patch("/api/v1/labels/{id}/status", labelId)
-                        .param("status", status.name()))
-                .andExpect(status().isNoContent());
+        var request = new LabelReprintRequest(
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                StorageType.AMBIENTE
+        );
+
+        Label mockNewLabel = mock(Label.class);
+        when(labelService.updateLabelStatus(any())).thenReturn(mockNewLabel);
+
+        mockMvc.perform(post("/api/v1/labels/{oldLabelId}/reprint", oldLabelId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+        verify(printService).printLabel(mockNewLabel);
     }
 
     @Test

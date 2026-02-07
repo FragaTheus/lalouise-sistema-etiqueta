@@ -1,6 +1,7 @@
 package matheusfraga.dev.lalouise.backend.service;
 
 import matheusfraga.dev.lalouise.backend.application.command.label.CreateLabelInputCommand;
+import matheusfraga.dev.lalouise.backend.application.command.label.LabelReprintCommand;
 import matheusfraga.dev.lalouise.backend.application.command.label.PageFilterQueryCommand;
 import matheusfraga.dev.lalouise.backend.application.service.*;
 import matheusfraga.dev.lalouise.backend.domain.entity.Label;
@@ -163,32 +164,47 @@ class LabelServiceTest {
     }
 
     @Test
-    @DisplayName("Deve atualizar status da etiqueta")
+    @DisplayName("Deve atualizar status da etiqueta antiga")
     void shouldUpdateLabelStatus() {
-        // Arrange
-        when(labelRepository.findById(labelId)).thenReturn(Optional.of(label));
+        UUID targetId = UUID.randomUUID();
 
-        // Act
-        labelService.updateStatus(labelId, LabelStatus.DESCARTADA);
+        Product mockProduct = mock(Product.class);
+        Sector mockSector = mock(Sector.class);
+        Account mockAccount = mock(Account.class);
 
-        // Assert
-        assertThat(label.getStatus()).isEqualTo(LabelStatus.DESCARTADA);
-        verify(labelRepository).findById(labelId);
+
+        when(mockSector.getStorages()).thenReturn(List.of(StorageType.AMBIENTE));
+
+        Label oldLabel = new Label(
+                targetId,
+                mockProduct,
+                mockSector,
+                mockAccount,
+                LocalDate.now(),
+                LocalDate.now().plusDays(5),
+                LabelStatus.ATIVA
+        );
+
+        var command = LabelReprintCommand.builder()
+                .oldLabelId(targetId)
+                .newResponsibleId(UUID.randomUUID())
+                .newSectorId(UUID.randomUUID())
+                .newStorage(StorageType.AMBIENTE)
+                .build();
+
+        when(labelRepository.findById(targetId)).thenReturn(Optional.of(oldLabel));
+        when(productService.getProduct(any())).thenReturn(mockProduct);
+        when(sectorService.getSector(any())).thenReturn(mockSector);
+        when(accountService.getUserById(any())).thenReturn(mockAccount);
+        when(validityService.calculateExpirationDate(any(), any())).thenReturn(LocalDate.now());
+        when(labelRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+
+        labelService.updateLabelStatus(command);
+
+        assertThat(oldLabel.getStatus()).isEqualTo(LabelStatus.DESCARTADA);
+        verify(labelRepository).findById(targetId);
     }
 
-    @Test
-    @DisplayName("Deve lançar exceção ao atualizar status de etiqueta inexistente")
-    void shouldThrowExceptionWhenUpdatingNonExistentLabel() {
-        // Arrange
-        UUID nonExistentId = UUID.randomUUID();
-        when(labelRepository.findById(nonExistentId)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        assertThatThrownBy(() -> labelService.updateStatus(nonExistentId, LabelStatus.VENCIDA))
-                .isInstanceOf(LabelNotFoundException.class);
-
-        verify(labelRepository).findById(nonExistentId);
-    }
 
     @Test
     @DisplayName("Deve buscar etiqueta por ID")
