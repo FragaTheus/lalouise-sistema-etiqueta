@@ -102,4 +102,8 @@ public class AccountService {
                 command.role()
         );
     }
+
+    public Account getUserByEmail(String email){
+        return accountRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+    }
 }

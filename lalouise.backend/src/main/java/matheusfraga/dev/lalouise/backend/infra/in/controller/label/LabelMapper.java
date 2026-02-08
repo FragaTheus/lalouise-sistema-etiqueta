@@ -2,7 +2,6 @@ package matheusfraga.dev.lalouise.backend.infra.in.controller.label;
 
 import matheusfraga.dev.lalouise.backend.domain.entity.Label;
 
-import java.util.UUID;
 
 public record LabelMapper() {
 
@@ -11,6 +10,7 @@ public record LabelMapper() {
                 .id(label.getId())
                 .product(label.getProduct().getName())
                 .sector(label.getSector().getName())
+                .status(label.getStatus())
                 .build();
     }
 
@@ -30,10 +30,7 @@ public record LabelMapper() {
                 .id(label.getId())
                 .productId(label.getProduct().getId())
                 .productName(label.getProduct().getName())
-                .sectorId(label.getSector().getId())
-                .sectorName(label.getSector().getName())
-                .responsibleId(label.getResponsible().getId())
-                .responsibleName(label.getResponsible().getNickname())
+                .expirationDate(label.getExpirationDate())
                 .build();
 
     }

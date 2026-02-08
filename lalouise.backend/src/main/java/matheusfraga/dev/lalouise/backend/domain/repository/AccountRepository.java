@@ -17,6 +17,8 @@ public interface AccountRepository extends JpaRepository<Account, UUID> {
 
     boolean existsByEmailIgnoreCase(String email);
 
+    Optional<Account> findByEmail(String email);
+
     @Query("""
         SELECT u FROM Account u 
         WHERE (:nickname IS NULL OR LOWER(u.nickname) LIKE LOWER(CONCAT('%', :nickname, '%'))) 

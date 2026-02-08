@@ -25,8 +25,8 @@ public class LabelController {
     private final LabelService labelService;
     private final PrintService printService;
 
-    @PostMapping("print")
-    public ResponseEntity<Void> create(@RequestBody @Valid CreateLabelRequest request) {
+    @PostMapping("/print")
+    public ResponseEntity<Void> create(@RequestBody CreateLabelRequest request) {
         var label = labelService.createLabel(request.productId(), request.storageType());
         printService.printLabel(label);
         return ResponseEntity.status(HttpStatus.CREATED).build();

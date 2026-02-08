@@ -1,6 +1,8 @@
 package matheusfraga.dev.lalouise.backend.infra.in.handler;
 
+import matheusfraga.dev.lalouise.backend.domain.exception.print.LabelPrintException;
 import matheusfraga.dev.lalouise.backend.domain.exception.product.ProductAlreadyExistsException;
+import matheusfraga.dev.lalouise.backend.domain.exception.product.ProductNotFoundException;
 import matheusfraga.dev.lalouise.backend.domain.exception.sector.*;
 import matheusfraga.dev.lalouise.backend.domain.exception.user.*;
 import org.springframework.http.HttpStatus;
@@ -105,5 +107,31 @@ public class GlobalExceptionHandler {
     public ResponseEntity<HandlerResponse<Void>> handleProductAlreadyExistsException(ProductAlreadyExistsException ex){
         var response = HandlerResponse.withoutData(HttpStatus.CONFLICT.value(), ex.getMessage());
         return  ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<HandlerResponse<Void>> handleProductNotFoundException(ProductNotFoundException ex){
+        var response = HandlerResponse.withoutData(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(StorageTypeNotAllowedInSectorException.class)
+    public ResponseEntity<HandlerResponse<Void>> handleStorageTypeNotAllowedInSectorException(
+            StorageTypeNotAllowedInSectorException ex
+    ){
+        var response = HandlerResponse.withoutData(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(LabelPrintException.class)
+    public  ResponseEntity<HandlerResponse<Void>> handleLabelPrintException(LabelPrintException ex){
+        var response = HandlerResponse.withoutData(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<HandlerResponse<Void>> handleException(Exception ex){
+        var response = HandlerResponse.withoutData(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
+        return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 }

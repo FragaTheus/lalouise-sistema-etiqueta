@@ -13,9 +13,11 @@ import matheusfraga.dev.lalouise.backend.domain.exception.label.LabelAlreadyDisc
 import matheusfraga.dev.lalouise.backend.domain.exception.label.LabelNotFoundException;
 import matheusfraga.dev.lalouise.backend.domain.exception.sector.StorageTypeNotAllowedInSectorException;
 import matheusfraga.dev.lalouise.backend.domain.repository.LabelRepository;
+import matheusfraga.dev.lalouise.backend.infra.security.UserDetailsImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -31,6 +33,7 @@ public class LabelService {
     private final ProductService productService;
     private final SectorService sectorService;
     private final ValidityService validityService;
+    private final AccountService accountService;
 
     @Transactional
     public Label createLabel(UUID productId, StorageType storage) {
@@ -131,8 +134,8 @@ public class LabelService {
 
     //Métodos auxiliares
     private Account getResponsible(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (Account) authentication.getPrincipal();
+        String accountEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        return accountService.getUserByEmail(accountEmail);
     }
 
 }

@@ -3,6 +3,7 @@ package matheusfraga.dev.lalouise.backend.application.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matheusfraga.dev.lalouise.backend.domain.entity.Label;
+import matheusfraga.dev.lalouise.backend.domain.exception.print.LabelPrintException;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
@@ -25,7 +26,7 @@ public class PrintService {
             log.info("Label enviada para impressao!");
         }catch (Exception e){
             log.error("Erro ao gerar ZPL para labelId: {}", label.getId(), e);
-            throw new RuntimeException("Erro ao imprimir etiqueta: "+ e.getMessage(), e);
+            throw new LabelPrintException("Erro ao imprimir etiqueta: "+ e.getMessage(), e);
         }
     }
 
