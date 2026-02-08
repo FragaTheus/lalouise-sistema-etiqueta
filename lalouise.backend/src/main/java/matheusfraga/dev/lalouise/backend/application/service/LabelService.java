@@ -3,16 +3,19 @@ package matheusfraga.dev.lalouise.backend.application.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import matheusfraga.dev.lalouise.backend.application.command.label.CreateLabelInputCommand;
-import matheusfraga.dev.lalouise.backend.application.command.label.LabelReprintCommand;
 import matheusfraga.dev.lalouise.backend.application.command.label.PageFilterQueryCommand;
+import matheusfraga.dev.lalouise.backend.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.domain.entity.Label;
+import matheusfraga.dev.lalouise.backend.domain.entity.Sector;
 import matheusfraga.dev.lalouise.backend.domain.enums.LabelStatus;
+import matheusfraga.dev.lalouise.backend.domain.enums.StorageType;
 import matheusfraga.dev.lalouise.backend.domain.exception.label.LabelAlreadyDiscardedException;
 import matheusfraga.dev.lalouise.backend.domain.exception.label.LabelNotFoundException;
 import matheusfraga.dev.lalouise.backend.domain.exception.sector.StorageTypeNotAllowedInSectorException;
 import matheusfraga.dev.lalouise.backend.domain.repository.LabelRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -26,27 +29,25 @@ public class LabelService {
 
     private final LabelRepository labelRepository;
     private final ProductService productService;
-    private final AccountService accountService;
     private final SectorService sectorService;
     private final ValidityService validityService;
 
     @Transactional
-    public Label createLabel(CreateLabelInputCommand command) {
+    public Label createLabel(UUID productId, StorageType storage) {
 
-        var product = productService.getProduct(command.productId());
-        var sector = sectorService.getSector(command.sectorId());
-        var responsible = accountService.getUserById(command.responsibleId());
+        Account responsible = getResponsible();
 
-        if (!sector.getStorages().contains(command.storageType())) throw new StorageTypeNotAllowedInSectorException();
+        Sector sector = sectorService.getSectorByResponsible(responsible.getId());
+
+        var product = productService.getProduct(productId);
+        if (!sector.getStorages().contains(storage)) throw new StorageTypeNotAllowedInSectorException();
 
         LocalDate today = LocalDate.now();
-        var expirationDate = validityService.calculateExpirationDate(command.storageType(), today);
-
+        var expirationDate = validityService.calculateExpirationDate(storage, today);
         var initialStatus = validityService.determineStatus(expirationDate);
 
-        var issueDate = LocalDate.now();
         Label label = new Label(
-                product, sector, responsible, issueDate, expirationDate, initialStatus
+                product, sector, responsible, today, expirationDate, initialStatus
         );
         return labelRepository.save(label);
     }
@@ -63,24 +64,17 @@ public class LabelService {
     }
 
     @Transactional
-    public Label updateLabelStatus(LabelReprintCommand command) {
+    public Label updateLabelStatus(UUID oldLabelId, StorageType storage) {
 
-        Label oldLabel = labelRepository.findById(command.oldLabelId())
+        Label oldLabel = labelRepository.findById(oldLabelId)
                 .orElseThrow(LabelNotFoundException::new);
 
-        if (oldLabel.getStatus() == LabelStatus.DESCARTADA) {
-            throw new LabelAlreadyDiscardedException();
-        }
-
-        CreateLabelInputCommand createCommand = CreateLabelInputCommand.builder()
-                .productId(oldLabel.getProduct().getId())
-                .responsibleId(command.newResponsibleId())
-                .sectorId(command.newSectorId())
-                .storageType(command.newStorage())
-                .build();
-
+        if (oldLabel.getStatus() == LabelStatus.DESCARTADA) throw new LabelAlreadyDiscardedException();
         oldLabel.setStatus(LabelStatus.DESCARTADA);
-        return createLabel(createCommand);
+
+        var productId = oldLabel.getProduct().getId();
+
+        return createLabel(productId, storage );
     }
 
     public Label getLabel(UUID id) {
@@ -133,6 +127,12 @@ public class LabelService {
         } else {
             log.info("Nenhuma etiqueta antiga para remover hoje.");
         }
+    }
+
+    //Métodos auxiliares
+    private Account getResponsible(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (Account) authentication.getPrincipal();
     }
 
 }

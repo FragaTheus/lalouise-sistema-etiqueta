@@ -8,8 +8,6 @@ import java.util.UUID;
 @Builder
 public record CreateLabelRequest(
         UUID productId,
-        UUID responsibleId,
-        UUID sectorId,
         StorageType storageType
 ) {
 }

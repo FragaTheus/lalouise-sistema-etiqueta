@@ -27,8 +27,7 @@ public class LabelController {
 
     @PostMapping("print")
     public ResponseEntity<Void> create(@RequestBody @Valid CreateLabelRequest request) {
-        var command = LabelMapper.toCreateLabelInputCommand(request);
-        var label = labelService.createLabel(command);
+        var label = labelService.createLabel(request.productId(), request.storageType());
         printService.printLabel(label);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -76,8 +75,7 @@ public class LabelController {
             @PathVariable UUID oldLabelId,
             @Valid @RequestBody LabelReprintRequest request
             ) {
-        var command = LabelMapper.toLabelReprintCommand(oldLabelId, request);
-        var newLabel = labelService.updateLabelStatus(command);
+        var newLabel = labelService.updateLabelStatus(oldLabelId, request.storage());
         printService.printLabel(newLabel);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

@@ -1,21 +1,10 @@
 package matheusfraga.dev.lalouise.backend.infra.in.controller.label;
 
-import matheusfraga.dev.lalouise.backend.application.command.label.CreateLabelInputCommand;
-import matheusfraga.dev.lalouise.backend.application.command.label.LabelReprintCommand;
 import matheusfraga.dev.lalouise.backend.domain.entity.Label;
 
 import java.util.UUID;
 
 public record LabelMapper() {
-
-    public static CreateLabelInputCommand toCreateLabelInputCommand(CreateLabelRequest request) {
-        return CreateLabelInputCommand.builder()
-                .productId(request.productId())
-                .responsibleId(request.responsibleId())
-                .sectorId(request.sectorId())
-                .storageType(request.storageType())
-                .build();
-    }
 
     public static LabelSummary toLabelSummary(Label label){
         return LabelSummary.builder()
@@ -47,15 +36,6 @@ public record LabelMapper() {
                 .responsibleName(label.getResponsible().getNickname())
                 .build();
 
-    }
-
-    public static LabelReprintCommand toLabelReprintCommand(UUID oldLabelId, LabelReprintRequest request){
-        return LabelReprintCommand.builder()
-                .oldLabelId(oldLabelId)
-                .newResponsibleId(request.responsibleId())
-                .newSectorId(request.sectorId())
-                .newStorage(request.storage())
-                .build();
     }
 
 }

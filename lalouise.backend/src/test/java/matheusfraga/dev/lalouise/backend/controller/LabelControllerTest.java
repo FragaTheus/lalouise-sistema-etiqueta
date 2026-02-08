@@ -1,11 +1,9 @@
 package matheusfraga.dev.lalouise.backend.controller;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import matheusfraga.dev.lalouise.backend.application.service.LabelService;
 import matheusfraga.dev.lalouise.backend.application.service.PrintService;
 import matheusfraga.dev.lalouise.backend.domain.entity.Label;
-import matheusfraga.dev.lalouise.backend.domain.enums.LabelStatus;
 import matheusfraga.dev.lalouise.backend.domain.enums.StorageType;
 import matheusfraga.dev.lalouise.backend.infra.in.controller.label.CreateLabelRequest;
 import matheusfraga.dev.lalouise.backend.infra.in.controller.label.LabelController;
@@ -22,9 +20,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(LabelController.class)
@@ -32,67 +30,54 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("LabelController - Testes de Unidade (Web)")
 class LabelControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
+    @Autowired private ObjectMapper objectMapper;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @MockitoBean
-    private LabelService labelService;
-
-    @MockitoBean
-    private PrintService printService;
-
-    @MockitoBean
-    private TokenService tokenService;
+    @MockitoBean private LabelService labelService;
+    @MockitoBean private PrintService printService;
+    @MockitoBean private TokenService tokenService;
 
     @Test
     @DisplayName("Deve retornar 201 ao criar uma etiqueta com sucesso")
     void shouldReturnCreatedWhenCreateLabelIsValid() throws Exception {
-        var request = CreateLabelRequest.builder()
-                .productId(UUID.randomUUID())
-                .responsibleId(UUID.randomUUID())
-                .sectorId(UUID.randomUUID())
-                .storageType(StorageType.REFRIGERADO)
-                .build();
+        UUID prodId = UUID.randomUUID();
+        var request = new CreateLabelRequest(prodId, StorageType.REFRIGERADO);
+        Label mockLabel = mock(Label.class);
+
+        when(labelService.createLabel(eq(prodId), eq(StorageType.REFRIGERADO))).thenReturn(mockLabel);
 
         mockMvc.perform(post("/api/v1/labels/print")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
+
+        verify(printService).printLabel(mockLabel);
+    }
+
+    @Test
+    @DisplayName("Deve retornar 201 ao solicitar a reimpressão")
+    void shouldReturnCreatedWhenReprintIsSuccessful() throws Exception {
+        UUID oldLabelId = UUID.randomUUID();
+        var request = new LabelReprintRequest(StorageType.AMBIENTE);
+        Label mockNewLabel = mock(Label.class);
+
+        when(labelService.updateLabelStatus(eq(oldLabelId), eq(StorageType.AMBIENTE))).thenReturn(mockNewLabel);
+
+        mockMvc.perform(post("/api/v1/labels/{oldLabelId}/reprint", oldLabelId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated());
+
+        verify(printService).printLabel(mockNewLabel);
     }
 
     @Test
     @DisplayName("Deve retornar 204 ao rodar limpeza de etiquetas antigas")
     void shouldReturnNoContentWhenRunningCleanup() throws Exception {
-        doNothing().when(labelService).cleanOldLabels();
-
         mockMvc.perform(delete("/api/v1/labels/maintenance/cleanup"))
                 .andExpect(status().isNoContent());
-    }
 
-    @Test
-    @DisplayName("Deve retornar 201 ao solicitar a reimpressão de uma etiqueta")
-    void shouldReturnCreatedWhenReprintIsSuccessful() throws Exception {
-        UUID oldLabelId = UUID.randomUUID();
-
-        var request = new LabelReprintRequest(
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                StorageType.AMBIENTE
-        );
-
-        Label mockNewLabel = mock(Label.class);
-        when(labelService.updateLabelStatus(any())).thenReturn(mockNewLabel);
-
-        mockMvc.perform(post("/api/v1/labels/{oldLabelId}/reprint", oldLabelId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andDo(print())
-                .andExpect(status().isCreated());
-
-        verify(printService).printLabel(mockNewLabel);
+        verify(labelService).cleanOldLabels();
     }
 
     @Test
@@ -100,5 +85,7 @@ class LabelControllerTest {
     void shouldReturnAcceptedWhenRunJobs() throws Exception {
         mockMvc.perform(post("/api/v1/labels/maintenance/run-jobs"))
                 .andExpect(status().isAccepted());
+
+        verify(labelService).checkAndExpireLabels();
     }
 }

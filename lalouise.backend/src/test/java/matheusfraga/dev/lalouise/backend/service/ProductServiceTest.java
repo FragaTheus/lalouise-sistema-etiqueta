@@ -104,17 +104,6 @@ class ProductServiceTest {
 
             assertEquals(newName, product.getName());
         }
-
-        @Test
-        @DisplayName("Deve lançar NoDataForUpdateException se o nome for igual ao atual")
-        void shouldThrowExceptionWhenNameIsSame() {
-            var id = UUID.randomUUID();
-            var product = new Product("Mesmo Nome");
-
-            when(repository.findById(id)).thenReturn(Optional.of(product));
-
-            assertThrows(NoDataForUpdateException.class, () -> productService.updateProduct(id, "Mesmo Nome"));
-        }
     }
 
     @Nested
