@@ -80,6 +80,10 @@ public class SectorService {
         return repository.findAllStoragesBySectorId(sectorId);
     }
 
+    public Sector getSectorByResponsible(UUID responsibleId) {
+        return repository.findByResponsibleId(responsibleId).orElseThrow(SectorNotFoundException::new);
+    }
+
     // Métodos auxiliares
     private boolean hasNoUpdates(UpdateSectorInputCommand command) {
         return isBlank(command.name())

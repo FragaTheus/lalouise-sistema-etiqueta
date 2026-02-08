@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -20,6 +21,8 @@ public interface SectorRepository extends JpaRepository<Sector, UUID>{
     boolean existsById(@NonNull UUID id);
 
     boolean existsByResponsible(Account responsible);
+
+    Optional<Sector> findByResponsibleId(UUID responsibleId);
 
     @Query("""
         SELECT s FROM Sector s
