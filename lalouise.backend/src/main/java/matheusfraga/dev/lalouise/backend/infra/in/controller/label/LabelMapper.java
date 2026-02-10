@@ -1,6 +1,10 @@
 package matheusfraga.dev.lalouise.backend.infra.in.controller.label;
 
+import matheusfraga.dev.lalouise.backend.application.command.label.CreateLabelCommand;
+import matheusfraga.dev.lalouise.backend.application.command.label.CreateLabelOverOldLabelCommand;
 import matheusfraga.dev.lalouise.backend.domain.entity.Label;
+
+import java.util.UUID;
 
 
 public record LabelMapper() {
@@ -33,6 +37,25 @@ public record LabelMapper() {
                 .expirationDate(label.getExpirationDate())
                 .build();
 
+    }
+
+    public static CreateLabelCommand toCreateLabelCommand(CreateLabelRequest request){
+        return CreateLabelCommand.builder()
+                .productId(request.productId())
+                .storageType(request.storageType())
+                .copies(request.copies())
+                .build();
+    }
+
+    public static CreateLabelOverOldLabelCommand toCreateLabelOverOldLabelCommand(
+            UUID oldLabelId,
+            CreateLabelOverOldLabelRequest request
+    ){
+        return CreateLabelOverOldLabelCommand.builder()
+                .oldLabelId(oldLabelId)
+                .storageType(request.storageType())
+                .copies(request.copies())
+                .build();
     }
 
 }

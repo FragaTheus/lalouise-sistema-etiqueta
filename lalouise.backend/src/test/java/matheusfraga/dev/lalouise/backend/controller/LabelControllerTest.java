@@ -7,7 +7,7 @@ import matheusfraga.dev.lalouise.backend.domain.entity.Label;
 import matheusfraga.dev.lalouise.backend.domain.enums.StorageType;
 import matheusfraga.dev.lalouise.backend.infra.in.controller.label.CreateLabelRequest;
 import matheusfraga.dev.lalouise.backend.infra.in.controller.label.LabelController;
-import matheusfraga.dev.lalouise.backend.infra.in.controller.label.LabelReprintRequest;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.label.CreateLabelOverOldLabelRequest;
 import matheusfraga.dev.lalouise.backend.infra.security.TokenService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,7 +58,7 @@ class LabelControllerTest {
     @DisplayName("Deve retornar 201 ao solicitar a reimpressão")
     void shouldReturnCreatedWhenReprintIsSuccessful() throws Exception {
         UUID oldLabelId = UUID.randomUUID();
-        var request = new LabelReprintRequest(StorageType.AMBIENTE);
+        var request = new CreateLabelOverOldLabelRequest(StorageType.AMBIENTE);
         Label mockNewLabel = mock(Label.class);
 
         when(labelService.updateLabelStatus(eq(oldLabelId), eq(StorageType.AMBIENTE))).thenReturn(mockNewLabel);

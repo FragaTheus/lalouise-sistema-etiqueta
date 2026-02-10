@@ -22,12 +22,11 @@ import java.util.UUID;
 public class LabelController {
 
     private final LabelService labelService;
-    private final ZplService printService;
 
     @PostMapping("/print")
-    public ResponseEntity<Void> create(@RequestBody CreateLabelRequest request) {
-        var label = labelService.createLabel(request.productId(), request.storageType());
-        printService.printLabel(label);
+    public ResponseEntity<Void> create(@Valid @RequestBody CreateLabelRequest request) {
+        var command = LabelMapper.toCreateLabelCommand(request);
+        var label = labelService.createLabel(command);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -72,10 +71,10 @@ public class LabelController {
     @PostMapping("/{oldLabelId}/reprint")
     public ResponseEntity<Void> reprint(
             @PathVariable UUID oldLabelId,
-            @Valid @RequestBody LabelReprintRequest request
+            @Valid @RequestBody CreateLabelOverOldLabelRequest request
             ) {
-        var newLabel = labelService.updateLabelStatus(oldLabelId, request.storage());
-        printService.printLabel(newLabel);
+        var command = LabelMapper.toCreateLabelOverOldLabelCommand(oldLabelId, request);
+        var newLabel = labelService.createLabelOverOldLabel(command);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
