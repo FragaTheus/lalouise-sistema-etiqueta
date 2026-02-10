@@ -34,6 +34,7 @@ public class LabelService {
     private final SectorService sectorService;
     private final ValidityService validityService;
     private final AccountService accountService;
+    private final PrintJobService printJobService;
 
     @Transactional
     public Label createLabel(UUID productId, StorageType storage) {
@@ -52,7 +53,10 @@ public class LabelService {
         Label label = new Label(
                 product, sector, responsible, today, expirationDate, initialStatus
         );
-        return labelRepository.save(label);
+        Label savedLabel = labelRepository.save(label);
+
+
+        return savedLabel;
     }
 
     public Page<Label> findByFilters(PageFilterQueryCommand command) {

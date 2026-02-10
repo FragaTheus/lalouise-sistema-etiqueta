@@ -2,7 +2,7 @@ package matheusfraga.dev.lalouise.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import matheusfraga.dev.lalouise.backend.application.service.LabelService;
-import matheusfraga.dev.lalouise.backend.application.service.PrintService;
+import matheusfraga.dev.lalouise.backend.application.service.ZplService;
 import matheusfraga.dev.lalouise.backend.domain.entity.Label;
 import matheusfraga.dev.lalouise.backend.domain.enums.StorageType;
 import matheusfraga.dev.lalouise.backend.infra.in.controller.label.CreateLabelRequest;
@@ -34,7 +34,7 @@ class LabelControllerTest {
     @Autowired private ObjectMapper objectMapper;
 
     @MockitoBean private LabelService labelService;
-    @MockitoBean private PrintService printService;
+    @MockitoBean private ZplService printService;
     @MockitoBean private TokenService tokenService;
 
     @Test

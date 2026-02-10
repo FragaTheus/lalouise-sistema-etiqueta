@@ -4,9 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import matheusfraga.dev.lalouise.backend.application.command.label.PageFilterQueryCommand;
 import matheusfraga.dev.lalouise.backend.application.service.LabelService;
-import matheusfraga.dev.lalouise.backend.application.service.PrintService;
+import matheusfraga.dev.lalouise.backend.application.service.ZplService;
 import matheusfraga.dev.lalouise.backend.domain.enums.LabelStatus;
-import matheusfraga.dev.lalouise.backend.domain.enums.StorageType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,7 +22,7 @@ import java.util.UUID;
 public class LabelController {
 
     private final LabelService labelService;
-    private final PrintService printService;
+    private final ZplService printService;
 
     @PostMapping("/print")
     public ResponseEntity<Void> create(@RequestBody CreateLabelRequest request) {
