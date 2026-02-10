@@ -3,6 +3,8 @@ package matheusfraga.dev.lalouise.backend.application.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import matheusfraga.dev.lalouise.backend.application.command.label.CreateLabelCommand;
+import matheusfraga.dev.lalouise.backend.application.command.label.CreateLabelOverOldLabelCommand;
 import matheusfraga.dev.lalouise.backend.application.command.label.PageFilterQueryCommand;
 import matheusfraga.dev.lalouise.backend.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.domain.entity.Label;
@@ -35,19 +37,20 @@ public class LabelService {
     private final ValidityService validityService;
     private final AccountService accountService;
     private final PrintJobService printJobService;
+    private final ZplService zplService;
 
     @Transactional
-    public Label createLabel(UUID productId, StorageType storage) {
+    public Label createLabel(CreateLabelCommand command) {
 
         Account responsible = getResponsible();
 
         Sector sector = sectorService.getSectorByResponsible(responsible.getId());
 
-        var product = productService.getProduct(productId);
-        if (!sector.getStorages().contains(storage)) throw new StorageTypeNotAllowedInSectorException();
+        var product = productService.getProduct(command.productId());
+        if (!sector.getStorages().contains(command.storageType())) throw new StorageTypeNotAllowedInSectorException();
 
         LocalDate today = LocalDate.now();
-        var expirationDate = validityService.calculateExpirationDate(storage, today);
+        var expirationDate = validityService.calculateExpirationDate(command.storageType(), today);
         var initialStatus = validityService.determineStatus(expirationDate);
 
         Label label = new Label(
@@ -55,6 +58,8 @@ public class LabelService {
         );
         Label savedLabel = labelRepository.save(label);
 
+        String zpl = zplService.generate(savedLabel);
+        printJobService.queue(zpl, command.copies());
 
         return savedLabel;
     }
@@ -71,9 +76,9 @@ public class LabelService {
     }
 
     @Transactional
-    public Label updateLabelStatus(UUID oldLabelId, StorageType storage) {
+    public Label createLabelOverOldLabel(CreateLabelOverOldLabelCommand command) {
 
-        Label oldLabel = labelRepository.findById(oldLabelId)
+        Label oldLabel = labelRepository.findById(command.oldLabelId())
                 .orElseThrow(LabelNotFoundException::new);
 
         if (oldLabel.getStatus() == LabelStatus.DESCARTADA) throw new LabelAlreadyDiscardedException();
@@ -81,7 +86,13 @@ public class LabelService {
 
         var productId = oldLabel.getProduct().getId();
 
-        return createLabel(productId, storage );
+        CreateLabelCommand createCommand = CreateLabelCommand.builder()
+                .productId(productId)
+                .storageType(command.storageType())
+                .copies(command.copies())
+                .build();
+
+        return createLabel(createCommand);
     }
 
     public Label getLabel(UUID id) {
