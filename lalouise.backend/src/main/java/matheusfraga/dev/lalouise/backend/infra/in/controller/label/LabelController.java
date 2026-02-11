@@ -26,7 +26,7 @@ public class LabelController {
     @PostMapping("/print")
     public ResponseEntity<Void> create(@Valid @RequestBody CreateLabelRequest request) {
         var command = LabelMapper.toCreateLabelCommand(request);
-        var label = labelService.createLabel(command);
+        labelService.createLabel(command);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

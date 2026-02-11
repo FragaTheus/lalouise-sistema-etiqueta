@@ -32,33 +32,27 @@ public class ZplService {
     private String buildZplLayout(Label label) {
         StringBuilder zpl = new StringBuilder();
 
-        zpl.append("^XA\n^CI28\n^MMT\n^PW812\n^LL1218\n^LS0\n\n");
-        zpl.append("^FO50,30^A0N,45,45^FDLa Louise^FS\n\n");
-        zpl.append("^FO50,90^GB700,3,3^FS\n\n");
+        zpl.append("^XA\n^CI28\n^MMT\n^PW480\n^LL320\n^LS0\n\n");
 
-        zpl.append(String.format("^FO50,110^A0N,30,30^FDResponsavel: %s^FS\n",
+        zpl.append("^FO30,20^A0N,30,30^FDLa Louise^FS\n");
+        zpl.append("^FO30,55^GB420,2,2^FS\n");
+
+        zpl.append(String.format("^FO30,70^A0N,20,20^FDResp: %s^FS\n",
                 sanitize(label.getResponsible().getNickname())));
 
-        zpl.append(String.format("^FO50,150^A0N,30,30^FDSetor: %s^FS\n\n",
+        zpl.append(String.format("^FO30,95^A0N,20,20^FDSetor: %s^FS\n",
                 sanitize(label.getSector().getName())));
 
-        zpl.append("^FO50,200^GB700,3,3^FS\n\n");
-        zpl.append("^FO50,220^A0N,50,50^FDPRODUTO:^FS\n");
+        zpl.append("^FO30,120^GB420,2,2^FS\n");
 
-        zpl.append(String.format("^FO50,280^A0N,40,40^FD%s^FS\n\n",
+        zpl.append(String.format("^FO30,135^A0N,25,25^FD%s^FS\n",
                 sanitize(label.getProduct().getName())));
 
-        zpl.append(String.format("^FO50,340^A0N,35,35^FDValidade: %s^FS\n\n",
+        zpl.append(String.format("^FO30,170^A0N,25,25^FDVal: %s^FS\n",
                 label.getExpirationDate().format(formatter)));
 
-        zpl.append("^FO50,400^GB700,3,3^FS\n\n");
-
         String qrData = buildQRCodeData(label);
-        zpl.append(String.format("^FO250,430^BQN,2,8,Q^FDQA,%s^FS\n\n", qrData));
-
-        zpl.append("^FO200,900^A0N,25,25^FDEscaneie para reimprimir^FS\n\n");
-        zpl.append(String.format("^FO50,1150^A0N,20,20^FDEmitido: %s^FS\n\n",
-                label.getIssueDate().format(formatter)));
+        zpl.append(String.format("^FO320,135^BQN,2,4,Q^FDQA,%s^FS\n", qrData));
 
         zpl.append("^XZ");
 
