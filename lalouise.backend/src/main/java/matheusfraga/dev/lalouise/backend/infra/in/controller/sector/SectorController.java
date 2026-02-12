@@ -60,9 +60,9 @@ public class SectorController {
         return ResponseEntity.ok(summaries);
     }
 
-    @GetMapping("/{id}/storages")
-    public ResponseEntity<List<StorageType>> getAllStorages(@PathVariable UUID id){
-        var response = service.getSectorStorages(id);
+    @GetMapping("/storages")
+    public ResponseEntity<List<StorageType>> getAllStorages(){
+        var response = service.getStoragesFromAuthenticatedUser();
         return ResponseEntity.ok(response);
     }
 

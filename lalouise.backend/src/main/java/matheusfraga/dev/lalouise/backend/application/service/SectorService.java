@@ -10,6 +10,7 @@ import matheusfraga.dev.lalouise.backend.domain.enums.StorageType;
 import matheusfraga.dev.lalouise.backend.domain.exception.sector.*;
 import matheusfraga.dev.lalouise.backend.domain.exception.user.NoDataForUpdateException;
 import matheusfraga.dev.lalouise.backend.domain.repository.SectorRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -72,7 +73,19 @@ public class SectorService {
         repository.deleteById(id);
     }
 
-    public List<StorageType> getSectorStorages(UUID sectorId) {
+    public List<StorageType> getStoragesFromAuthenticatedUser() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Account account = (Account) authentication.getPrincipal();
+        UUID userId = account.getId();
+
+        Sector sector = repository.findByResponsibleId(userId)
+                .orElseThrow(SectorNotFoundException::new);
+
+        return repository.findAllStoragesBySectorId(sector.getId());
+    }
+
+    private List<StorageType> getSectorStorages(UUID sectorId) {
         if (!repository.existsById(sectorId)) {
             throw new SectorNotFoundException();
         }
