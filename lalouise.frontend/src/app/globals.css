@@ -18,17 +18,6 @@
   --font-size-small: clamp(0.75rem, 0.8vw, 0.875rem);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --surface: #171717; 
-
-    --primary: #52b788;      
-    --secondary: #ffb3c1;    
-  }
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

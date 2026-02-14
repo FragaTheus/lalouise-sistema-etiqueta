@@ -1,7 +1,7 @@
 import Image from "next/image";
 import sushiIcon from "@/assets/login-icon.svg";
 
-export default function RootLayout({
+export default function AuthLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
