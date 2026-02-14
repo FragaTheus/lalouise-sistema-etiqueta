@@ -5,10 +5,10 @@
   --foreground: #171717;
   --surface: #f4f4f5; 
 
-  --primary: #2d6a4f;       
-  --primary-light: #40916c;
-  --secondary: #ff85a1;     
-  --secondary-light: #fbb1bd;
+  --primary: #004B4D;       
+  --primary-light: #2B7D8E;
+  --secondary: #5E1D5B;     
+  --secondary-light: #E4005E;
   
   --font-size-h1: clamp(2rem, 5vw, 3.25rem);
   --font-size-h2: clamp(1.5rem, 4vw, 2.25rem);
@@ -24,8 +24,8 @@
     --foreground: #ededed;
     --surface: #171717; 
 
-    --primary: #52b788;      /* Verde mais vibrante para leitura no Dark Mode */
-    --secondary: #ffb3c1;    /* Rosa mais claro para contraste */
+    --primary: #52b788;      
+    --secondary: #ffb3c1;    
   }
 }
 
@@ -45,7 +45,11 @@
   --font-mono: var(--font-geist-mono);
 
   --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+
   --color-secondary: var(--secondary);
+  --color-secondary-light: var(--secondary-light);
+
 }
 
 body {
@@ -60,4 +64,4 @@ h2 { font-size: var(--font-size-h2); font-weight: 700; line-height: 1.3; }
 h3 { font-size: var(--font-size-h3); font-weight: 600; line-height: 1.3; }
 h4 { font-size: var(--font-size-h4); font-weight: 600; line-height: 1.4; }
 p  { font-size: var(--font-size-p); line-height: 1.6; }
-small { font-size: var(--font-size-small); color: var(--foreground); opacity: 0.8; }
+small { font-size: var(--font-size-small);}

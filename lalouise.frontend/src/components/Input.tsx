@@ -1,38 +1,32 @@
-export type InputProps = {
-  label: string;
-  type: string;
-  name: string;
-  options?: string[];
-};
+import { forwardRef } from "react";
 
-export function Input({ label, type, name, options }: InputProps) {
-  const inputId = `id-${name}`;
-  const baseClass =
-    "rounded-sm p-1 border border-foreground/20 transition-all outline-none focus:bg-background focus:ring-2 focus:ring-primary/70";
-
-  return (
-    <div className="flex flex-col gap-1 mb-3">
-      <label htmlFor={inputId} className="font-bold cursor-pointer">
-        <small>{label}</small>
-      </label>
-
-      {options ? (
-        <select id={inputId} name={name} className={baseClass}>
-          {options.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <input
-          id={inputId}
-          name={name}
-          type={type}
-          required
-          className={baseClass}
-        />
-      )}
-    </div>
-  );
+interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  error?: string;
 }
+
+export const Input = forwardRef<HTMLInputElement, IInputProps>(
+  ({ error, ...props }, ref) => {
+    return (
+      <div className="flex flex-col gap-1">
+        <input
+          ref={ref}
+          {...props}
+          className={`
+            rounded-sm
+            p-1
+            border
+            transition-all
+            focus:outline-none
+            focus:ring-2
+            ${
+              error
+                ? "border-secondary-light focus:ring-secondary-light"
+                : "border-foreground/30 focus:ring-primary"
+            }
+          `}
+        />
+        {error && <span className="text-secondary-light text-sm">{error}</span>}
+      </div>
+    );
+  },
+);
