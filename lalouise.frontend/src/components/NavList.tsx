@@ -25,8 +25,8 @@ const NAV_ITEMS: NavItem[] = [
 
 export default function NavList() {
   return (
-    <ul className="grid grid-cols-5 md:flex md:flex-col items-start w-full h-full p-2 gap-2">
-      <small className="font-bold ml-2 hidden md:block">Recursos</small>
+    <ul className="grid grid-cols-5 lg:flex lg:flex-col items-center lg:items-start w-full h-full px-2 gap-2 lg:mt-4">
+      <small className="font-bold ml-2 hidden lg:block mb-2">Recursos</small>
 
       {NAV_ITEMS.map((item, i) => (
         <ListItem key={i} href={item.href} index={i} text={item.label}>

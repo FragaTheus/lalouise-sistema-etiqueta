@@ -16,7 +16,7 @@ export default function Drawer() {
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.2 }}
-        className="order-2 lg:order-1 hidden md:block relative"
+        className="order-2 lg:order-1 hidden lg:block relative"
       >
         <Image
           src={logo}
