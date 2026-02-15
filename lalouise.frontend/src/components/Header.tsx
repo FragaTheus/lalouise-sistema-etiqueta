@@ -10,7 +10,7 @@ import Link from "next/link";
 import Image from "next/image";
 export default function Header() {
   return (
-    <header className="bg-surface flex justify-between w-full h-15 items-center px-4">
+    <header className="bg-surface flex justify-between w-full h-15 items-center px-4 shadow-2xs">
       <motion.div
         initial={{ opacity: 0, y: -15 }}
         animate={{ opacity: 1, y: 0 }}
