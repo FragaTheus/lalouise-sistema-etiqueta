@@ -1,5 +1,11 @@
 "use client";
 
+import {
+  AccountContent,
+  ProductContent,
+  SectorContent,
+  TagContent,
+} from "@/components/AccountChildrenDashCard";
 import { motion } from "framer-motion";
 
 interface ICard {
@@ -15,10 +21,10 @@ function Card(i: ICard) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: i.index * 0.3 }}
-      className="bg-primary/10 shadow-2xs rounded-sm p-4 w-full h-full relative"
+      className="bg-primary/5 shadow-2xs rounded-sm p-2 w-full h-full relative active:scale-95 transition-all flex-1 max-w-lg"
     >
       <div className="">{i.children}</div>
-      <div className="h-1/3 absolute w-full left-0 bottom-0 rounded-b-sm bg-surface p-2">
+      <div className="h-1/3 absolute w-full left-0 bottom-0 rounded-b-sm bg-surface p-2 overflow-hidden">
         <p className="font-bold">{i.title}</p>
         <small className="text-gray-500/70 font-semibold">{i.subtitle}</small>
       </div>
@@ -27,10 +33,10 @@ function Card(i: ICard) {
 }
 
 const titles = [
-  { t: "Contas", s: "Gerencie seus funcinarios" },
-  { t: "Setores", s: "Gerencie seus setores" },
-  { t: "Produtos", s: "Gerencie seus produtos" },
-  { t: "Etiquetas", s: "Gerencie suas etiquetas" },
+  { t: "Contas", s: "Gestão de Usuários", content: <AccountContent /> },
+  { t: "Setores", s: "Gerencie setores", content: <SectorContent /> },
+  { t: "Produtos", s: "Gerencie produtos", content: <ProductContent /> },
+  { t: "Etiquetas", s: "Gerencie etiquetas", content: <TagContent /> },
 ];
 
 export default function Dashboard() {
@@ -47,7 +53,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-2 items-center justify-items-center gap-2 flex-1">
         {titles.map((c, i) => (
           <Card key={i} index={i} title={c.t} subtitle={c.s}>
-            Children
+            {c.content}
           </Card>
         ))}
       </div>

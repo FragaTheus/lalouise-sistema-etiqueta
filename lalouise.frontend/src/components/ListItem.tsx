@@ -21,7 +21,7 @@ export default function ListItem(i: IListItem) {
       className="w-full"
     >
       <Link href={i.href}>
-        <div className="flex p-4 lg:p-2 rounded-md items-center gap-4 group transition-all hover:bg-primary/20 active:scale-95 duration-300">
+        <div className="flex p-5 lg:p-2 rounded-md items-center gap-4 group transition-all hover:bg-primary/20 active:scale-95 duration-300">
           <div
             className={`w-5 text-gray-500 group-hover:text-primary group-hover:scale-110 duration-300
               ${isActive ? "scale-110 text-primary" : ""}`}
