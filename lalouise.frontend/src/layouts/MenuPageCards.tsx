@@ -25,7 +25,7 @@ export default function MenuPageCard(i: IMenuPageCard) {
         <div className="row-span-2">
           <div className="h-full w-full grid grid-rows-2">
             <div className="flex items-center justify-start">
-              <i.icon className="h-10 text-primary" />
+              <i.icon className="h-6 text-primary" />
             </div>
             <div>{i.children}</div>
           </div>
