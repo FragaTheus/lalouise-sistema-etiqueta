@@ -20,6 +20,7 @@ export default function MenuPageCard(i: IMenuPageCard) {
                 p-2
                 active:scale-95
                 transition-all
+                lg:p-8
                 "
       >
         <div className="row-span-2">

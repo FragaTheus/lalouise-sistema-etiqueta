@@ -21,7 +21,7 @@ export default function Drawer() {
         <Image
           src={logo}
           alt="Lalouise Logo"
-          className="absolute w-60 -left-8 -top-6"
+          className="absolute w-60 -left-20 -top-6"
         />
       </motion.div>
 

@@ -16,7 +16,12 @@ export default function Header() {
         transition={{ duration: 0.2 }}
         className="flex"
       >
-        <Image src={logo} alt="Lalouise logo" className="w-40 -ml-6" priority />
+        <Image
+          src={logo}
+          alt="Lalouise logo"
+          className="w-40 -ml-11"
+          priority
+        />
       </motion.div>
       <div className="items-center flex gap-3">
         <motion.button

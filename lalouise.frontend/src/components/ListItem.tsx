@@ -28,12 +28,12 @@ export default function ListItem(i: IListItem) {
           >
             {i.children}
           </div>
-          <small
+          <p
             className={`text-gray-500 group-hover:text-primary font-semibold hidden md:block duration-300 active:scale-95
               ${isActive ? "text-primary" : ""}`}
           >
             {i.text}
-          </small>
+          </p>
         </div>
       </Link>
     </motion.li>

@@ -1,3 +1,4 @@
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import MenuPageCard, { IMenuPageCard } from "./MenuPageCards";
 
 type MenuPageLayoutType = {
@@ -6,7 +7,11 @@ type MenuPageLayoutType = {
 
 export default function MenuPageLayout({ cards }: MenuPageLayoutType) {
   return (
-    <div className="flex-1 grid grid-rows-4 p-4 lg:p-12">
+    <div className="flex-1 grid grid-rows-4 p-4 lg:p-12 relative">
+      <div className="w-full h-20 absolute top-0  items-center px-12 shadow-2xs hidden lg:flex gap-2">
+        <ChevronRightIcon className="w-5 text-primary font-bold" />
+        <h2 className="text-primary">Dashboard</h2>
+      </div>
       <div className="flex flex-col justify-center items-start">
         <h2>Ola, nome.</h2>
         <h2>Que bom ter voce de volta!</h2>

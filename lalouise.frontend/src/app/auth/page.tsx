@@ -18,7 +18,7 @@ export default function Login() {
           <Image
             src={logo}
             alt="Logo Lalouise"
-            className="absolute -left-10 -top-10 w-50 md:w-60"
+            className="absolute -left-25 -top-10 w-50 md:w-60"
             priority
           />
         </div>
