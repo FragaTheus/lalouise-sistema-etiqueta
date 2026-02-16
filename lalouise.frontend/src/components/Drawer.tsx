@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import logo from "@/assets/logo.svg";
+import logo from "@/assets/logo.png";
 import { motion } from "framer-motion";
 import NavList from "./NavList";
 import ConfigList from "./ConfigList";

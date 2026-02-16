@@ -1,10 +1,9 @@
 "use client";
-import logo from "@/assets/logo.svg";
+import logo from "@/assets/logo.png";
 import {
   ArrowLeftStartOnRectangleIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-import SearchBar from "./SearchBar";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
