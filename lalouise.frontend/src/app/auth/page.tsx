@@ -1,7 +1,7 @@
 "use client";
 
 import LoginForm from "@/components/Form";
-import logo from "@/assets/logo.svg";
+import logo from "@/assets/logo.png";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
