@@ -11,21 +11,21 @@ const contas = [
     title: "Novo Usuário",
     subtitle: "Criar acesso",
     children: <></>,
-    href: "/dashboard/accounts/create",
+    href: "/painel/contas/criar",
   },
   {
     icon: MagnifyingGlassIcon,
     title: "Listar Todos",
     subtitle: "Gerenciar ativos",
     children: <></>,
-    href: "/dashboard/accounts/list",
+    href: "/painel/contas/listar",
   },
   {
     icon: PencilSquareIcon,
     title: "Alterar Dados",
     subtitle: "Segurança",
     children: <></>,
-    href: "/dashboard/accounts/update",
+    href: "/painel/contas/atualizar",
   },
 ];
 

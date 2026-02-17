@@ -2,7 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: hsl(0, 0%, 9%);
   --surface: #f4f4f5; 
 
   --primary: #004B4D;       

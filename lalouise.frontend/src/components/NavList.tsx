@@ -16,11 +16,11 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Painel de controle", href: "/dashboard", icon: HomeIcon },
-  { label: "Contas", href: "/dashboard/accounts", icon: UserGroupIcon },
-  { label: "Setores", href: "/dashboard/sectors", icon: Squares2X2Icon },
-  { label: "Produtos", href: "/dashboard/products", icon: BeakerIcon },
-  { label: "Etiquetas", href: "/dashboard/labels", icon: TagIcon },
+  { label: "Painel de controle", href: "/painel", icon: HomeIcon },
+  { label: "Contas", href: "/painel/contas", icon: UserGroupIcon },
+  { label: "Setores", href: "/painel/setores", icon: Squares2X2Icon },
+  { label: "Produtos", href: "/painel/produtos", icon: BeakerIcon },
+  { label: "Etiquetas", href: "/painel/etiquetas", icon: TagIcon },
 ];
 
 export default function NavList() {
