@@ -39,6 +39,10 @@ const CreateAccountInputs: IInputConfig<ICreateAccountForm>[] = [
     type: "text",
     rules: {
       required: "O nome de usuário é obrigatório",
+      pattern: {
+        value: /^[a-zA-Z ]{3,20}$/i,
+        message: "O nome não pode ter números nem caracteres especiais",
+      },
     },
   },
   {
@@ -48,8 +52,8 @@ const CreateAccountInputs: IInputConfig<ICreateAccountForm>[] = [
     rules: {
       required: "O e-mail é obrigatório",
       pattern: {
-        value: /^\S+@\S+$/i,
-        message: "O e-mail deve ser válido",
+        value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+        message: "Formato de e-mail inválido, tente novamente.",
       },
     },
   },
@@ -60,8 +64,14 @@ const CreateAccountInputs: IInputConfig<ICreateAccountForm>[] = [
     rules: {
       required: "A senha é obrigatória",
       minLength: {
-        value: 6,
-        message: "A senha deve conter no mínimo 6 caracteres",
+        value: 8,
+        message: "A senha deve conter no mínimo 8 caracteres",
+      },
+      pattern: {
+        value:
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,12}$/,
+        message:
+          "Use letras maiúsculas, minúsculas, números e caracteres especiais",
       },
     },
   },

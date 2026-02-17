@@ -14,7 +14,7 @@ export default function DashHeader() {
     rawTitle.charAt(0).toUpperCase() + rawTitle.slice(1).replace(/-/g, " ");
 
   return (
-    <div className="w-full min-h-15 lg:h-20 top-0 items-center px-2 lg:px-12 shadow-2xs flex gap-4">
+    <div className="w-full min-h-15 lg:h-20 top-0 items-center px-2 lg:px-12 shadow-2xs  gap-4 hidden lg:flex">
       <button
         onClick={() => router.back()}
         className="flex items-center gap-1 text-gray-400 hover:text-primary transition-colors group cursor-pointer"

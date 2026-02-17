@@ -21,6 +21,7 @@ export default function MenuPageCard(i: IMenuPageCard) {
                 active:scale-95
                 transition-all
                 lg:p-8
+                hover:scale-101
                 "
       >
         <div className="row-span-2">

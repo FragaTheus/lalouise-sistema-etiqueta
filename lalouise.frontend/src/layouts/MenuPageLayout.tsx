@@ -1,4 +1,3 @@
-import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import MenuPageCard, { IMenuPageCard } from "./MenuPageCards";
 
 type MenuPageLayoutType = {

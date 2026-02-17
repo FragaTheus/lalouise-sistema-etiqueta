@@ -52,10 +52,15 @@ export default function LoginForm() {
       className="flex flex-col gap-4"
       noValidate
     >
-      {loginConfigs.map((config) => (
-        <div key={config.name} className="flex flex-col gap-1">
+      {loginConfigs.map((config, i) => (
+        <div key={i} className="flex flex-col gap-1">
           <label className="text-small font-semibold">{config.label}</label>
-          <Input config={config} register={register} errors={errors} />
+          <Input
+            config={config}
+            register={register}
+            errors={errors}
+            index={i}
+          />
         </div>
       ))}
 
