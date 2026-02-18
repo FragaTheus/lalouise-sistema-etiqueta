@@ -1,4 +1,12 @@
 package matheusfraga.dev.lalouise.backend.infra.in.controller.auth;
 
-public record LoginResponse(String token) {
+import matheusfraga.dev.lalouise.backend.domain.enums.Role;
+
+import java.util.UUID;
+
+public record LoginResponse(
+        UUID id,
+        String nickname,
+        Role role
+) {
 }

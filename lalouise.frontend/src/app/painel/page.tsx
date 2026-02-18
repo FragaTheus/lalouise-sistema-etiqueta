@@ -1,3 +1,5 @@
+"use client";
+
 import MenuPageLayout from "@/layouts/MenuPageLayout";
 import { FireIcon, UserGroupIcon } from "@heroicons/react/16/solid";
 import { Squares2X2Icon, TagIcon } from "@heroicons/react/24/outline";

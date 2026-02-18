@@ -23,13 +23,6 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        return userEmail -> accountRepository.findByEmailIgnoreCase(userEmail)
-                .map(UserDetailsImpl::new)
-                .orElseThrow(()-> new UsernameNotFoundException("Usuario nao encontrado" + userEmail));
-    }
-
-    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }

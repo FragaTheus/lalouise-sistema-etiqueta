@@ -1,7 +1,13 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { motion } from "framer-motion";
 import { Input, IInputConfig } from "./Input";
+import { login } from "@/api/auth.api";
+import { ApiError } from "@/api/ApiError";
+import { useAuthStore } from "@/store/UserStore";
 
 type FormData = {
   email: string;
@@ -9,41 +15,40 @@ type FormData = {
 };
 
 const loginConfigs: IInputConfig<FormData>[] = [
-  {
-    name: "email",
-    label: "Email",
-    type: "email",
-    rules: {
-      required: "Email é obrigatório",
-      pattern: {
-        value: /^\S+@\S+$/i,
-        message: "Email inválido",
-      },
-    },
-  },
-  {
-    name: "password",
-    label: "Senha",
-    type: "password",
-    rules: {
-      required: "Senha é obrigatória",
-      minLength: {
-        value: 6,
-        message: "Senha deve ter no mínimo 6 caracteres",
-      },
-    },
-  },
+  { name: "email", label: "Email", type: "email" },
+  { name: "password", label: "Senha", type: "password" },
 ];
 
 export default function LoginForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>();
+  const router = useRouter();
+  const setUser = useAuthStore((state) => state.setUser);
+  const [formErrors, setFormErrors] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  function onSubmit(data: FormData) {
-    console.log("Login data:", data);
+  const { register, handleSubmit } = useForm<FormData>();
+
+  async function onSubmit(data: FormData) {
+    setFormErrors([]);
+    setLoading(true);
+
+    try {
+      const user = await login(data);
+      setUser(user);
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      user.role === "ADMIN"
+        ? router.push("/painel")
+        : router.push("/painel/etiquetas");
+    } catch (err) {
+      const error = err as ApiError<Record<string, string>>;
+
+      if (error.data) {
+        setFormErrors(Object.values(error.data));
+      } else {
+        setFormErrors([error.message]);
+      }
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -53,22 +58,27 @@ export default function LoginForm() {
       noValidate
     >
       {loginConfigs.map((config, i) => (
-        <div key={i} className="flex flex-col gap-1">
-          <label className="text-small font-semibold">{config.label}</label>
-          <Input
-            config={config}
-            register={register}
-            errors={errors}
-            index={i}
-          />
-        </div>
+        <Input key={i} config={config} register={register} index={i} />
       ))}
+
+      {formErrors.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: -4 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col gap-1 text-sm text-red-500 bg-red-50 border border-red-200 rounded-sm p-2"
+        >
+          {formErrors.map((err, i) => (
+            <span key={i}>{err}</span>
+          ))}
+        </motion.div>
+      )}
 
       <button
         type="submit"
-        className="bg-primary text-white p-2 rounded-sm mt-4 md:mt-8 cursor-pointer hover:scale-102 active:scale-98 transition-all hover:bg-secondary font-bold"
+        disabled={loading}
+        className="bg-primary text-white p-2 rounded-sm mt-4 md:mt-8 cursor-pointer hover:scale-101 active:scale-98 transition-all font-bold"
       >
-        Entrar
+        {loading ? "Entrando..." : "Entrar"}
       </button>
     </form>
   );

@@ -7,7 +7,7 @@ import {
   HomeIcon,
   Squares2X2Icon,
 } from "@heroicons/react/24/outline";
-import ListItem from "./ListItem";
+import ListItem from "./NavListItem";
 
 interface NavItem {
   label: string;
