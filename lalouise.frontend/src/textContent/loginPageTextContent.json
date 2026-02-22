@@ -1,0 +1,26 @@
+{
+    "logo": {
+        "alt": "Logo Lalouise"
+    },
+    "title": {
+        "headline": "Olá!",
+        "main": "É bom ter você por aqui novamente.",
+        "description": "Faça login para acessar mais recursos."
+    },
+    "footer":{
+        "headline": "Está com problemas para entrar?",
+        "main": "Entre em contato com a administradora do sistema."
+    },
+    "form": {
+        "email": {
+            "label": "Email",
+            "placeholder": "seu@email.com"
+        },
+        "password": {
+            "label": "Senha",
+            "placeholder": "Senha@123"
+        },
+        "buttonTxt": "Entrar" 
+    }
+
+}

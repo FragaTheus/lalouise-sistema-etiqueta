@@ -1,36 +1,43 @@
-"use client";
-
-import Image from "next/image";
 import logo from "@/assets/logo.png";
-import { motion } from "framer-motion";
-import NavList from "./NavList";
-import ConfigList from "./ConfigList";
+import Image from "next/image";
+import { AnimationDiv } from "./Animations";
+import UserMenu from "./UserMenu";
+import { NavItem } from "./NavItem";
+import { navItems } from "@/constants/drawerItens";
+import { logoDownAnimation } from "@/constants/animationContants";
 
 export default function Drawer() {
   return (
-    <div
-      id="drawer"
-      className="h-full w-full bg-surface grid grid-rows-1 lg:grid-rows-12 p-2"
-    >
-      <motion.div
-        initial={{ opacity: 0, x: -10 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.2 }}
-        className="order-2 lg:order-1 hidden lg:block relative"
-      >
-        <Image
-          src={logo}
-          alt="Lalouise Logo"
-          className="absolute w-60 -left-20 -top-6"
-        />
-      </motion.div>
+    <div className="bg-surface w-full h-15 lg:h-full lg:w-60 lg:p-4 flex">
+      <div id="drawer-content" className="flex-1 relative flex flex-col">
+        <AnimationDiv
+          className="h-30 hidden lg:block pointer-events-none"
+          animation={logoDownAnimation}
+        >
+          <Image
+            src={logo}
+            alt="Lalouise Logo"
+            className="absolute w-60 -left-19 -top-3"
+          />
+        </AnimationDiv>
 
-      <div className="lg:row-span-9 order-1 lg:order-2">
-        <NavList />
-      </div>
+        <div id="drawer-list" className="flex-1 flex">
+          <ul className="flex-1 flex items-center justify-evenly lg:flex-col lg:gap-2 lg:items-start lg:justify-start">
+            {navItems.map((n, i) => (
+              <NavItem
+                key={i}
+                index={i}
+                href={n.href}
+                Icon={n.Icon}
+                linkText={n.linkText}
+              />
+            ))}
+          </ul>
+        </div>
 
-      <div className="hidden lg:block order-last lg:row-span-2">
-        <ConfigList />
+        <div id="drawer-footer" className="hidden lg:flex">
+          <UserMenu />
+        </div>
       </div>
     </div>
   );
