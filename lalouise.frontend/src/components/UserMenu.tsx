@@ -13,16 +13,16 @@ export default function UserMenu() {
   const { logout } = useAuth();
 
   return (
-    <div className="flex-1 flex flex-col gap-2 bg-primary/10 p-2 rounded-sm">
-      <label className="text-small font-semibold">Configs</label>
+    <div className="flex-1 flex lg:flex-col lg:gap-2 lg:bg-primary/10 lg:p-2 rounded-sm items-center lg:items-start">
+      <label className="text-small font-semibold hidden">Configs</label>
       <NavItem index={0} href="/" Icon={UserCircleIcon} linkText="Perfil" />
       <AnimationDiv animation={formInputLeftAnimation()}>
         <button
           onClick={() => logout()}
-          className="hover:bg-secondary-light/10 rounded-sm px-2 p-1 flex items-center group text-small text-secondary-light transition-all gap-2 font-medium cursor-pointer active:scale-98"
+          className="hover:bg-secondary-light/10 rounded-sm px-2 p-1 flex items-center group  transition-all gap-2 font-medium cursor-pointer active:scale-98"
         >
-          <ArrowLeftEndOnRectangleIcon className="w-6 text-secondary-light group-hover:scale-105" />
-          Sair
+          <ArrowLeftEndOnRectangleIcon className="w-5 lg:w-6 text-secondary-light group-hover:scale-105" />
+          <small className="hidden lg:inline text-secondary-light">Sair</small>
         </button>
       </AnimationDiv>
     </div>

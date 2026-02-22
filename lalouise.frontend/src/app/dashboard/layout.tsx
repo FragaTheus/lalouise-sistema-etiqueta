@@ -1,4 +1,5 @@
 import Drawer from "@/components/Drawer";
+import Header from "@/components/Header";
 
 export default function DashboardLayout({
   children,
@@ -7,9 +8,10 @@ export default function DashboardLayout({
 }) {
   return (
     //<ProtectedRoute>
-    <main className="h-svh w-full bg-amber-500 flex flex-col lg:flex-row">
+    <main className="h-svh w-full flex flex-col lg:flex-row">
+      <Header />
       <Drawer />
-      <div className="flex-1 order-first lg:order-last">{children}</div>
+      <div className="flex-1 order-2 p-8 lg:p-12 flex flex-col">{children}</div>
     </main>
     //</ProtectedRoute>
   );

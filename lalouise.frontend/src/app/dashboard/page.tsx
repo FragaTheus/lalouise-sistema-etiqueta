@@ -1,10 +1,10 @@
-"use client";
-
-import { useAuthStore } from "@/store/UserStore";
-
 export default function Dashboard() {
-  const { user } = useAuthStore();
   return (
-    <div className="bg-amber-300">{(user?.nickname, user?.id, user?.role)}</div>
+    <div id="dashboard-page" className="bg-amber-300 flex-1 grid grid-rows-6">
+      <div id="dashboard-header" className="bg-amber-400">
+        Header
+      </div>
+      <div id="dashboard-content" className="bg-amber-500 row-span-5"></div>
+    </div>
   );
 }
