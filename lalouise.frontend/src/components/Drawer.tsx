@@ -4,11 +4,17 @@ import { AnimationDiv } from "./Animations";
 import UserMenu from "./UserMenu";
 import { NavItem } from "./NavItem";
 import { navItems } from "@/constants/drawerItens";
-import { logoDownAnimationDrawer } from "@/constants/animationContants";
+import {
+  logoDownAnimationDrawer,
+  navListAnimation,
+} from "@/constants/animationContants";
 
 export default function Drawer() {
   return (
-    <div className="bg-surface w-full h-15 lg:h-full lg:w-60 lg:p-4 flex order-last lg:order-first">
+    <AnimationDiv
+      animation={navListAnimation(0.5)}
+      className="bg-surface w-full h-15 lg:h-full lg:w-60 lg:p-4 flex order-last lg:order-first"
+    >
       <div id="drawer-content" className="flex-1 relative flex flex-col">
         <AnimationDiv
           className="h-30 hidden lg:block pointer-events-none"
@@ -40,6 +46,6 @@ export default function Drawer() {
           <UserMenu />
         </div>
       </div>
-    </div>
+    </AnimationDiv>
   );
 }

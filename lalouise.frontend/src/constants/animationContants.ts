@@ -1,3 +1,4 @@
+
 //Pagina Login
 export const logoDownAnimation = {
   initial: { opacity: 0, y: -20 },
@@ -28,7 +29,7 @@ export const fadeInUpAnimationFooter = {
 export const navListAnimation = (index: number) => ({
   initial: { opacity: 0, x: -20 },
   animate: { opacity: 1, x: 0 },
-  transition: { duration: 0.4, delay: index * 0.1 },
+  transition: { duration: 0.4, delay: index * 0.3 },
 });
 
 export const logoDownAnimationDrawer = {
@@ -37,3 +38,15 @@ export const logoDownAnimationDrawer = {
   transition: { duration: 0.4 },
 };
 
+//Dashboard
+export const titleAnimation = {
+  initial:{ opacity: 0 },
+  animate:{ opacity: 1 },
+  transition:{ duration: 0.5 }
+}
+
+export const subtitleAnimation = {
+  initial:{ opacity: 0 },
+  animate:{ opacity: 1 },
+  transition:{ duration: 0.5, delay: 1  }
+}
