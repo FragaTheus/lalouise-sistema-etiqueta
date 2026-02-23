@@ -15,7 +15,12 @@ export default function UserMenu() {
   return (
     <div className="flex-1 flex lg:flex-col lg:gap-2 bg-primary/10 lg:p-2 rounded-sm items-center lg:items-start">
       <label className="text-small font-semibold hidden">Configs</label>
-      <NavItem index={0} href="/" Icon={UserCircleIcon} linkText="Perfil" />
+      <NavItem
+        index={0}
+        href="/dashboard/desenvolvimento"
+        Icon={UserCircleIcon}
+        linkText="Perfil"
+      />
       <AnimationDiv animation={formInputLeftAnimation()} className="w-full">
         <button
           onClick={() => logout()}
