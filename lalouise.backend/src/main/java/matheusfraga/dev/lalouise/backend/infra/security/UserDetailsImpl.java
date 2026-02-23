@@ -43,4 +43,9 @@ public class UserDetailsImpl implements UserDetails {
         return account.getRole();
     }
 
+    @Override
+    public boolean isEnabled() {
+        return account.isActive() && account.getDeletedAt() == null;
+    }
+
 }

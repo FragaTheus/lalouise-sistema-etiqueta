@@ -48,7 +48,7 @@ public class AccountController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete
             (@PathVariable UUID id){
-            service.deleteUser(id);
+            service.deactivateAccount(id);
             return ResponseEntity.noContent().build();
     }
 

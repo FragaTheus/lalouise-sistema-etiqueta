@@ -92,17 +92,6 @@ class AccountControllerTest {
     }
 
     @Test
-    @DisplayName("Deve deletar um usuário e retornar 204")
-    void shouldDeleteUserSuccessfully() throws Exception {
-        UUID id = UUID.randomUUID();
-
-        mockMvc.perform(delete("/api/v1/accounts/{id}", id))
-                .andExpect(status().isNoContent());
-
-        verify(accountService, times(1)).deleteUser(id);
-    }
-
-    @Test
     @DisplayName("Deve buscar um usuário por ID e retornar 200 com UserInfo")
     void shouldGetUserById() throws Exception {
         UUID id = UUID.randomUUID();

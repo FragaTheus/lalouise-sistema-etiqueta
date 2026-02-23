@@ -13,19 +13,34 @@ import java.util.UUID;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, UUID> {
 
-    Optional<Account> findByEmailIgnoreCase(String email);
+    Optional<Account> findByEmailIgnoreCaseAndIsActiveTrue(String email);
 
-    boolean existsByEmailIgnoreCase(String email);
+    boolean existsByEmailIgnoreCaseAndIsActiveTrue(String email);
 
-    Optional<Account> findByEmail(String email);
+    Optional<Account> findByEmailAndIsActiveTrue(String email);
 
     @Query("""
         SELECT u FROM Account u 
-        WHERE (:nickname IS NULL OR LOWER(u.nickname) LIKE LOWER(CONCAT('%', :nickname, '%'))) 
+        WHERE u.isActive = true
+        AND u.deletedAt IS NULL
+        AND (:nickname IS NULL OR LOWER(u.nickname) LIKE LOWER(CONCAT('%', :nickname, '%'))) 
         AND (:email IS NULL OR LOWER(u.email) LIKE LOWER(CONCAT('%', :email, '%'))) 
         AND (:role IS NULL OR u.role = :role)
     """)
     List<Account> findByFilters(
+            @Param("nickname") String nickname,
+            @Param("email") String email,
+            @Param("role") Role role
+    );
+
+    @Query("""
+        SELECT u FROM Account u 
+        WHERE u.isActive = false
+        AND (:nickname IS NULL OR LOWER(u.nickname) LIKE LOWER(CONCAT('%', :nickname, '%'))) 
+        AND (:email IS NULL OR LOWER(u.email) LIKE LOWER(CONCAT('%', :email, '%'))) 
+        AND (:role IS NULL OR u.role = :role)
+    """)
+    List<Account> findDeletedByFilters(
             @Param("nickname") String nickname,
             @Param("email") String email,
             @Param("role") Role role

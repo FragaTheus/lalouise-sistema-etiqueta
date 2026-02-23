@@ -83,11 +83,17 @@ public class AccountService {
     }
 
     @Transactional
-    public void deleteUser(UUID id) {
-        if (!accountRepository.existsById(id)) {
-            throw new UserNotFoundException();
-        }
-        accountRepository.deleteById(id);
+    public void deactivateAccount(UUID id) {
+        Account account = getUserById(id);
+        account.deactivate();
+        accountRepository.save(account);
+    }
+
+    @Transactional
+    public void reactivateAccount(UUID id) {
+        Account account = getUserById(id);
+        account.reactivate();
+        accountRepository.save(account);
     }
 
     public Account getUserById(UUID id) {
@@ -106,4 +112,12 @@ public class AccountService {
     public Account getUserByEmail(String email){
         return accountRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
     }
+
+    @Transactional
+    public void recordLastLogin(String email){
+        Account account = getUserByEmail(email);
+        account.recordLastLogin();
+        accountRepository.save(account);
+    }
+
 }

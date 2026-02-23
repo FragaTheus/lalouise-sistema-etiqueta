@@ -2,6 +2,7 @@ package matheusfraga.dev.lalouise.backend.infra.in.controller.auth;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import matheusfraga.dev.lalouise.backend.application.service.AccountService;
 import matheusfraga.dev.lalouise.backend.application.service.AuthService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final AccountService accountService;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request){
         var authResult = authService.authenticate(request.email(),  request.password());
+        accountService.recordLastLogin(request.email());
         var token = authResult.token();
         var user = authResult.userDetails();
 
