@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ComponentType } from "react";
-import { usePathname } from "next/navigation";
 import { AnimationDiv } from "./Animations";
 import { navListAnimation } from "@/constants/animationContants";
 
@@ -9,12 +8,16 @@ export interface NavItemProps {
   href: string;
   Icon: ComponentType<{ className: string }>;
   linkText: string;
+  isActive: boolean;
 }
 
-export const NavItem = ({ index, href, Icon, linkText }: NavItemProps) => {
-  const pathname = usePathname();
-  const isActive = pathname === href;
-
+export const NavItem = ({
+  index,
+  href,
+  Icon,
+  linkText,
+  isActive,
+}: NavItemProps) => {
   return (
     <AnimationDiv animation={navListAnimation(index)} className="lg:w-full">
       <Link

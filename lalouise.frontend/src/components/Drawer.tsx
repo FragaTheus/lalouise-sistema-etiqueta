@@ -9,7 +9,11 @@ import {
   navListAnimation,
 } from "@/constants/animationContants";
 
-export default function Drawer() {
+interface DrawerProps {
+  pathname: string;
+}
+
+export default function Drawer({ pathname }: DrawerProps) {
   return (
     <AnimationDiv
       animation={navListAnimation(0.5)}
@@ -37,6 +41,7 @@ export default function Drawer() {
                 href={n.href}
                 Icon={n.Icon}
                 linkText={n.linkText}
+                isActive={pathname === n.href}
               />
             ))}
           </ul>
