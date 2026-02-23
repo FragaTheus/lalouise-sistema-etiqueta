@@ -8,7 +8,7 @@ export default function Header() {
   return (
     <AnimationDiv
       animation={navListAnimation(0.5)}
-      className="w-full left-0 lg:hidden order-1 flex p-4 fixed bg-surface h-15 shadow-xs"
+      className="w-full left-0 lg:hidden order-1 flex p-4 fixed bg-surface h-15 shadow-xs z-50"
     >
       <div className="flex-1 flex items-center justify-between">
         <div>

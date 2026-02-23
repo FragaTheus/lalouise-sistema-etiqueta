@@ -13,7 +13,7 @@ export default function Drawer() {
   return (
     <AnimationDiv
       animation={navListAnimation(0.5)}
-      className="w-full h-18 lg:h-full lg:w-60 lg:p-4 flex order-last lg:order-first bottom-0 fixed lg:static bg-surface border-t border-black/5"
+      className="w-full h-18 lg:h-full lg:w-60 lg:p-4 flex order-last lg:order-first bottom-0 fixed lg:static bg-surface border-t border-black/5 z-50"
     >
       <div id="drawer-content" className="flex-1 relative flex flex-col">
         <AnimationDiv
