@@ -20,6 +20,7 @@ export default function UserMenu() {
         href="/dashboard/desenvolvimento"
         Icon={UserCircleIcon}
         linkText="Perfil"
+        isActive
       />
       <AnimationDiv animation={formInputLeftAnimation()} className="w-full">
         <button
