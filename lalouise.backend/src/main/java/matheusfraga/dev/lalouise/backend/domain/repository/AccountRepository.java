@@ -2,6 +2,8 @@ package matheusfraga.dev.lalouise.backend.domain.repository;
 
 import matheusfraga.dev.lalouise.backend.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.domain.enums.Role;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,10 +29,11 @@ public interface AccountRepository extends JpaRepository<Account, UUID> {
         AND (:email IS NULL OR LOWER(u.email) LIKE LOWER(CONCAT('%', :email, '%'))) 
         AND (:role IS NULL OR u.role = :role)
     """)
-    List<Account> findByFilters(
+    Page<Account> findByFilters(
             @Param("nickname") String nickname,
             @Param("email") String email,
-            @Param("role") Role role
+            @Param("role") Role role,
+            Pageable pageable
     );
 
     @Query("""
@@ -40,10 +43,11 @@ public interface AccountRepository extends JpaRepository<Account, UUID> {
         AND (:email IS NULL OR LOWER(u.email) LIKE LOWER(CONCAT('%', :email, '%'))) 
         AND (:role IS NULL OR u.role = :role)
     """)
-    List<Account> findDeletedByFilters(
+    Page<Account> findDeletedByFilters(
             @Param("nickname") String nickname,
             @Param("email") String email,
-            @Param("role") Role role
+            @Param("role") Role role,
+            Pageable pageable
     );
 
 }

@@ -9,6 +9,7 @@ import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.CreateU
 import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UpdateUserRequest;
 import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UserInfo;
 import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UserSummary;
+import org.springframework.data.domain.Pageable;
 
 import java.util.UUID;
 
@@ -48,11 +49,12 @@ public record AccountMapper() {
                 .build();
     }
 
-    public static AccountFilterQueryCommand toFilterQueryCommand(String nickname, String email, Role role){
+    public static AccountFilterQueryCommand toFilterQueryCommand(String nickname, String email, Role role, Pageable pageable){
         return AccountFilterQueryCommand.builder()
                 .nickname(nickname)
                 .email(email)
                 .role(role)
+                .pageable(pageable)
                 .build();
     }
 

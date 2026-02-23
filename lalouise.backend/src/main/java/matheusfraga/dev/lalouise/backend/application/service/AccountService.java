@@ -9,6 +9,7 @@ import matheusfraga.dev.lalouise.backend.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.domain.enums.Role;
 import matheusfraga.dev.lalouise.backend.domain.exception.user.*;
 import matheusfraga.dev.lalouise.backend.domain.repository.AccountRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,7 @@ public class AccountService {
     }
 
     private void ensureEmailUnique(String email) {
-        if (accountRepository.existsByEmailIgnoreCase(email)) {
+        if (accountRepository.existsByEmailIgnoreCaseAndIsActiveTrue(email)) {
             throw new EmailAlreadyExists();
         }
     }
@@ -80,6 +81,7 @@ public class AccountService {
             ensurePasswordsMatch(command.password(), command.confirmPassword());
             account.setPassword(encoder.encode(command.password()));
         }
+        accountRepository.save(account);
     }
 
     @Transactional
@@ -101,16 +103,17 @@ public class AccountService {
                 .orElseThrow(UserNotFoundException::new);
     }
 
-    public List<Account> getAllUsers(AccountFilterQueryCommand command) {
+    public Page<Account> getAllUsers(AccountFilterQueryCommand command) {
         return accountRepository.findByFilters(
                 command.nickname(),
                 command.email(),
-                command.role()
+                command.role(),
+                command.pageable()
         );
     }
 
     public Account getUserByEmail(String email){
-        return accountRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        return accountRepository.findByEmailAndIsActiveTrue(email).orElseThrow(UserNotFoundException::new);
     }
 
     @Transactional
@@ -118,6 +121,10 @@ public class AccountService {
         Account account = getUserByEmail(email);
         account.recordLastLogin();
         accountRepository.save(account);
+    }
+
+    public Page<Account> getDeletedAccountsByFilter(AccountFilterQueryCommand command) {
+        return accountRepository.findDeletedByFilters(command.nickname(), command.email(), command.role(), command.pageable());
     }
 
 }

@@ -9,6 +9,10 @@ import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.CreateU
 import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UpdateUserRequest;
 import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UserInfo;
 import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UserSummary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,17 +64,35 @@ public class AccountController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserSummary>> getAllUsers(
+    public ResponseEntity<Page<UserSummary>> getAllUsers(
             @RequestParam(required = false) String nickname,
             @RequestParam(required = false) String email,
-            @RequestParam(required = false) Role role
+            @RequestParam(required = false) Role role,
+            @PageableDefault(size = 20, page = 0, sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable
     ) {
-        var command = AccountMapper.toFilterQueryCommand(nickname, email, role);
-        List<Account> accounts = service.getAllUsers(command);
-        List<UserSummary> response = accounts.stream()
-                .map(AccountMapper::toUserSummary)
-                .toList();
+        var command = AccountMapper.toFilterQueryCommand(nickname, email, role, pageable);
+        Page<Account> accounts = service.getAllUsers(command);
+        Page<UserSummary> response = accounts.map(AccountMapper::toUserSummary);
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/deleted")
+    public ResponseEntity<Page<UserSummary>> getDeletedUsers(
+            @RequestParam(required = false) String nickname,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) Role role,
+            @PageableDefault(size = 20, page = 0, sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable
+    ) {
+        var command = AccountMapper.toFilterQueryCommand(nickname, email, role, pageable);
+        Page<Account> accounts = service.getDeletedAccountsByFilter(command);
+        Page<UserSummary> response = accounts.map(AccountMapper::toUserSummary);
+
+        return ResponseEntity.ok(response);
+    }
+
+
+
 }
