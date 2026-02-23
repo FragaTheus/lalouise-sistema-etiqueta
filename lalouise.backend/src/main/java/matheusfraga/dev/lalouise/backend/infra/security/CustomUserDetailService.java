@@ -21,7 +21,7 @@ public class CustomUserDetailService implements UserDetailsService {
             key = "#username"
     )
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return accountRepository.findByEmailIgnoreCase(username).map(UserDetailsImpl::new).orElseThrow(UserNotFoundException::new);
+        return accountRepository.findByEmailAndIsActiveTrue(username).map(UserDetailsImpl::new).orElseThrow(UserNotFoundException::new);
     }
 
 }

@@ -39,7 +39,7 @@ public class Account {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createAt;
 
-    @Column(nullable = false)
+    @Column
     private LocalDateTime updateAt;
 
     @Column
@@ -112,6 +112,6 @@ public class Account {
     private static void validatePassword(String password) {
         if (password == null || password.isEmpty()) throw new InternalException("Password cant be null or empty");
         if (password.length() < 20) throw new InternalException("Password length must be at least 20 characters");
-        if (!password.matches("^[a-zA-Z0-9+/=$]*$")) throw new InternalException("Password is not a hash");
+        if (!password.matches("^[\\x20-\\x7E]+$")) throw new InternalException("Password is not a hash");
     }
 }
