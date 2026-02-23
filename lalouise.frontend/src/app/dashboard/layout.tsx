@@ -11,7 +11,7 @@ export default function DashboardLayout({
     <main className="h-svh w-full flex flex-col lg:flex-row">
       <Header />
       <Drawer />
-      <div className="flex-1 order-2 p-8 lg:p-12 flex flex-col">{children}</div>
+      <div className="flex-1 order-2 flex flex-col">{children}</div>
     </main>
     //</ProtectedRoute>
   );

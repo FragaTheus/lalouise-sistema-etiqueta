@@ -1,20 +1,20 @@
 import Card from "@/components/Card";
-import { dashCard } from "@/constants/dashboardCardsProps";
+import { accountsCards } from "@/constants/accountsCardsProps";
 import DashPageLayout from "@/layout/DashPageLayout";
 
-export default function Dashboard() {
+export default function Accounts() {
   return (
     <DashPageLayout>
-      {dashCard.map((dc, i) => (
+      {accountsCards.map((dc, i) => (
         <Card
           key={i}
           index={i}
+          Icon={dc.Icon}
           title={dc.title}
           description={dc.description}
           href={dc.href}
-          Icon={dc.Icon}
           children={dc.children}
-        />
+        ></Card>
       ))}
     </DashPageLayout>
   );

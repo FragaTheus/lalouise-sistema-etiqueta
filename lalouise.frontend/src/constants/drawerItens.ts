@@ -1,7 +1,6 @@
-import { NavItemProps } from "@/components/NavItem"
 import { 
+  HomeIcon,
   UserGroupIcon,
-  CreditCardIcon,
   SparklesIcon,
   BuildingStorefrontIcon,
   TagIcon
@@ -9,23 +8,28 @@ import {
 
 export const navItems = [
     {
-        href: "/",
+        href: "/dashboard",
+        Icon: HomeIcon,
+        linkText: "Dashboard"
+    },
+    {
+        href: "/dashboard/accounts",
         Icon: UserGroupIcon,
         linkText: "Usuários"
     },
     {
-        href: "/",
+        href: "/dashboard/desenvolvimento",
         Icon: SparklesIcon,
         linkText: "Alimentos"
     },
     {
-        href: "/",
+        href: "/dashboard/desenvolvimento",
         Icon: BuildingStorefrontIcon,
         linkText: "Setores"
     },
     {
-        href: "/",
+        href: "/dashboard/desenvolvimento",
         Icon: TagIcon,
         linkText: "Etiquetas"
     }
-] 
+]
