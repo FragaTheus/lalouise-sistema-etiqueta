@@ -1,4 +1,4 @@
-import Drawer from "@/components/drawer";
+import Drawer from "@/components/app-drawer";
 import Header from "@/components/ui/header";
 
 export default function DashboardLayout({
@@ -10,9 +10,7 @@ export default function DashboardLayout({
     <main className="w-full h-svh flex flex-col lg:flex-row">
       <Header />
       <Drawer />
-      <div className="flex-1 order-first lg:order-last overflow-auto p-4 lg:p-12 gap-2">
-        {children}
-      </div>
+      {children}
     </main>
   );
 }

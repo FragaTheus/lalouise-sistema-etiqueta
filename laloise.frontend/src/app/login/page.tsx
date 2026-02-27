@@ -1,4 +1,3 @@
-import LoginForm from "@/components/login-from";
 import {
   Card,
   CardContent,
@@ -11,6 +10,7 @@ import Image from "next/image";
 import login from "@/assets/login.svg";
 import { FieldSeparator } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
+import LoginClient from "@/wrapper/login-client";
 
 export default function Login() {
   return (
@@ -21,7 +21,7 @@ export default function Login() {
           <CardDescription>Insira seus dados para continuar</CardDescription>
         </CardHeader>
         <CardContent>
-          <LoginForm />
+          <LoginClient />
         </CardContent>
         <FieldSeparator>Está com dificuldades?</FieldSeparator>
         <CardFooter className="flex justify-center">
