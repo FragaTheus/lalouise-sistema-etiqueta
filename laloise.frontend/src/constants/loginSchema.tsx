@@ -1,21 +1,24 @@
 import { z } from "zod";
+import loginContent from "@/constants/loginTextContent.json";
+
+const messages = loginContent.login.schema;
 
 export const loginSchema = z.object({
   email: z
     .string()
-    .min(1, "Email nao pode estar vazio")
+    .min(1, messages.email.empty)
     .refine(
       (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
-      "Formato de email invalido",
+      messages.email.invalid,
     ),
   password: z
     .string()
-    .min(1, "Senha nao pode estar vazia")
-    .min(8, "Mínimo 8 caracteres")
-    .max(12, "Máximo 12 caracteres")
+    .min(1, messages.password.empty)
+    .min(8, messages.password.minLength)
+    .max(12, messages.password.maxLength)
     .regex(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
-      "Deve conter maiúscula, minúscula, número e caractere especial (@$!%*?&)",
+      messages.password.pattern,
     ),
 });
 

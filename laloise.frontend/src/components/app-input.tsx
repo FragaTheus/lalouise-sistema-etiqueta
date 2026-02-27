@@ -1,4 +1,4 @@
-import { HTMLInputTypeAttribute, InputHTMLAttributes } from "react";
+import { InputHTMLAttributes } from "react";
 import {
   Field,
   FieldContent,
@@ -8,24 +8,23 @@ import {
 } from "./ui/field";
 import { Input } from "./ui/input";
 
-export interface AppInputProps {
+export interface AppInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
-  inputProps: InputHTMLAttributes<HTMLInputElement>;
   description: string;
-  error?: string | undefined;
+  error?: string;
 }
 
 export default function AppInput({
   label,
-  inputProps,
   description,
   error,
+  ...inputProps
 }: AppInputProps) {
   return (
     <Field>
       <FieldLabel>{label}</FieldLabel>
       <FieldContent>
-        <Input type={inputProps.type} placeholder={inputProps.placeholder} />
+        <Input {...inputProps} />
       </FieldContent>
       {!error ? (
         <FieldDescription>{description}</FieldDescription>

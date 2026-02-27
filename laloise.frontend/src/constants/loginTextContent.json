@@ -1,0 +1,45 @@
+{
+  "login": {
+    "page": {
+      "title": "Bem-vindo de volta!",
+      "description": "Insira seus dados para continuar",
+      "separator": "Está com dificuldades?",
+      "help": "Entre em contato com nosso suporte"
+    },
+    "form": {
+      "btnText": "Entrar",
+      "defaultValues": {
+        "email": "",
+        "password": ""
+      },
+      "fields": [
+        {
+          "name": "email",
+          "label": "Email",
+          "description": "Digite seu endereço de email",
+          "type": "email",
+          "placeholder": "email@exemplo.com"
+        },
+        {
+          "name": "password",
+          "label": "Senha",
+          "description": "Digite sua senha de acesso",
+          "type": "password",
+          "placeholder": "Senha@123"
+        }
+      ]
+    },
+    "schema": {
+      "email": {
+        "empty": "Por favor, insira seu email",
+        "invalid": "Insira um email válido"
+      },
+      "password": {
+        "empty": "Por favor, insira sua senha",
+        "minLength": "A senha deve ter no mínimo 8 caracteres",
+        "maxLength": "A senha deve ter no máximo 12 caracteres",
+        "pattern": "A senha deve conter maiúscula, minúscula, número e um caractere especial (@$!%*?&)"
+      }
+    }
+  }
+}
