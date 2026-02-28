@@ -12,7 +12,7 @@
   --color-sidebar-accent-foreground: #ffffff;
   --color-sidebar-accent: var(--secondary-light);
   --color-sidebar-primary-foreground: #ffffff;
-  --color-sidebar-primary: var(--primary);
+  --color-sidebar-primary: var(--secondary-light);
   --color-sidebar-foreground: var(--foreground);
   --color-sidebar: var(--surface);
   --color-chart-5: #8b5cf6;
@@ -53,7 +53,15 @@
   --primary: #004B4D;       
   --primary-light: #2B7D8E;
   --secondary: #5E1D5B;     
-  --secondary-light: #E4005E;
+  --secondary-light: #E4005E;     
+  --sidebar: hsl(0 0% 98%);     
+  --sidebar-foreground: hsl(240 5.3% 26.1%);     
+  --sidebar-primary: hsl(240 5.9% 10%);     
+  --sidebar-primary-foreground: hsl(0 0% 98%);     
+  --sidebar-accent: hsl(240 4.8% 95.9%);     
+  --sidebar-accent-foreground: hsl(240 5.9% 10%);     
+  --sidebar-border: hsl(220 13% 91%);     
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
 .dark {
@@ -65,6 +73,14 @@
   --primary-light: #4ca5b8;
   --secondary: #c73a8f;
   --secondary-light: #ff3d7f;
+  --sidebar: hsl(240 5.9% 10%);
+  --sidebar-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-primary: hsl(224.3 76.3% 48%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(240 3.7% 15.9%);
+  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-border: hsl(240 3.7% 15.9%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
 @layer base {
@@ -75,43 +91,43 @@
   h1 {
     @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl;
   }
-  
+
   h2 {
     @apply scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0;
   }
-  
+
   h3 {
     @apply scroll-m-20 text-2xl font-semibold tracking-tight;
   }
-  
+
   h4 {
     @apply scroll-m-20 text-xl font-semibold tracking-tight;
   }
-  
+
   p {
     @apply leading-7 not-first:mt-6;
   }
-  
+
   blockquote {
     @apply mt-6 border-l-2 border-border pl-6 italic text-muted-foreground;
   }
-  
+
   ul {
     @apply my-6 ml-6 list-disc [&>li]:mt-2;
   }
-  
+
   code {
     @apply relative rounded-md bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-foreground;
   }
-  
+
   pre {
     @apply mb-4 overflow-x-auto rounded-lg border bg-muted p-4;
   }
-  
+
   pre code {
     @apply bg-transparent p-0;
   }
-  
+
   body {
     @apply bg-background text-foreground;
   }

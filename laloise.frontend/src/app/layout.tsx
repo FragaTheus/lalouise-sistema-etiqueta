@@ -27,14 +27,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased relative`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Image
-          src={logo}
-          alt="LaLouise Logo"
-          className="absolute w-100 -left-26 -top-16 z-50 pointer-events-none"
-          priority
-        />
         {children}
       </body>
     </html>

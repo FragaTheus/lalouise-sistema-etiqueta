@@ -20,12 +20,12 @@ export interface FormFieldConfig<TFormValues extends FieldValues> {
   placeholder?: string;
 }
 
-interface AppFormProps<TSchema extends z.ZodObject<any>> {
+interface AppFormProps<TSchema extends z.ZodType<any, any>> {
   legend?: string;
   schema: TSchema;
-  fields: FormFieldConfig<z.infer<TSchema>>[];
+  fields: FormFieldConfig<any>[];
   onSubmit: (data: z.infer<TSchema>) => void | Promise<void>;
-  defaultValues: DefaultValues<z.infer<TSchema>>;
+  defaultValues: any;
   btnText: string;
 }
 

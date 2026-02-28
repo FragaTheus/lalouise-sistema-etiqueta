@@ -11,7 +11,7 @@ import { Button } from "./ui/button";
 import Image from "next/image";
 
 interface AppImageCardProps {
-  title: string;
+  title?: string;
   description: string;
   children: React.ReactNode;
   imgSrc: string;
@@ -28,12 +28,14 @@ export default function AppImageCard({
   separator,
 }: AppImageCardProps) {
   return (
-    <Card className="w-full grid grid-cols-1 lg:grid-cols-2 transition-all">
+    <Card className="w-full grid grid-cols-1 lg:grid-cols-2 transition-all max-w-sm lg:max-w-4xl">
       <div className="flex flex-col gap-6">
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </CardHeader>
+        {title && (
+          <CardHeader>
+            <CardTitle>{title}</CardTitle>
+            <CardDescription>{description}</CardDescription>
+          </CardHeader>
+        )}
         <CardContent>{children}</CardContent>
         {help && (
           <>
@@ -44,7 +46,7 @@ export default function AppImageCard({
           </>
         )}
       </div>
-      <Image alt="Lalouise" src={imgSrc} className="hidden lg:block" />
+      <Image alt="Lalouise" src={imgSrc} className="hidden lg:block h-full" />
     </Card>
   );
 }
