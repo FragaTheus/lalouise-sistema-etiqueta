@@ -1,0 +1,55 @@
+"use client";
+
+import { ChevronDown } from "lucide-react";
+import { CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
+import { SidebarMenuButton, useSidebar } from "../ui/sidebar";
+import Link from "next/link";
+
+export type ItemsProps = {
+  itemHref: string;
+  ItemIcon: React.ElementType;
+  itemText: string;
+};
+
+export interface AppSideBarGroupItems {
+  TriggerIcon: React.ElementType;
+  triggerText: string;
+  items: ItemsProps[];
+}
+
+export default function AppSidebarGroups({
+  TriggerIcon,
+  triggerText,
+  items,
+}: AppSideBarGroupItems) {
+  const { open } = useSidebar();
+  return (
+    <>
+      <CollapsibleTrigger
+        asChild
+        className="w-full data-[state=open]:bg-secondary/5 data-[state=open]:hover:bg-secondary/10 data-[state=open]:hover:text-inherit group/collapsible"
+      >
+        <SidebarMenuButton size={"sm"} className="bg-transparent">
+          <TriggerIcon className="text-secondary group-data-[state=open]/collapsible:scale-110" />
+          <span className="font-semibold">{triggerText}</span>
+          <ChevronDown className="ml-auto group-data-[state=open]/collapsible:rotate-180 text-secondary" />
+        </SidebarMenuButton>
+      </CollapsibleTrigger>
+      <CollapsibleContent
+        className={`${open && "border-l border-muted-foreground/50 ml-3.5 px-2 mt-2"} transition-all mt-1`}
+      >
+        {items.map((c, i) => (
+          <Link href={c.itemHref} key={i}>
+            <SidebarMenuButton
+              size={"sm"}
+              className="bg-transparent group/menubutton hover:bg-primary/10 w-3/4"
+            >
+              <c.ItemIcon className="text-primary" />
+              <span>{c.itemText}</span>
+            </SidebarMenuButton>
+          </Link>
+        ))}
+      </CollapsibleContent>
+    </>
+  );
+}

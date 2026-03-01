@@ -1,42 +1,36 @@
-import { UserIcon } from "lucide-react";
+"use client";
+
+import { Collapsible } from "../ui/collapsible";
 import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarMenuButton,
 } from "../ui/sidebar";
-import Link from "next/link";
+import AppSidebarGroups, { AppSideBarGroupItems } from "./app-sidebar-group";
 
-export type SidebarContentProps = {
-  href: string;
-  Icon: React.ElementType;
-  text: string;
-};
-
-interface AppSidebarContentProps {
-  contents: SidebarContentProps[];
+export interface AppSidebarContentProps {
+  groups: AppSideBarGroupItems[];
 }
 
-export default function AppSidebarContent({
-  contents,
-}: AppSidebarContentProps) {
+export default function AppSidebarContent({ groups }: AppSidebarContentProps) {
   return (
     <SidebarContent>
       <SidebarGroup>
-        <SidebarGroupLabel>Recursos</SidebarGroupLabel>
+        <SidebarGroupLabel className="gap-2">
+          <p>Recursos</p>
+        </SidebarGroupLabel>
         <SidebarGroupContent>
-          {contents.map((c, i) => (
-            <Link href={c.href} key={i}>
-              <SidebarMenuButton
-                size={"sm"}
-                className="mt-2 bg-transparent hover:bg-primary/10"
-              >
-                <c.Icon className="text-primary" />
-                {c.text}
-              </SidebarMenuButton>
-            </Link>
-          ))}
+          <Collapsible className="bg-transparent">
+            {groups.map((groups, index) => (
+              <AppSidebarGroups
+                key={index}
+                TriggerIcon={groups.TriggerIcon}
+                triggerText={groups.triggerText}
+                items={groups.items}
+              />
+            ))}
+          </Collapsible>
         </SidebarGroupContent>
       </SidebarGroup>
     </SidebarContent>
