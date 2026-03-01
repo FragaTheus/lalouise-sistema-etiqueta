@@ -27,10 +27,10 @@ export default function AppSidebarGroups({
     <>
       <CollapsibleTrigger
         asChild
-        className="w-full data-[state=open]:bg-secondary/5 data-[state=open]:hover:bg-secondary/10 data-[state=open]:hover:text-inherit group/collapsible"
+        className="w-full data-[state=open]:bg-secondary/5 data-[state=open]:hover:bg-secondary/10 data-[state=open]:hover:text-inherit hover:bg-secondary/5"
       >
         <SidebarMenuButton size={"sm"} className="bg-transparent">
-          <TriggerIcon className="text-secondary group-data-[state=open]/collapsible:scale-110" />
+          <TriggerIcon className="text-secondary" />
           <span className="font-semibold">{triggerText}</span>
           <ChevronDown className="ml-auto group-data-[state=open]/collapsible:rotate-180 text-secondary" />
         </SidebarMenuButton>
@@ -42,7 +42,7 @@ export default function AppSidebarGroups({
           <Link href={c.itemHref} key={i}>
             <SidebarMenuButton
               size={"sm"}
-              className="bg-transparent group/menubutton hover:bg-primary/10 w-3/4"
+              className="bg-transparent group/menubutton hover:bg-primary/5 active:bg-primary/10 w-3/4"
             >
               <c.ItemIcon className="text-primary" />
               <span>{c.itemText}</span>

@@ -28,7 +28,7 @@ import {
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 const SIDEBAR_WIDTH = "16rem";
-const SIDEBAR_WIDTH_MOBILE = "18rem";
+const SIDEBAR_WIDTH_MOBILE = "15rem";
 const SIDEBAR_WIDTH_ICON = "3rem";
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 
@@ -291,7 +291,7 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
       onClick={toggleSidebar}
       title="Menu"
       className={cn(
-        "hover:after:bg-sidebar-primary absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-0.5 sm:flex ",
+        "absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-0.5 sm:flex ",
         "in-data-[side=left]:cursor-pointer in-data-[side=right]:cursor-pointer",
         "[[data-side=left][data-state=collapsed]_&]:cursor-pointer [[data-side=right][data-state=collapsed]_&]:cursor-w-resize",
         "hover:group-data-[collapsible=offcanvas]:bg-sidebar group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full",
@@ -479,7 +479,7 @@ const sidebarMenuButtonVariants = cva(
     variants: {
       variant: {
         default: "hover:bg-primary/10 hover:text-sidebar-accent-foreground",
-        outline: "bg-primary/10 hover:scale-101 group transition-all",
+        outline: "bg-primary/10 group transition-all",
       },
       size: {
         default: "h-8 text-sm",

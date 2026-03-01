@@ -8,7 +8,7 @@ import logo from "@/assets/logo.png";
 export default function AppSidebarHeader() {
   const { open } = useSidebar();
   return (
-    <SidebarHeader>
+    <SidebarHeader className="mt-2">
       <div className="transition-opacity">
         {open ? (
           <Image src={logo} alt="Lalouise Logo" className="w-30 lg:w-40" />
