@@ -12,15 +12,15 @@ import { Button } from "../ui/button";
 
 export default function AppTableContent() {
   return (
-    <CardContent className="overflow-y-auto">
+    <CardContent>
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className="pointer-events-none">
             <TableHead>Nome</TableHead>
             <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody className="overflow-auto">
+        <TableBody className="max-h-79 overflow-auto grid auto-rows-auto border-b">
           {data.map((row, index) => (
             <TableRow key={index}>
               <TableCell>{row.name}</TableCell>
