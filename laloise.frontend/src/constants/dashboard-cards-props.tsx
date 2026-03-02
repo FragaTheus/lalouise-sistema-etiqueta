@@ -1,14 +1,20 @@
-import { DashboardCardProps } from "@/app/dashboard/page";
 import userIcon from "@/assets/user-icon.svg";
 import productIcon from "@/assets/product-icon.svg";
 import tagIcon from "@/assets/labels-icon.svg";
 import sectorIcon from "@/assets/sector-icon.svg";
 
+interface DashboardCardProps {
+  srcUrl: string;
+  link: string;
+  title: string;
+  description: string;
+}
+
 export const dashboardCardProps = [
   {
     title: "Usuarios",
     description: "Gerencie sua equipe e controle quem tem acesso ao sistema",
-    link: "",
+    link: "/painel/contas",
     srcUrl: userIcon,
   },
   {

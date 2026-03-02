@@ -2,7 +2,6 @@ import AppDashboardLayout from "@/components/app-dashboard-layout";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -12,22 +11,9 @@ import {
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import userIcon from "@/assets/user-icon.svg";
 import { dashboardCardProps } from "@/constants/dashboard-cards-props";
 
-export interface DashboardCardProps {
-  srcUrl: string;
-  link: string;
-  title: string;
-  description: string;
-}
-
-export default function Dashboard({
-  srcUrl,
-  link,
-  title,
-  description,
-}: DashboardCardProps) {
+export default function Dashboard() {
   return (
     <AppDashboardLayout>
       <div className="flex-1 grid grid-cols-1 auto-rows-auto lg:grid-cols-3 h-full gap-4 lg:gap-8">

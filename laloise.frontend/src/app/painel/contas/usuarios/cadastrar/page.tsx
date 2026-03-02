@@ -9,8 +9,8 @@ export default function CreateUser() {
   return (
     <AppDashboardLayout>
       <AppImageCard
-        title="Cadastrar"
-        description="Insira os dados do novo usuario"
+        title="Cadastrar Usuário"
+        description="Insira os dados do novo usuário"
         imgSrc={createUser}
       >
         <CreateUserClient />
