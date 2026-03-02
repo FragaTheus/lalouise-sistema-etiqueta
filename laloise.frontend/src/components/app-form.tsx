@@ -1,16 +1,15 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  DefaultValues,
-  FieldPath,
-  FieldValues,
-  useForm,
-} from "react-hook-form";
+import { FieldPath, FieldValues, useForm } from "react-hook-form";
 import { Field, FieldGroup, FieldLegend, FieldSet } from "./ui/field";
 import { Button } from "./ui/button";
 import z from "zod";
 import AppInput from "./app-input";
+import { useState } from "react";
+import { extractErrorMessage } from "@/api/api.error";
+import { AppErrorAlert } from "./app-error-alert";
+import { LoaderIcon } from "lucide-react";
 
 export interface FormFieldConfig<TFormValues extends FieldValues> {
   name: FieldPath<TFormValues>;
@@ -37,9 +36,11 @@ export default function AppForm<TSchema extends z.ZodObject<any>>({
   defaultValues,
   btnText,
 }: AppFormProps<TSchema>) {
+  const [apiError, setApiError] = useState<string | null>(null);
+
   const {
     register,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     handleSubmit,
   } = useForm<z.infer<TSchema>>({
     resolver: zodResolver(schema),
@@ -47,8 +48,19 @@ export default function AppForm<TSchema extends z.ZodObject<any>>({
     defaultValues,
   });
 
+  const handleFormSubmit = async (data: z.infer<TSchema>) => {
+    setApiError(null);
+
+    try {
+      await onSubmit(data);
+    } catch (error) {
+      setApiError(extractErrorMessage(error));
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(handleFormSubmit)}>
+      <AppErrorAlert message={apiError} onClose={() => setApiError(null)} />
       <FieldSet>
         {legend && <FieldLegend>{legend}</FieldLegend>}
         <FieldGroup>
@@ -70,8 +82,13 @@ export default function AppForm<TSchema extends z.ZodObject<any>>({
             );
           })}
           <Field>
-            <Button className="mt-2" type="submit">
-              {btnText}
+            <Button
+              className="mt-2 flex items-center gap-2"
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting && <LoaderIcon className="h-4 w-4 animate-spin" />}
+              {isSubmitting ? "Carregando..." : btnText}
             </Button>
           </Field>
         </FieldGroup>

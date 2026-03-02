@@ -14,7 +14,7 @@ export default function LoginLayout({
       <Image
         src={logo}
         alt="LaLouise Logo"
-        className="absolute w-100 -left-25 -top-16 z-50 pointer-events-none"
+        className="absolute w-40 lg:w-50 left-4 top-2 lg:left-8 z-50 pointer-events-none"
         priority
       />
       <div id="content" className="w-full max-w-sm lg:max-w-4xl flex flex-col">
