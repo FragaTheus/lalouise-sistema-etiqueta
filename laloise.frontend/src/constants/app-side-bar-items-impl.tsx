@@ -17,7 +17,7 @@ const sidebarUserItensImpl = [
     itemText: "Criar Admin",
   },
   {
-    itemHref: "/painel/usuarios",
+    itemHref: "/painel/contas",
     ItemIcon: GroupIcon,
     itemText: "Usuarios",
   },

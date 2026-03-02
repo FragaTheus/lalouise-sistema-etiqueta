@@ -27,7 +27,7 @@ export default function AppSidebarGroups({
     <>
       <CollapsibleTrigger
         asChild
-        className="w-full data-[state=open]:bg-secondary/5 data-[state=open]:hover:bg-secondary/10 data-[state=open]:hover:text-inherit hover:bg-secondary/5"
+        className="w-full data-[state=open]:bg-secondary/5 data-[state=open]:hover:bg-secondary/10 data-[state=open]:hover:text-inherit hover:bg-secondary/5 group/collapsible"
       >
         <SidebarMenuButton size={"sm"} className="bg-transparent">
           <TriggerIcon className="text-secondary" />
