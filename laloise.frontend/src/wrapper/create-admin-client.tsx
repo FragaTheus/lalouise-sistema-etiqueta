@@ -1,5 +1,6 @@
 "use client";
 
+import { createAdmin } from "@/api/accounts/api.createAccounts";
 import AppForm from "@/components/app-form";
 import {
   signupAdminBtnText,
@@ -9,8 +10,13 @@ import {
 import { createUserSchema } from "@/constants/create-user-schema";
 
 export default function CreateAdminClient() {
-  const handleSubmit = (data: any) => {
-    console.log("Signup data:", data);
+  const handleSubmit = async (data: any) => {
+    try {
+      await createAdmin(data);
+      console.log("Admin criado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao criar admin:", error);
+    }
   };
   return (
     <AppForm

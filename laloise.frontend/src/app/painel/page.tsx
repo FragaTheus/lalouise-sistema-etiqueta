@@ -36,7 +36,7 @@ export default function Dashboard() {
               <Link href={cards.link} className="w-full">
                 <Button
                   variant={"outline"}
-                  className="flex items-center w-full group"
+                  className="flex items-center w-full group cursor-pointer"
                 >
                   <span>Gerenciar</span>
                   <ChevronRight className="group-hover:ml-1 duration-300 transition-all " />

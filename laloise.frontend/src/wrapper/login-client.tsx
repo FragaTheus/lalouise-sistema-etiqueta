@@ -16,7 +16,7 @@ export default function LoginClient() {
 
     if (!user) return;
 
-    router.push("/dashboard");
+    router.push("/painel");
   };
 
   return (

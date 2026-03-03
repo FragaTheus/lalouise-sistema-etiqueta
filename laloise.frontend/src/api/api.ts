@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { HandlerResponse } from "./api.types";
 
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = "http://localhost:8080/api/v1";
 
 
 
