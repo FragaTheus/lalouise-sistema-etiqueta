@@ -39,6 +39,10 @@ public record AccountMapper() {
                 .nickname(account.getNickname())
                 .email(account.getEmail())
                 .role(account.getRole().name())
+                .status(account.isActive())
+                .createAt(account.getCreateAt())
+                .updateAt(account.getUpdateAt())
+                .lastLogin(account.getLastLogin())
                 .build();
     }
 

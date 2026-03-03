@@ -29,12 +29,11 @@ public class TokenService {
         try {
             var authorities = user.getAuthorities();
 
-            // ✅ VALIDAÇÃO ADICIONADA
             if (authorities == null || authorities.isEmpty()) {
                 throw new IllegalStateException("Usuário sem role");
             }
 
-            String role = authorities.iterator().next().getAuthority(); // ✅ Mudado para .getAuthority()
+            String role = authorities.iterator().next().getAuthority();
 
             return JWT.create()
                     .withIssuer("lalouise-api")

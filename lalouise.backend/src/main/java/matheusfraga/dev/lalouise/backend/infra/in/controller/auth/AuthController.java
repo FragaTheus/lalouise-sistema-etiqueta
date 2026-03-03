@@ -29,8 +29,8 @@ public class AuthController {
                 .httpOnly(true)
                 .secure(false)
                 .path("/")
-                .maxAge(60*60)
-                .sameSite("Lax")
+                .maxAge(60 * 60)
+                .sameSite("Strict")
                 .build();
 
         var response = new LoginResponse(
