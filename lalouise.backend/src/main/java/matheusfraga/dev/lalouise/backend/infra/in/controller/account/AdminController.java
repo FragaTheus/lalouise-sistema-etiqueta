@@ -5,16 +5,16 @@ import lombok.RequiredArgsConstructor;
 import matheusfraga.dev.lalouise.backend.application.service.AccountService;
 import matheusfraga.dev.lalouise.backend.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.domain.enums.Role;
-import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.CreateUserRequest;
-import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UpdateUserRequest;
-import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UserInfo;
-import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UserSummary;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.*;
+import matheusfraga.dev.lalouise.backend.infra.security.UserDetailsImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -90,6 +90,15 @@ public class AccountController {
         Page<Account> accounts = service.getDeletedAccountsByFilter(command);
         Page<UserSummary> response = accounts.map(AccountMapper::toUserSummary);
 
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<PerfilInfo> getMe(
+            @AuthenticationPrincipal UserDetailsImpl principal
+    ) {
+        var user = service.getUserById(principal.getId());
+        var response =  AccountMapper.toPerfilInfo(user);
         return ResponseEntity.ok(response);
     }
 

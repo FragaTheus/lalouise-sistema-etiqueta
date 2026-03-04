@@ -28,7 +28,7 @@ export default function AppImageCard({
   separator,
 }: AppImageCardProps) {
   return (
-    <Card className="w-full grid grid-cols-1 lg:grid-cols-2 transition-all max-w-sm lg:max-w-4xl">
+    <Card className="w-full grid grid-cols-1 lg:grid-cols-2 transition-all max-w-sm lg:max-w-5xl">
       <div className="flex flex-col gap-6">
         {title && (
           <CardHeader>

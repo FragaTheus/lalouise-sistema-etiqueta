@@ -6,10 +6,9 @@ import { Field, FieldGroup, FieldLegend, FieldSet } from "./ui/field";
 import { Button } from "./ui/button";
 import z from "zod";
 import AppInput from "./app-input";
-import { useState } from "react";
 import { extractErrorMessage } from "@/api/api.error";
-import { AppErrorAlert } from "./app-error-alert";
 import { LoaderIcon } from "lucide-react";
+import { toast } from "sonner";
 
 export interface FormFieldConfig<TFormValues extends FieldValues> {
   name: FieldPath<TFormValues>;
@@ -26,18 +25,18 @@ interface AppFormProps<TSchema extends z.ZodType<any, any>> {
   onSubmit: (data: z.infer<TSchema>) => void | Promise<void>;
   defaultValues: any;
   btnText: string;
+  sucessMsg: string;
 }
 
-export default function AppForm<TSchema extends z.ZodObject<any>>({
+export default function AppForm<TSchema extends z.ZodType<any, any>>({
   legend,
   schema,
   fields,
   onSubmit,
   defaultValues,
   btnText,
+  sucessMsg,
 }: AppFormProps<TSchema>) {
-  const [apiError, setApiError] = useState<string | null>(null);
-
   const {
     register,
     formState: { errors, isSubmitting },
@@ -49,18 +48,16 @@ export default function AppForm<TSchema extends z.ZodObject<any>>({
   });
 
   const handleFormSubmit = async (data: z.infer<TSchema>) => {
-    setApiError(null);
-
     try {
       await onSubmit(data);
+      toast.success(sucessMsg);
     } catch (error) {
-      setApiError(extractErrorMessage(error));
+      toast.error(extractErrorMessage(error));
     }
   };
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
-      <AppErrorAlert message={apiError} onClose={() => setApiError(null)} />
       <FieldSet>
         {legend && <FieldLegend>{legend}</FieldLegend>}
         <FieldGroup>

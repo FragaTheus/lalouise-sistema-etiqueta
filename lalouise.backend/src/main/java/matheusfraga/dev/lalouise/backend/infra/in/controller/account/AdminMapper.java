@@ -5,10 +5,7 @@ import matheusfraga.dev.lalouise.backend.application.command.account.CreateAccou
 import matheusfraga.dev.lalouise.backend.application.command.account.UpdateAccountCommand;
 import matheusfraga.dev.lalouise.backend.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.domain.enums.Role;
-import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.CreateUserRequest;
-import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UpdateUserRequest;
-import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UserInfo;
-import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UserSummary;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.*;
 import org.springframework.data.domain.Pageable;
 
 import java.util.UUID;
@@ -59,6 +56,15 @@ public record AccountMapper() {
                 .email(email)
                 .role(role)
                 .pageable(pageable)
+                .build();
+    }
+    
+    public static PerfilInfo toPerfilInfo(Account account){
+        return PerfilInfo.builder()
+                .nickname(account.getNickname())
+                .email(account.getEmail())
+                .role(account.getRole())
+                .createdAt(account.getCreateAt())
                 .build();
     }
 

@@ -23,7 +23,7 @@ export default function AppSidebarFooter() {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-50">
           <DropdownMenuItem>
-            <Link href={""} className="w-full">
+            <Link href={"/painel/contas/perfil"} className="w-full">
               <SidebarMenuButton
                 size={"sm"}
                 className="bg-transparent hover:bg-primary/5 active:bg-primary/10"

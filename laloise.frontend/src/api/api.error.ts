@@ -1,5 +1,11 @@
 import axios from "axios";
-import { HandlerResponse } from "./api.types";
+
+export interface HandlerResponse<T> {
+  timestamp: string;
+  status: number;
+  message: string;
+  data: T | null;
+}
 
 export function extractErrorMessage(error: unknown): string {
   if (axios.isAxiosError(error)) {

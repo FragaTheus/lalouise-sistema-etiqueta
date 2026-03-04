@@ -1,5 +1,5 @@
 import { FormFieldConfig } from "@/components/app-form";
-import { LoginFormData } from "@/constants/loginSchema";
+import { LoginFormData } from "@/constants/schemas/loginSchema";
 import textContent from "@/constants/loginTextContent.json";
 
 export const loginDefaultValues = textContent.login.form.defaultValues;

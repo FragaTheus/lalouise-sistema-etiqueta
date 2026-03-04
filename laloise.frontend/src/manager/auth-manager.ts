@@ -1,6 +1,5 @@
-import { login as loginRequest } from "@/api/api.login";
+import { LoginRequest, login as loginRequest } from "@/api/api.login";
 import { useAuthStore } from "@/store/zustand.user";
-import type { LoginRequest } from "@/api/api.types";
 
 
 export async function loginAndSetUser(data: LoginRequest) {

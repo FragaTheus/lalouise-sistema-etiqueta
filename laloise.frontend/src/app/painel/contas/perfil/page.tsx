@@ -1,0 +1,18 @@
+import AppDashboardLayout from "@/components/app-dashboard-layout";
+import AppImageCard from "@/components/app-image-card";
+import perfilIcon from "@/assets/perfil-icon.svg";
+import AppPerfilInfo from "@/components/app-perfil-info";
+
+export default function AccountInfo() {
+  return (
+    <AppDashboardLayout>
+      <AppImageCard
+        imgSrc={perfilIcon}
+        title="Meu Perfil"
+        description="Tudo sobre a sua conta em um só lugar"
+      >
+        <AppPerfilInfo />
+      </AppImageCard>
+    </AppDashboardLayout>
+  );
+}

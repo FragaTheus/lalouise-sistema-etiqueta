@@ -1,4 +1,4 @@
-import api from "../api";
+import api from "./api";
 
 interface CreateUserRequest {
   nickname: string;
@@ -9,7 +9,7 @@ interface CreateUserRequest {
 
 export const createAdmin = async (data: CreateUserRequest): Promise<void> => {
   try {
-    await api.post("/accounts/admins", data);
+    await api.post("/admins/create-admins", data);
   } catch (error) {
     throw error;
   }
@@ -17,7 +17,7 @@ export const createAdmin = async (data: CreateUserRequest): Promise<void> => {
 
 export const createUser = async (data: CreateUserRequest): Promise<void> => {
   try {
-    await api.post("/accounts", data);
+    await api.post("/admins", data);
   } catch (error) {
     throw error;
   }
