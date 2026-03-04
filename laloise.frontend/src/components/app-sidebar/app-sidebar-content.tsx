@@ -1,13 +1,16 @@
 "use client";
 
+import Link from "next/link";
 import { Collapsible } from "../ui/collapsible";
 import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarMenuButton,
 } from "../ui/sidebar";
 import AppSidebarGroups, { AppSideBarGroupItems } from "./app-sidebar-group";
+import { HomeIcon } from "lucide-react";
 
 export interface AppSidebarContentProps {
   groups: AppSideBarGroupItems[];
@@ -21,7 +24,16 @@ export default function AppSidebarContent({ groups }: AppSidebarContentProps) {
           <p>Recursos</p>
         </SidebarGroupLabel>
         <SidebarGroupContent>
-          <Collapsible className="bg-transparent">
+          <Link href={"/painel"}>
+            <SidebarMenuButton
+              size={"sm"}
+              className="bg-transparent hover:bg-secondary/5 active:bg-secondary/10"
+            >
+              <HomeIcon className="text-secondary" />
+              <span className="font-semibold">Painel</span>
+            </SidebarMenuButton>
+          </Link>
+          <Collapsible className="bg-transparent mt-1">
             {groups.map((groups, index) => (
               <AppSidebarGroups
                 key={index}
