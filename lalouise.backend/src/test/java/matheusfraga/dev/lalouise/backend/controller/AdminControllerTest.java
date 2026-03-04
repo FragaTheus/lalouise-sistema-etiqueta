@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import matheusfraga.dev.lalouise.backend.application.service.AccountService;
 import matheusfraga.dev.lalouise.backend.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.domain.enums.Role;
-import matheusfraga.dev.lalouise.backend.infra.in.controller.account.AccountController;
+import matheusfraga.dev.lalouise.backend.infra.in.controller.account.AdminController;
 import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.CreateUserRequest;
 import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.UpdateUserRequest;
 import matheusfraga.dev.lalouise.backend.infra.security.TokenFilter;
@@ -25,9 +25,9 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(AccountController.class)
+@WebMvcTest(AdminController.class)
 @AutoConfigureMockMvc(addFilters = false)
-class AccountControllerTest {
+class AdminControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

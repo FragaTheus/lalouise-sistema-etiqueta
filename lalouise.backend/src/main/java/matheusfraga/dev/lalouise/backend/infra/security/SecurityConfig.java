@@ -53,7 +53,7 @@ public class SecurityConfig {
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/v1/products/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/sectors/**").hasRole("ADMIN")
-                        .requestMatchers("/api/v1/accounts/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/accounts/admins/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)

@@ -6,60 +6,56 @@ import matheusfraga.dev.lalouise.backend.application.service.AccountService;
 import matheusfraga.dev.lalouise.backend.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.domain.enums.Role;
 import matheusfraga.dev.lalouise.backend.infra.in.controller.account.dto.*;
-import matheusfraga.dev.lalouise.backend.infra.security.UserDetailsImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/accounts")
+@RequestMapping("api/v1/admins")
 @RequiredArgsConstructor
-public class AccountController {
+public class AdminController {
 
-    private final AccountService service;
+    private final AccountService accountService;
 
     @PostMapping
     public ResponseEntity<Void> createUser(@Valid @RequestBody CreateUserRequest request){
-        var command = AccountMapper.toCreateUserInputCommand(request);
-        service.createUser(command);
+        var command = AdminMapper.toCreateUserInputCommand(request);
+        accountService.createUser(command);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/admins")
+    @PostMapping("/create-admins")
     public ResponseEntity<Void> createAdmin(@Valid @RequestBody CreateUserRequest request){
-        var command = AccountMapper.toCreateUserInputCommand(request);
-        service.createAdmin(command);
+        var command = AdminMapper.toCreateUserInputCommand(request);
+        accountService.createAdmin(command);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<Void> update
             (@PathVariable UUID id, @Valid @RequestBody UpdateUserRequest request){
-        var command = AccountMapper.toUpdateUserInputCommand(id, request);
-        service.updateUser(command);
+        var command = AdminMapper.toUpdateUserInputCommand(id, request);
+        accountService.updateUser(command);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete
             (@PathVariable UUID id){
-            service.deactivateAccount(id);
+            accountService.deactivateAccount(id);
             return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserInfo> getUser(@PathVariable UUID id){
-        var user = service.getUserById(id);
-        var response = AccountMapper.toUserInfo(user);
+        var user = accountService.getUserById(id);
+        var response = AdminMapper.toUserInfo(user);
         return ResponseEntity.ok().body(response);
     }
 
@@ -71,9 +67,9 @@ public class AccountController {
             @PageableDefault(size = 20, page = 0, sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
-        var command = AccountMapper.toFilterQueryCommand(nickname, email, role, pageable);
-        Page<Account> accounts = service.getAllUsers(command);
-        Page<UserSummary> response = accounts.map(AccountMapper::toUserSummary);
+        var command = AdminMapper.toFilterQueryCommand(nickname, email, role, pageable);
+        Page<Account> accounts = accountService.getAllUsers(command);
+        Page<UserSummary> response = accounts.map(AdminMapper::toUserSummary);
 
         return ResponseEntity.ok(response);
     }
@@ -86,21 +82,14 @@ public class AccountController {
             @PageableDefault(size = 20, page = 0, sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
-        var command = AccountMapper.toFilterQueryCommand(nickname, email, role, pageable);
-        Page<Account> accounts = service.getDeletedAccountsByFilter(command);
-        Page<UserSummary> response = accounts.map(AccountMapper::toUserSummary);
+        var command = AdminMapper.toFilterQueryCommand(nickname, email, role, pageable);
+        Page<Account> accounts = accountService.getDeletedAccountsByFilter(command);
+        Page<UserSummary> response = accounts.map(AdminMapper::toUserSummary);
 
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<PerfilInfo> getMe(
-            @AuthenticationPrincipal UserDetailsImpl principal
-    ) {
-        var user = service.getUserById(principal.getId());
-        var response =  AccountMapper.toPerfilInfo(user);
-        return ResponseEntity.ok(response);
-    }
+
 
 
 

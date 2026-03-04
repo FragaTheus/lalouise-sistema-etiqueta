@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.UUID;
 
-public record AccountMapper() {
+public record AdminMapper() {
 
     public static CreateAccountCommand toCreateUserInputCommand(CreateUserRequest request){
         return CreateAccountCommand.builder()
