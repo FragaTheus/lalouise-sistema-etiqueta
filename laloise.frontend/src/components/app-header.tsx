@@ -1,12 +1,8 @@
-"use client";
-
 import { SidebarTrigger } from "./ui/sidebar";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
-import { useRouter } from "next/navigation";
 
 export default function AppHeader() {
-  const router = useRouter();
   return (
     <header className="w-full px-4  items-center justify-items-center h-auto grid grid-cols-12 fixed  bg-card border-b shadow-xs lg:hidden z-50">
       <div className="col-span-4 mt-1">
