@@ -2,9 +2,8 @@ import {
   AppSideBarGroupItems,
   ItemsProps,
 } from "@/components/app-sidebar/app-sidebar-group";
-import { GroupIcon, PlusIcon, ShieldIcon, User2Icon } from "lucide-react";
+import { GroupIcon, PlusIcon, ShieldIcon, UsersIcon } from "lucide-react";
 
-// Lista de itens
 const sidebarUserItensImpl = [
   {
     itemHref: "/painel/contas/cadastrar/usuarios",
@@ -23,10 +22,9 @@ const sidebarUserItensImpl = [
   },
 ] satisfies ItemsProps[];
 
-// Lista de itens agrupados
 export const appSideBarGroupsLabelImpl = [
   {
-    TriggerIcon: User2Icon,
+    TriggerIcon: UsersIcon,
     triggerText: "Usuarios",
     items: sidebarUserItensImpl,
   },

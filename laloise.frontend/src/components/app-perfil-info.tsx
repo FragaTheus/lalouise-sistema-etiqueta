@@ -3,7 +3,7 @@
 import { CardTitle } from "./ui/card";
 import { Dialog, DialogTrigger } from "./ui/dialog";
 import { PencilIcon } from "lucide-react";
-import AppProfileEditDialog from "./app-dialog-profile-edit";
+import AppProfileEditDialog from "./app-dialog-form";
 import { Button } from "./ui/button";
 import { Field, FieldContent, FieldError, FieldLabel } from "./ui/field";
 import { useEffect, useState } from "react";

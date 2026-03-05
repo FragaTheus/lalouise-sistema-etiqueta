@@ -10,7 +10,7 @@ import {
 
 import UpdateProfileClient from "@/wrapper/update-profile-client";
 
-export default function AppProfileEditDialog() {
+export default function AppDialogForm() {
   return (
     <DialogContent>
       <DialogHeader>
