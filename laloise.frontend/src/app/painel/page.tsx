@@ -1,4 +1,4 @@
-import AppDashboardLayout from "@/components/app-dashboard-layout";
+import AppDashboardLayout from "@/components/layouts/app-dashboard-layout";
 import { Button } from "@/components/ui/button";
 import {
   Card,

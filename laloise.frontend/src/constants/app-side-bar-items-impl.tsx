@@ -7,12 +7,12 @@ import { GroupIcon, PlusIcon, ShieldIcon, User2Icon } from "lucide-react";
 // Lista de itens
 const sidebarUserItensImpl = [
   {
-    itemHref: "/painel/contas/usuarios/cadastrar",
+    itemHref: "/painel/contas/cadastrar/usuarios",
     ItemIcon: PlusIcon,
     itemText: "Criar Usuario",
   },
   {
-    itemHref: "/painel/contas/admins/cadastrar",
+    itemHref: "/painel/contas/cadastrar/admins",
     ItemIcon: ShieldIcon,
     itemText: "Criar Admin",
   },

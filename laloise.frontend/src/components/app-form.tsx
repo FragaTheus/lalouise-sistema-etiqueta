@@ -13,12 +13,11 @@ import { toast } from "sonner";
 export interface FormFieldConfig<TFormValues extends FieldValues> {
   name: FieldPath<TFormValues>;
   label: string;
-  description: string;
   type?: string;
   placeholder?: string;
 }
 
-interface AppFormProps<TSchema extends z.ZodType<any, any>> {
+export interface AppFormProps<TSchema extends z.ZodType<any, any>> {
   legend?: string;
   schema: TSchema;
   fields: FormFieldConfig<any>[];
@@ -60,7 +59,7 @@ export default function AppForm<TSchema extends z.ZodType<any, any>>({
     <form onSubmit={handleSubmit(handleFormSubmit)}>
       <FieldSet>
         {legend && <FieldLegend>{legend}</FieldLegend>}
-        <FieldGroup>
+        <FieldGroup className="gap-6 lg:gap-8">
           {fields.map((fieldConfig) => {
             const fieldError = errors[fieldConfig.name];
 
@@ -68,7 +67,6 @@ export default function AppForm<TSchema extends z.ZodType<any, any>>({
               <AppInput
                 key={String(fieldConfig.name)}
                 label={fieldConfig.label}
-                description={fieldConfig.description}
                 type={fieldConfig.type}
                 placeholder={fieldConfig.placeholder}
                 error={
@@ -80,7 +78,7 @@ export default function AppForm<TSchema extends z.ZodType<any, any>>({
           })}
           <Field>
             <Button
-              className="mt-2 flex items-center gap-2"
+              className="mt-2 flex items-center gap-2 cursor-pointer"
               type="submit"
               disabled={isSubmitting}
             >

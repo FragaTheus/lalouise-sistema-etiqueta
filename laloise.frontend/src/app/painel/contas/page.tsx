@@ -7,9 +7,9 @@ export default function Accounts() {
   return (
     <div className="mt-17 flex-1 lg:mt-0 flex flex-col">
       <AppListHeader />
-      <div className="flex-1 grid grid-cols-1 auto-rows-auto overflow-auto gap-2 px-4 mt-20 mb-16">
+      <div className="flex-1 grid grid-cols-1 auto-rows-auto overflow-auto gap-2 px-4 mt-18 mb-16">
         {index2.map((i, index) => (
-          <Card key={i} className="w-full flex items-center ">
+          <Card key={i} className="w-full flex items-center">
             <CardContent className="flex items-center justify-between w-full h-full">
               <div className="flex gap-2 items-center flex-1">
                 <UserIcon className="text-primary h-15 w-15" />

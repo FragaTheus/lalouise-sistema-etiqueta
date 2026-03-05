@@ -1,5 +1,4 @@
-import { Filter, Search } from "lucide-react";
-import { Card, CardContent } from "../ui/card";
+import { Filter, PlusIcon, Search } from "lucide-react";
 import { Input } from "../ui/input";
 import {
   DropdownMenu,

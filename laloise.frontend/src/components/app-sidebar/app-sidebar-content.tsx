@@ -8,6 +8,7 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenuButton,
+  useSidebar,
 } from "../ui/sidebar";
 import AppSidebarGroups, { AppSideBarGroupItems } from "./app-sidebar-group";
 import { HomeIcon } from "lucide-react";
@@ -17,6 +18,7 @@ export interface AppSidebarContentProps {
 }
 
 export default function AppSidebarContent({ groups }: AppSidebarContentProps) {
+  const { setOpenMobile } = useSidebar();
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -28,6 +30,7 @@ export default function AppSidebarContent({ groups }: AppSidebarContentProps) {
             <SidebarMenuButton
               size={"sm"}
               className="bg-transparent hover:bg-secondary/5 active:bg-secondary/10"
+              onClick={() => setOpenMobile(false)}
             >
               <HomeIcon className="text-secondary" />
               <span className="font-semibold">Painel</span>
