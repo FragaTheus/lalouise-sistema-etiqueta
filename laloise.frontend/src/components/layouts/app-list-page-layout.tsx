@@ -1,11 +1,9 @@
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "../ui/pagination";
+"use client";
+
+import { useState } from "react";
+import { Pagination } from "../ui/pagination";
+
+import AppListPageLayoutHeader from "./app-list-page-layout-header";
 import {
   Table,
   TableBody,
@@ -14,45 +12,39 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import AppListPageLayoutHeader from "./app-list-page-layout-header";
+
+const ITEMS_PER_PAGE = 10;
 
 export default function AppListPageLayout() {
+  const [page, setPage] = useState(1);
+
+  const paginated = rows.slice(
+    (page - 1) * ITEMS_PER_PAGE,
+    page * ITEMS_PER_PAGE,
+  );
+
   return (
-    <>
+    <div className="pt-17 lg:pt-0">
       <AppListPageLayoutHeader />
-      <div className="flex-1 pt-44 lg:pt-27 flex flex-col overflow-hidden max-h-svh">
-        <Table className="bg-card m-auto rounded-sm">
-          <TableHeader className="sticky top-0 w-full max-w-7xl z-50 bg-card border-b shadow-xs pb-1">
+      <div className="mt-30 lg:pt-0 flex-1 flex flex-col max-w-screen mb-15 px-2">
+        <Table className="bg-card">
+          <TableHeader>
             <TableRow>
-              <TableHead>Nome</TableHead>
+              <TableHead>Head</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody className="overflow-x-auto overflow-y-hidden z-10">
-            {rows.map((r, i) => (
-              <TableRow key={i}>
-                <TableCell>Matheus</TableCell>
-                <TableCell>email@email.com</TableCell>
+          <TableBody>
+            {paginated.map((row) => (
+              <TableRow key={row}>
+                <TableCell>Nome {row}</TableCell>
+                <TableCell className="hidden lg:inline">Email</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-        <Pagination className="sticky bg-card border-t">
-          <PaginationContent>
-            <PaginationPrevious href="#" />
-            <PaginationLink href="#" isActive>
-              1
-            </PaginationLink>
-            <PaginationLink href="#">2</PaginationLink>
-            <PaginationLink href="#">3</PaginationLink>
-            <PaginationEllipsis />
-
-            <PaginationNext href="#" />
-          </PaginationContent>
-        </Pagination>
       </div>
-    </>
+    </div>
   );
 }
 
