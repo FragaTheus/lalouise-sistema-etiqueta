@@ -28,7 +28,7 @@ export default function AppListPageLayout() {
   );
 
   return (
-    <div className="pt-17 lg:pt-0">
+    <div className="pt-16 lg:pt-0">
       <AppListPageLayoutHeader />
       <div className="mt-30 flex-1 flex flex-col max-w-screen mb-15 px-4 gap-2">
         {paginated.map((page) => (
