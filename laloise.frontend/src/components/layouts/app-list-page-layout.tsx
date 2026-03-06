@@ -36,7 +36,7 @@ export default function AppListPageLayout() {
             <CardContent className="flex justify-between items-center">
               <div className="flex items-center gap-4 w-full">
                 <UserIcon className="size-10 text-primary" />
-                <div className="flex flex-1 flex-col overflow-hidden lg:flex-row justify-evenly max-w-2/3 lg:max-w-full">
+                <div className="flex flex-1 flex-col overflow-hidden lg:flex-row justify-evenly max-w-1/2 lg:max-w-full">
                   <span className="truncate">Matheus</span>
                   <span className="truncate">matheusguto1@hotmail.com</span>
                   <span className="truncate">Ativo</span>
