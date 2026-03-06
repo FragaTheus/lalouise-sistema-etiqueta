@@ -1,7 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Pagination } from "../ui/pagination";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../ui/pagination";
 
 import AppListPageLayoutHeader from "./app-list-page-layout-header";
 import {
@@ -30,7 +38,7 @@ export default function AppListPageLayout() {
   return (
     <div className="pt-16 lg:pt-0">
       <AppListPageLayoutHeader />
-      <div className="mt-30 flex-1 flex flex-col max-w-screen mb-15 px-4 gap-2">
+      <div className="mt-30 flex-1 flex flex-col max-w-screen mb-25 px-4 gap-2">
         {paginated.map((page) => (
           <Card key={page}>
             <CardContent className="flex justify-between items-center">
@@ -51,8 +59,14 @@ export default function AppListPageLayout() {
           </Card>
         ))}
       </div>
-      <Pagination className="fixed bottom-0 w-full bg-card px-4 py-2 border-t">
-        Pagination
+      <Pagination className="fixed bottom-0 w-full bg-card border-t">
+        <PaginationContent>
+          <PaginationPrevious />
+          <PaginationLink>1</PaginationLink>
+          <PaginationLink isActive>2</PaginationLink>
+          <PaginationEllipsis />
+          <PaginationNext />
+        </PaginationContent>
       </Pagination>
     </div>
   );
