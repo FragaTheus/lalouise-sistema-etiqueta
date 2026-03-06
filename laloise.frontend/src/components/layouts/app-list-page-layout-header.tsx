@@ -6,8 +6,8 @@ import { Toggle } from "../ui/toggle";
 
 export default function AppListPageLayoutHeader() {
   return (
-    <div className="fixed w-full max-h-min flex flex-col ">
-      <div className=" flex py-2 px-4 border-b bg-card">
+    <div className="fixed w-full max-h-min flex flex-col border-b bg-card">
+      <div className=" flex py-2 px-4">
         <div className="relative flex items-center justify-start w-full max-w-xl gap-2">
           <Search className="size-4 text-primary left-3 absolute" />
           <Input
