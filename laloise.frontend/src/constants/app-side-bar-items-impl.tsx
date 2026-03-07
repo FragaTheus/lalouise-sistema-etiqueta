@@ -1,7 +1,7 @@
 import {
   AppSideBarGroupItems,
   ItemsProps,
-} from "@/components/app-sidebar/app-sidebar-group";
+} from "@/components/app-sidebar/app-sidebar-types";
 import { GroupIcon, PlusIcon, ShieldIcon, UsersIcon } from "lucide-react";
 
 const sidebarUserItensImpl = [

@@ -1,4 +1,4 @@
-import AppFormPageLayout from "@/components/layouts/form-page-layout/app-form-page-layout";
+import AppFormPageLayout from "@/components/layouts/form-page-layout/app-form-layout";
 import createAdminImgSrc from "@/assets/create-admin.svg";
 import CreateAdminClient from "@/wrapper/create-admin-client";
 

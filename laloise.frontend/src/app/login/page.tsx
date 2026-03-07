@@ -1,6 +1,6 @@
 import login from "@/assets/login.svg";
 import LoginClient from "@/wrapper/login-client";
-import AppImageCard from "@/components/app-image-card";
+import AppImageCard from "@/components/app-image-card/app-image-card";
 import textContent from "@/constants/loginTextContent.json";
 
 export default function Login() {

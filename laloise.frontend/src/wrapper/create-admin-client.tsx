@@ -1,23 +1,27 @@
 "use client";
 
 import { createAdmin } from "@/api/api.accounts";
-import AppForm from "@/components/app-form";
+import AppForm from "@/components/app-form/app-form";
 import {
   signupAdminBtnText,
   signupAdminDefaultValues,
   signupAdminsFields,
 } from "@/constants/form-fields/create-user-form-fields";
 import { createUserSchema } from "@/constants/schemas/create-user-schema";
+import useCreateUser from "@/hooks/use-create-user";
 
 export default function CreateAdminClient() {
+  const mutation = useCreateUser({
+    mutationFn: createAdmin,
+    successMsg: "Administrador cadastrado com sucesso!",
+  });
   return (
     <AppForm
-      onSubmit={createAdmin}
       fields={signupAdminsFields}
       defaultValues={signupAdminDefaultValues}
       schema={createUserSchema}
       btnText={signupAdminBtnText}
-      sucessMsg="Admin cadastrado com sucesso!"
+      mutation={mutation}
     />
   );
 }

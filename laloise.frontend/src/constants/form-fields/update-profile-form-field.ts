@@ -1,4 +1,4 @@
-import { FormFieldConfig } from "@/components/app-form";
+import { FormFieldConfig } from "@/components/app-form/app-form-types";
 import { UpdateUserRequest } from "../schemas/updateProfileSchema";
 
 export const updateUserFields: FormFieldConfig<UpdateUserRequest>[] = [

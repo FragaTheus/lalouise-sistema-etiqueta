@@ -1,4 +1,4 @@
-import { FormFieldConfig } from "@/components/app-form";
+import { FormFieldConfig } from "@/components/app-form/app-form-types";
 import { CreateUserRequest } from "../schemas/create-user-schema";
 
 export const signupUsersFields: FormFieldConfig<CreateUserRequest>[] = [

@@ -4,18 +4,7 @@ import { ChevronDown } from "lucide-react";
 import { CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import { SidebarMenuButton, useSidebar } from "../ui/sidebar";
 import Link from "next/link";
-
-export type ItemsProps = {
-  itemHref: string;
-  ItemIcon: React.ElementType;
-  itemText: string;
-};
-
-export interface AppSideBarGroupItems {
-  TriggerIcon: React.ElementType;
-  triggerText: string;
-  items: ItemsProps[];
-}
+import { AppSideBarGroupItems } from "./app-sidebar-types";
 
 export default function AppSidebarGroups({
   TriggerIcon,

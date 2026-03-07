@@ -5,19 +5,11 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./ui/card";
-import { FieldSeparator } from "./ui/field";
-import { Button } from "./ui/button";
+} from "../ui/card";
+import { FieldSeparator } from "../ui/field";
+import { Button } from "../ui/button";
 import Image from "next/image";
-
-interface AppImageCardProps {
-  title?: string;
-  description: string;
-  children: React.ReactNode;
-  imgSrc: string;
-  help?: string;
-  separator?: string;
-}
+import { AppImageCardProps } from "./app-image-card-type";
 
 export default function AppImageCard({
   title,

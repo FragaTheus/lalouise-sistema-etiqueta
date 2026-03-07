@@ -10,8 +10,9 @@ import {
   SidebarMenuButton,
   useSidebar,
 } from "../ui/sidebar";
-import AppSidebarGroups, { AppSideBarGroupItems } from "./app-sidebar-group";
 import { HomeIcon } from "lucide-react";
+import { AppSideBarGroupItems } from "./app-sidebar-types";
+import AppSidebarGroups from "./app-sidebar-group";
 
 export interface AppSidebarContentProps {
   groups: AppSideBarGroupItems[];

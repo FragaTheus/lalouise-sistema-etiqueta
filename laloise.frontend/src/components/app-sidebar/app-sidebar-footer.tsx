@@ -9,9 +9,12 @@ import {
 } from "../ui/dropdown-menu";
 import { SidebarFooter, SidebarMenuButton, useSidebar } from "../ui/sidebar";
 import Link from "next/link";
+import { useAuthStore } from "@/hooks/use-auth-store";
 
 export default function AppSidebarFooter() {
   const { setOpenMobile } = useSidebar();
+  const logout = useAuthStore((state) => state.logout);
+
   return (
     <SidebarFooter>
       <DropdownMenu>
@@ -41,7 +44,10 @@ export default function AppSidebarFooter() {
             <SidebarMenuButton
               size={"sm"}
               className="bg-transparent hover:bg-destructive/5 active:bg-destructive/10"
-              onClick={() => setOpenMobile(false)}
+              onClick={() => {
+                setOpenMobile(false);
+                logout();
+              }}
             >
               <LogOutIcon className="text-destructive" />
               <span>Sair</span>

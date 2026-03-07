@@ -1,10 +1,10 @@
 "use client";
 
 import { ChevronLeft } from "lucide-react";
-import { Button } from "../../ui/button";
+import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 
-export default function AppFormPageLayoutRouterBack() {
+export default function AppRouterBack() {
   const router = useRouter();
   return (
     <div className="w-full max-h-min h-auto py-2 bg-transparent flex items-center justify-start lg:max-w-7xl mt-15">

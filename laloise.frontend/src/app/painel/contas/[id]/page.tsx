@@ -1,4 +1,4 @@
-import AppFormPageLayoutRouterBack from "@/components/layouts/form-page-layout/app-form-page-layout-router-back";
+import AppFormPageLayoutRouterBack from "@/components/app-router-back";
 
 export default function AccountInfo() {
   return (

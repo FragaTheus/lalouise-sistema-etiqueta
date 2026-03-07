@@ -1,5 +1,3 @@
-import AccountListClient from "@/wrapper/account-list-wrapper";
-
 export default function Accounts() {
-  return <AccountListClient />;
+  return <h1>Lista de contas</h1>;
 }

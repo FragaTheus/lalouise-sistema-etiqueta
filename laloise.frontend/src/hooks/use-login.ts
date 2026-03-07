@@ -1,0 +1,27 @@
+"use client"
+
+import { extractErrorMessage } from "@/api/api.error";
+import { login, LoginRequest } from "@/api/api.login";
+import { useAuthStore } from "@/hooks/use-auth-store";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+export default function useLogin(){
+    const router = useRouter();
+    const setUSer = useAuthStore((state)=> state.setUser) 
+
+    return useMutation({
+        mutationFn: (data: LoginRequest) => login(data),
+
+        onSuccess: (user) => {
+            setUSer(user);
+            toast.success(`Bem vindo de volta! ${user.nickname}`)
+            router.push("/painel")
+        },
+
+        onError: (error) => {
+            toast.error(extractErrorMessage(error))
+        }
+    })
+}
