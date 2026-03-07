@@ -1,4 +1,4 @@
-import AppDashboardLayout from "@/components/layouts/app-dashboard-layout";
+import AppDashboardLayout from "@/components/layouts/app-dashboard-layout/app-dashboard-layout";
 import AppImageCard from "@/components/app-image-card";
 import perfilIcon from "@/assets/perfil-icon.svg";
 import AppPerfilInfo from "@/components/app-perfil-info";

@@ -1,7 +1,7 @@
 import InfoMainContentCard, {
   InfoMainContentCardProps,
-} from "./info-main-content-card";
-import PerfilCard, { PerfilCardProps } from "./info-page-perfil-card";
+} from "./perfil-main-content";
+import PerfilCard, { PerfilCardProps } from "./perfil-page-content";
 
 interface AppInfoPageLayoutProps {
   title: string;
@@ -10,7 +10,7 @@ interface AppInfoPageLayoutProps {
   infoMainContent: InfoMainContentCardProps;
 }
 
-export default function AppInfoPageLayout({
+export default function AppPerfilPageLayout({
   title,
   isPerfil,
   userInfo,

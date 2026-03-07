@@ -18,7 +18,11 @@ export interface AppSidebarContentProps {
 }
 
 export default function AppSidebarContent({ groups }: AppSidebarContentProps) {
-  const { setOpenMobile } = useSidebar();
+  const { setOpenMobile, setOpen } = useSidebar();
+  const setClose = () => {
+    setOpenMobile(false);
+    setOpen(false);
+  };
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -30,7 +34,7 @@ export default function AppSidebarContent({ groups }: AppSidebarContentProps) {
             <SidebarMenuButton
               size={"sm"}
               className="bg-transparent hover:bg-secondary/5 active:bg-secondary/10"
-              onClick={() => setOpenMobile(false)}
+              onClick={() => setClose()}
             >
               <HomeIcon className="text-secondary" />
               <span className="font-semibold">Painel</span>

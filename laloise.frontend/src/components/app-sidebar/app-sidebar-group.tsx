@@ -22,7 +22,11 @@ export default function AppSidebarGroups({
   triggerText,
   items,
 }: AppSideBarGroupItems) {
-  const { open, setOpenMobile } = useSidebar();
+  const { open, setOpenMobile, setOpen } = useSidebar();
+  const setClose = () => {
+    setOpenMobile(false);
+    setOpen(false);
+  };
   return (
     <>
       <CollapsibleTrigger
@@ -39,7 +43,7 @@ export default function AppSidebarGroups({
         className={`${open && "border-l border-muted-foreground/50 ml-3.5 px-2 mt-2"} transition-all mt-1`}
       >
         {items.map((c, i) => (
-          <Link href={c.itemHref} key={i} onClick={() => setOpenMobile(false)}>
+          <Link href={c.itemHref} key={i} onClick={() => setClose()}>
             <SidebarMenuButton
               size={"sm"}
               className="bg-transparent group/menubutton hover:bg-primary/5 active:bg-primary/10 w-3/4"

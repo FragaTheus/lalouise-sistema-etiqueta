@@ -1,5 +1,5 @@
-import AppListPageLayout from "@/components/layouts/app-list-page-layout";
+import AccountListClient from "@/wrapper/account-list-wrapper";
 
 export default function Accounts() {
-  return <AppListPageLayout></AppListPageLayout>;
+  return <AccountListClient />;
 }

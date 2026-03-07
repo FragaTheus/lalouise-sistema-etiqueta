@@ -1,13 +1,13 @@
 import { PencilIcon, TrashIcon } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import {
   Card,
   CardAction,
   CardContent,
   CardHeader,
   CardTitle,
-} from "../ui/card";
-import { Field, FieldContent, FieldLabel } from "../ui/field";
+} from "../../ui/card";
+import { Field, FieldContent, FieldLabel } from "../../ui/field";
 
 export type MainFieldProps = {
   label: string;

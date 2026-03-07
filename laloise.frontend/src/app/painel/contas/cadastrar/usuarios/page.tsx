@@ -1,4 +1,4 @@
-import AppFormPageLayout from "@/components/layouts/app-form-page-layout";
+import AppFormPageLayout from "@/components/layouts/form-page-layout/app-form-page-layout";
 import createUserImgSrc from "@/assets/create-user.svg";
 import CreateUserClient from "@/wrapper/create-user-client";
 

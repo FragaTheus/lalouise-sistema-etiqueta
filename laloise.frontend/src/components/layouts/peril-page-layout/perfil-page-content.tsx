@@ -1,5 +1,5 @@
 import { UserIcon } from "lucide-react";
-import { Card, CardContent } from "../ui/card";
+import { Card, CardContent } from "../../ui/card";
 
 export interface PerfilCardProps {
   nickname?: string;

@@ -1,4 +1,4 @@
-import AppImageCard from "../app-image-card";
+import AppImageCard from "../../app-image-card";
 import AppFormPageLayoutRouterBack from "./app-form-page-layout-router-back";
 
 interface AppFormPageLayoutProps {
