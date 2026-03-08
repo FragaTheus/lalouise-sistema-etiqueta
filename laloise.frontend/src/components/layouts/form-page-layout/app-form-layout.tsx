@@ -9,7 +9,7 @@ export default function AppFormLayout({
   children,
 }: AppFormPageLayoutProps) {
   return (
-    <div className="flex-1 px-4 py-2 lg:p-12 items-center justify-center flex flex-col w-full">
+    <div className="flex-1 px-4 py-2 lg:p-12 items-center justify-center flex flex-col w-full mt-8 lg:mt-0">
       <AppImageCard
         imgSrc={cardImgSrc}
         description={cardDescription}

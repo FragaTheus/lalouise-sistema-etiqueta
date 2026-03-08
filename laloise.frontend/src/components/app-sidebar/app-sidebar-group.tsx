@@ -42,7 +42,7 @@ export default function AppSidebarGroups({
             <Link href={c.itemHref} onClick={() => setClose()}>
               <SidebarMenuButton
                 size={"sm"}
-                className="bg-transparent hover:bg-primary/8 active:bg-primary/15 transition-all duration-200 rounded-lg mx-1"
+                className="bg-transparent hover:bg-primary/8 active:bg-primary/15 transition-all duration-200 rounded-lg"
               >
                 <c.ItemIcon className="text-primary" />
                 <span className="text-foreground/90">{c.itemText}</span>

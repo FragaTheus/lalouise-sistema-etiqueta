@@ -2,10 +2,7 @@
 
 import AppFormPageLayoutRouterBack from "@/components/app-router-back";
 import AppItemInfo from "@/components/app-item-info-layout/app-intem-info";
-import {
-  AppItemInfoProps,
-  ItemInfoSection,
-} from "@/components/app-item-info-layout/app-item-data";
+import { AppItemInfoProps } from "@/components/app-item-info-layout/app-item-data";
 import { Users } from "lucide-react";
 
 const mockUserData = {

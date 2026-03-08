@@ -80,7 +80,7 @@ export default function AppForm<TSchema extends z.ZodType<any, any>>({
             <SlideInFromBottom delay={0.1 + fields.length * 0.08}>
               <Field>
                 <Button
-                  className="mt-2 flex items-center gap-2 cursor-pointer bg-gradient-to-r from-primary to-primary/80 text-white hover:shadow-md hover:from-primary/90 hover:to-primary/70 transition-all duration-300 w-full font-semibold"
+                  className="mt-2 flex items-center gap-2 cursor-pointer bg-linear-to-r from-primary to-primary/80 text-white hover:shadow-md hover:from-primary/90 hover:to-primary/70 transition-all duration-300 w-full font-semibold"
                   type="submit"
                   disabled={mutation.isPending}
                 >

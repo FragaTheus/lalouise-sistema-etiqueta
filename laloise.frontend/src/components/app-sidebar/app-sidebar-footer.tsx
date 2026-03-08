@@ -27,7 +27,7 @@ export default function AppSidebarFooter() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size={"sm"}
-              className="bg-gradient-to-r from-secondary/8 to-secondary/5 hover:from-secondary/15 hover:to-secondary/10 active:from-secondary/20 active:to-secondary/15 data-[state=open]:from-secondary/15 data-[state=open]:to-secondary/10 transition-all duration-200 rounded-lg"
+              className="bg-linear-to-r from-secondary/8 to-secondary/5 hover:from-secondary/15 hover:to-secondary/10 active:from-secondary/20 active:to-secondary/15 data-[state=open]:from-secondary/15 data-[state=open]:to-secondary/10 transition-all duration-200 rounded-lg"
             >
               <SettingsIcon className="text-secondary" />
               <span className="font-semibold text-foreground">

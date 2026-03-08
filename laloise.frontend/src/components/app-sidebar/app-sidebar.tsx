@@ -7,7 +7,7 @@ export default function AppSidebar() {
   return (
     <Sidebar
       collapsible="icon"
-      className="bg-gradient-to-b from-primary/5 to-transparent"
+      className="bg-linear-to-b from-primary/5 to-transparent"
     >
       <AppSidebarHeader />
       <AppSidebarContentClient />
