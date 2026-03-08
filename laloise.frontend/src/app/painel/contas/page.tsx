@@ -3,6 +3,7 @@
 import ListPageLayout from "@/components/layouts/list-layout/list-page-layout";
 import { useListPagination } from "@/hooks/use-list-pagination";
 import { ColumnDef } from "@tanstack/react-table";
+import { Suspense } from "react";
 
 interface MockUser {
   id: string;
@@ -105,9 +106,8 @@ const MOCK_COLUMNS: ColumnDef<MockUser>[] = [
   { accessorKey: "status", header: "Status", meta: { hideOnMobile: true } },
 ];
 
-export default function Accounts() {
+function AccountClient() {
   const { offset, pageSize } = useListPagination();
-
   const paginatedData = MOCK_DATA.slice(offset, offset + pageSize);
 
   return (
@@ -122,5 +122,13 @@ export default function Accounts() {
       totalItems={MOCK_DATA.length}
       caption="Lista de contas"
     />
+  );
+}
+
+export default function Accounts() {
+  return (
+    <Suspense>
+      <AccountClient />
+    </Suspense>
   );
 }
