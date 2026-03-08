@@ -7,10 +7,10 @@ import { useRouter } from "next/navigation";
 export default function AppRouterBack() {
   const router = useRouter();
   return (
-    <div className="w-full max-h-min h-auto py-2 bg-transparent flex items-center justify-start lg:max-w-7xl pt-15 lg:pt-0">
+    <div className="max-w-min max-h-min h-auto">
       <Button
         onClick={router.back}
-        className="text-primary bg-transparent hover:bg-primary/10 active:bg-primary/20 cursor-pointer"
+        className="text-destructive bg-destructive/5 hover:bg-destructive/10 active:bg-destructive/20 cursor-pointer "
       >
         <ChevronLeft />
         <span>Voltar</span>

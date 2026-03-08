@@ -57,6 +57,7 @@ export function SlideInFromRight({
 }) {
   return (
     <motion.div
+      className="w-full h-full"
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.6, delay, ease: "easeOut" }}
@@ -196,6 +197,44 @@ export function BounceIn({
         stiffness: 100,
         damping: 12,
       }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/**
+ * Animação de slide com delay customizável
+ */
+export function SlideInWithDelay({
+  children,
+  delay = 0,
+  direction = "left",
+}: {
+  children: ReactNode;
+  delay?: number;
+  direction?: "left" | "right" | "top" | "bottom";
+}) {
+  const getInitialValues = () => {
+    switch (direction) {
+      case "left":
+        return { opacity: 0, x: -20 };
+      case "right":
+        return { opacity: 0, x: 20 };
+      case "top":
+        return { opacity: 0, y: -20 };
+      case "bottom":
+        return { opacity: 0, y: 20 };
+      default:
+        return { opacity: 0, x: -20 };
+    }
+  };
+
+  return (
+    <motion.div
+      initial={getInitialValues()}
+      animate={{ opacity: 1, x: 0, y: 0 }}
+      transition={{ duration: 0.4, delay, ease: "easeOut" }}
     >
       {children}
     </motion.div>

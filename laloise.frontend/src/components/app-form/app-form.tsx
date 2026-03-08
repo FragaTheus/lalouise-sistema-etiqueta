@@ -16,6 +16,7 @@ import z from "zod";
 import { LoaderIcon } from "lucide-react";
 import { AppFormProps } from "./app-form-types";
 import { Input } from "../ui/input";
+import { SlideInFromBottom, FadeIn } from "@/animations/animations";
 
 export default function AppForm<TSchema extends z.ZodType<any, any>>({
   legend,
@@ -40,43 +41,59 @@ export default function AppForm<TSchema extends z.ZodType<any, any>>({
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)}>
-      <FieldSet>
-        {legend && <FieldLegend>{legend}</FieldLegend>}
-        <FieldGroup className="gap-6 lg:gap-8">
-          {fields.map((fieldConfig) => {
-            const fieldError = errors[fieldConfig.name];
+    <SlideInFromBottom delay={0}>
+      <form onSubmit={handleSubmit(handleFormSubmit)}>
+        <FieldSet>
+          {legend && (
+            <FadeIn delay={0.1}>
+              <FieldLegend>{legend}</FieldLegend>
+            </FadeIn>
+          )}
+          <FieldGroup className="gap-6 lg:gap-8">
+            {fields.map((fieldConfig, index) => {
+              const fieldError = errors[fieldConfig.name];
 
-            return (
-              <Field key={String(fieldConfig.name)}>
-                <FieldLabel>{fieldConfig.label}</FieldLabel>
-                <FieldContent>
-                  <Input
-                    type={fieldConfig.type}
-                    placeholder={fieldConfig.placeholder}
-                    {...register(fieldConfig.name as any)}
-                  />
-                </FieldContent>
-                {fieldError?.message && (
-                  <FieldError>{String(fieldError.message)}</FieldError>
-                )}
+              return (
+                <SlideInFromBottom
+                  key={String(fieldConfig.name)}
+                  delay={0.1 + index * 0.08}
+                >
+                  <Field>
+                    <FieldLabel>{fieldConfig.label}</FieldLabel>
+                    <FieldContent>
+                      <Input
+                        type={fieldConfig.type}
+                        placeholder={fieldConfig.placeholder}
+                        className="transition-all duration-200 focus:ring-2 focus:ring-primary/50"
+                        {...register(fieldConfig.name as any)}
+                      />
+                    </FieldContent>
+                    {fieldError?.message && (
+                      <FadeIn delay={0.05}>
+                        <FieldError>{String(fieldError.message)}</FieldError>
+                      </FadeIn>
+                    )}
+                  </Field>
+                </SlideInFromBottom>
+              );
+            })}
+            <SlideInFromBottom delay={0.1 + fields.length * 0.08}>
+              <Field>
+                <Button
+                  className="mt-2 flex items-center gap-2 cursor-pointer bg-gradient-to-r from-primary to-primary/80 text-white hover:shadow-md hover:from-primary/90 hover:to-primary/70 transition-all duration-300 w-full font-semibold"
+                  type="submit"
+                  disabled={mutation.isPending}
+                >
+                  {mutation.isPending && (
+                    <LoaderIcon className="h-4 w-4 animate-spin" />
+                  )}
+                  {mutation.isPending ? "Carregando..." : btnText}
+                </Button>
               </Field>
-            );
-          })}
-          <Field>
-            <Button
-              className="mt-2 flex items-center gap-2 cursor-pointer"
-              type="submit"
-              disabled={mutation.isPending}
-            >
-              {mutation.isPending && (
-                <LoaderIcon className="h-4 w-4 animate-spin" />
-              )}
-              {mutation.isPending ? "Carregando..." : btnText}
-            </Button>
-          </Field>
-        </FieldGroup>
-      </FieldSet>
-    </form>
+            </SlideInFromBottom>
+          </FieldGroup>
+        </FieldSet>
+      </form>
+    </SlideInFromBottom>
   );
 }

@@ -5,7 +5,10 @@ import AppSidebarContentClient from "@/wrapper/sidebar-content-client";
 
 export default function AppSidebar() {
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar
+      collapsible="icon"
+      className="bg-gradient-to-b from-primary/5 to-transparent"
+    >
       <AppSidebarHeader />
       <AppSidebarContentClient />
       <AppSidebarFooter />

@@ -46,16 +46,16 @@
 }
 
 :root {
-  --background: #f4f4f5;
+  --background: #ffffff;
   --foreground: #1a1a1b;
-  --surface: #ffffff; 
+  --surface: #f4f4f5; 
 
   --primary: #004B4D;       
   --primary-light: #2B7D8E;
   --secondary: #5E1D5B;     
   --secondary-light: #E4005E;     
   --sidebar: hsl(0 0% 98%);     
-  --sidebar-foreground: hsl(240 5.3% 26.1%);     
+  --sidebar-foreground: hsl(240, 71%, 56%);     
   --sidebar-primary: hsl(240 5.9% 10%);     
   --sidebar-primary-foreground: hsl(0 0% 98%);     
   --sidebar-accent: hsl(240 4.8% 95.9%);     
