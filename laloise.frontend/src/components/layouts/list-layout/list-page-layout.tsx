@@ -18,7 +18,7 @@ export default function ListPageLayout<T extends { id: string }>({
 }: ListPageLayoutProps<T>) {
   return (
     <div className="flex-1 flex items-center justify-center p-4 pt-10 lg:pt-4">
-      <div className="max-h-min max-w-7xl w-full gap-2">
+      <div className="max-h-min max-w-7xl w-full gap-2 flex flex-col pt-4">
         <AppRouterBack />
         <Card>
           <ListLayoutHeader

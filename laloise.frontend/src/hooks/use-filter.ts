@@ -15,27 +15,30 @@ export interface ListFiltersConfig {
 export function useListFilters({filterParam = "filters", filterOptions = []}: ListFiltersConfig) {
   const [params, setParams] = useQueryStates({
     search: parseAsString.withDefault(""),
-    filters: parseAsArrayOf(parseAsString).withDefault([]),
+    [filterParam]: parseAsArrayOf(parseAsString).withDefault([]),
   });
 
+  const filters = (params[filterParam] ?? []) as string[];
+
   const toggleFilter = (value: string) => {
-    setParams((prev) => ({
-      filters: prev.filters.includes(value)
-        ? prev.filters.filter((f) => f !== value)
-        : [...prev.filters, value],
-    }));
+    const current = (params[filterParam] ?? []) as string[];
+    setParams({
+      [filterParam]: current.includes(value)
+        ? current.filter((f: string) => f !== value)
+        : [...current, value],
+    });
   };
 
-  const hasActiveFilter = params.filters.length > 0;
+  const hasActiveFilter = filters.length > 0;
 
   const activeFilters = filterOptions.filter((opt) =>
-    params.filters.includes(opt.value)
+    filters.includes(opt.value)
   );
 
   return {
     search: params.search,
     setSearch: (value: string) => setParams({ search: value }),
-    filters: params.filters,
+    filters,
     toggleFilter,
     hasActiveFilter,
     activeFilters,

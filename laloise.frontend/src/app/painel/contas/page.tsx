@@ -2,113 +2,51 @@
 
 import ListPageLayout from "@/components/layouts/list-layout/list-page-layout";
 import { useListPagination } from "@/hooks/use-list-pagination";
+import { useUsersAccounts } from "@/hooks/use-users-accounts";
+import { useListFilters } from "@/hooks/use-filter";
 import { ColumnDef } from "@tanstack/react-table";
-import { Suspense } from "react";
+import { UserSummary } from "@/api/api.accounts";
+import { ListLoadingSkeleton } from "@/components/loading-skeleton";
+import { DataError } from "@/components/data-error";
+import { AccountsClientWrapper } from "@/wrapper/accounts-client";
 
-interface MockUser {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  status: string;
-}
-
-const MOCK_FILTERS = [
-  { label: "Admin", value: "admin" },
-  { label: "Ativo", value: "active" },
-  { label: "Inativo", value: "inactive" },
-];
-
-const MOCK_DATA: MockUser[] = [
-  {
-    id: "1",
-    name: "João Silva",
-    email: "joao@email.com",
-    role: "Admin",
-    status: "Ativo",
-  },
-  {
-    id: "2",
-    name: "Maria Souza",
-    email: "maria@email.com",
-    role: "User",
-    status: "Ativo",
-  },
-  {
-    id: "3",
-    name: "Pedro Santos",
-    email: "pedro@email.com",
-    role: "Admin",
-    status: "Inativo",
-  },
-  {
-    id: "4",
-    name: "Ana Lima",
-    email: "ana@email.com",
-    role: "User",
-    status: "Ativo",
-  },
-  {
-    id: "5",
-    name: "Carlos Oliveira",
-    email: "carlos@email.com",
-    role: "User",
-    status: "Inativo",
-  },
-  {
-    id: "6",
-    name: "Lucas Pereira",
-    email: "lucas@email.com",
-    role: "Admin",
-    status: "Ativo",
-  },
-  {
-    id: "7",
-    name: "Fernanda Costa",
-    email: "fernanda@email.com",
-    role: "User",
-    status: "Ativo",
-  },
-  {
-    id: "8",
-    name: "Rafael Mendes",
-    email: "rafael@email.com",
-    role: "User",
-    status: "Inativo",
-  },
-  {
-    id: "9",
-    name: "Juliana Rocha",
-    email: "juliana@email.com",
-    role: "Admin",
-    status: "Ativo",
-  },
-  {
-    id: "10",
-    name: "Bruno Alves",
-    email: "bruno@email.com",
-    role: "User",
-    status: "Inativo",
-  },
-  {
-    id: "11",
-    name: "Camila Nunes",
-    email: "camila@email.com",
-    role: "User",
-    status: "Ativo",
-  },
-];
-
-const MOCK_COLUMNS: ColumnDef<MockUser>[] = [
-  { accessorKey: "name", header: "Nome" },
+const COLUMNS: ColumnDef<UserSummary>[] = [
+  { accessorKey: "nickname", header: "Nome" },
   { accessorKey: "email", header: "Email", meta: { hideOnMobile: true } },
-  { accessorKey: "role", header: "Cargo" },
-  { accessorKey: "status", header: "Status", meta: { hideOnMobile: true } },
+  { accessorKey: "role", header: "Role", meta: { hideOnMobile: true } },
+];
+
+const ROLE_FILTERS = [
+  { label: "Admin", value: "ADMIN" },
+  { label: "User", value: "USER" },
 ];
 
 function AccountClient() {
   const { offset, pageSize } = useListPagination();
-  const paginatedData = MOCK_DATA.slice(offset, offset + pageSize);
+  const { search, filters } = useListFilters({
+    filterParam: "role",
+    filterOptions: ROLE_FILTERS,
+  });
+
+  const role = filters.length > 0 ? filters[0] : null;
+
+  const { data, isLoading, error, refetch } = useUsersAccounts({
+    page: offset / pageSize,
+    size: pageSize,
+    search: search || null,
+    role,
+  });
+
+  const users = data?.content || [];
+  const totalItems = data?.totalElements || 0;
+
+  if (isLoading) {
+    return <ListLoadingSkeleton />;
+  }
+
+  if (error) {
+    return <DataError error={error as Error} onRetry={() => refetch()} />;
+  }
 
   return (
     <ListPageLayout
@@ -116,10 +54,10 @@ function AccountClient() {
       actionHref="/painel/contas"
       placeholder="Busque por nome ou email"
       filterParam="role"
-      filterOptions={MOCK_FILTERS}
-      data={paginatedData}
-      columns={MOCK_COLUMNS}
-      totalItems={MOCK_DATA.length}
+      filterOptions={ROLE_FILTERS}
+      data={users}
+      columns={COLUMNS}
+      totalItems={totalItems}
       caption="Lista de contas"
     />
   );
@@ -127,8 +65,8 @@ function AccountClient() {
 
 export default function Accounts() {
   return (
-    <Suspense>
+    <AccountsClientWrapper>
       <AccountClient />
-    </Suspense>
+    </AccountsClientWrapper>
   );
 }

@@ -11,7 +11,7 @@ export interface UserSummary {
   id: string;
   nickname: string;
   email: string;
-  isActive: boolean;
+  role: string;
 }
 
 export interface PageResponse<T> {
