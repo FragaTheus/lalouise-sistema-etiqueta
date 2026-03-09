@@ -6,7 +6,7 @@ import { AppItemInfoProps } from "@/components/app-item-info-layout/app-item-dat
 import { DataError } from "@/components/data-error";
 import { ItemInfoLoadingSkeleton } from "@/components/loading-skeleton";
 import { useUsersProfile } from "@/hooks/accounts-hooks/use-users-profile";
-import useUsersUpdate from "@/hooks/accounts-hooks/use-users-update";
+import useUsersRestore from "@/hooks/accounts-hooks/use-users-restore";
 import { Users } from "lucide-react";
 import { useParams } from "next/navigation";
 
@@ -43,13 +43,13 @@ function formatBackendDateTime(value?: string | null) {
   return value;
 }
 
-export default function AccountInfo() {
+export default function DeletedAccountInfo() {
   const params = useParams();
   const userIdParam = params?.id;
   const userId = Array.isArray(userIdParam) ? userIdParam[0] : userIdParam;
 
   const { data, isLoading, error, refetch } = useUsersProfile(userId);
-  const updateUserMutation = useUsersUpdate(userId);
+  const restoreUserMutation = useUsersRestore(userId);
 
   if (!userId) {
     return (
@@ -73,8 +73,8 @@ export default function AccountInfo() {
     icon: Users,
     title: data.nickname,
     subtitle: `ID: ${data.id}`,
-    isProfile: false,
-    updateMutation: updateUserMutation,
+    isDeleted: true,
+    restoreMutation: restoreUserMutation,
     sections: [
       {
         fields: [
@@ -89,6 +89,13 @@ export default function AccountInfo() {
             value: data.role,
             isBadge: true,
             badgeColor: "secondary",
+          },
+          {
+            key: "status",
+            label: "Status",
+            value: data.status ? "Ativo" : "Deletado",
+            isBadge: true,
+            badgeColor: data.status ? "primary" : "secondary",
           },
           {
             key: "lastLoginAt",

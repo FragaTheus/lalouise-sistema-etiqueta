@@ -1,6 +1,6 @@
 "use client"
 
-import { createUser } from "@/api/api.accounts";
+import { createUser } from "@/api/api-accounts/api.accounts";
 import { extractErrorMessage } from "@/api/api.error";
 import { CreateUserRequest } from "@/constants/schemas/create-user-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

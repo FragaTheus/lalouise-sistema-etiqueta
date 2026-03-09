@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUsers, UserSummary, PageResponse } from "@/api/api.accounts";
+import { getUsers } from "@/api/api-accounts/api.accounts";
+import { UserSummary, PageResponse } from "@/api/api-accounts/api.accounts.data";
 
 interface UseUsersAccountsParams {
   page?: number;

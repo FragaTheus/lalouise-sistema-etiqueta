@@ -2,7 +2,13 @@ import {
   AppSideBarGroupItems,
   ItemsProps,
 } from "@/components/app-sidebar/app-sidebar-types";
-import { GroupIcon, PlusIcon, ShieldIcon, UsersIcon } from "lucide-react";
+import {
+  GroupIcon,
+  PlusIcon,
+  ShieldIcon,
+  Trash2Icon,
+  UsersIcon,
+} from "lucide-react";
 
 const sidebarUserItensImpl = [
   {
@@ -19,6 +25,11 @@ const sidebarUserItensImpl = [
     itemHref: "/painel/contas",
     ItemIcon: GroupIcon,
     itemText: "Usuarios",
+  },
+  {
+    itemHref: "/painel/contas/deletadas",
+    ItemIcon: Trash2Icon,
+    itemText: "Usuarios Deletados",
   },
 ] satisfies ItemsProps[];
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { createAdmin } from "@/api/api.accounts";
+import { createAdmin } from "@/api/api-accounts/api.accounts";
 import AppForm from "@/components/app-form/app-form";
 import {
   signupAdminBtnText,
@@ -8,7 +8,7 @@ import {
   signupAdminsFields,
 } from "@/constants/form-fields/create-user-form-fields";
 import { createUserSchema } from "@/constants/schemas/create-user-schema";
-import useCreateUser from "@/hooks/use-create-user";
+import useCreateUser from "@/hooks/accounts-hooks/use-create-user";
 
 export default function CreateAdminClient() {
   const mutation = useCreateUser({

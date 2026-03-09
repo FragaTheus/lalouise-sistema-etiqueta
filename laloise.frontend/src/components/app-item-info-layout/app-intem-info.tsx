@@ -28,7 +28,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Edit, MoreVertical, Trash2 } from "lucide-react";
+import { Edit, MoreVertical, RotateCcw, Trash2 } from "lucide-react";
 import { useState } from "react";
 import AppForm from "@/components/app-form/app-form";
 import { updateUserSchema } from "@/constants/schemas/updateProfileSchema";
@@ -37,17 +37,24 @@ import {
   updateUserDefaultValues,
   updateUserFields,
 } from "@/constants/form-fields/update-profile-form-field";
-import useUpdateAccount from "@/hooks/use-update-account";
 
 export default function AppItemInfo({
   icon: Icon,
   title,
   subtitle,
   sections,
+  updateMutation,
+  deleteMutation,
+  restoreMutation,
+  isProfile = false,
+  isDeleted = false,
 }: AppItemInfoProps) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const updateAccountMutation = useUpdateAccount();
+  const [isRestoreDialogOpen, setIsRestoreDialogOpen] = useState(false);
+  const canUpdate = Boolean(updateMutation);
+  const canDelete = !isProfile && Boolean(deleteMutation);
+  const canRestore = Boolean(restoreMutation);
 
   const handleUpdateSuccess = () => {
     setIsEditDialogOpen(false);
@@ -121,19 +128,35 @@ export default function AppItemInfo({
                   <MoreVertical className="w-5 h-5" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
-                  <Edit className="w-4 h-4" />
-                  Editar dados
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  variant="destructive"
-                  onClick={() => setIsDeleteDialogOpen(true)}
-                >
-                  <Trash2 className="w-4 h-4" />
-                  Excluir conta
-                </DropdownMenuItem>
-              </DropdownMenuContent>
+              {isDeleted ? (
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    onClick={() => setIsRestoreDialogOpen(true)}
+                    disabled={!canRestore}
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                    Restaurar conta
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              ) : (
+                <DropdownMenuContent align="end">
+                  {canUpdate && (
+                    <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
+                      <Edit className="w-4 h-4" />
+                      Editar dados
+                    </DropdownMenuItem>
+                  )}
+                  {canDelete && (
+                    <DropdownMenuItem
+                      variant="destructive"
+                      onClick={() => setIsDeleteDialogOpen(true)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Excluir conta
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuContent>
+              )}
             </DropdownMenu>
           </div>
         </CardHeader>
@@ -143,59 +166,103 @@ export default function AppItemInfo({
         </CardContent>
       </Card>
 
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="sm:max-w-125">
-          <DialogHeader>
-            <DialogTitle>Editar Perfil</DialogTitle>
-            <DialogDescription>
-              Atualize suas informações de perfil. Deixe os campos em branco
-              para não alterá-los.
-            </DialogDescription>
-          </DialogHeader>
-          <AppForm
-            schema={updateUserSchema}
-            fields={updateUserFields}
-            mutation={{
-              ...updateAccountMutation,
-              mutate: (data) => {
-                updateAccountMutation.mutate(data, {
-                  onSuccess: handleUpdateSuccess,
-                });
-              },
-            }}
-            defaultValues={updateUserDefaultValues}
-            btnText={updateUserBtnText}
-          />
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent className="sm:max-w-106.25">
-          <DialogHeader>
-            <DialogTitle>Excluir Conta</DialogTitle>
-            <DialogDescription>
-              Tem certeza que deseja excluir sua conta? Esta ação é irreversível
-              e todos os seus dados serão permanentemente removidos.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="gap-2 sm:gap-0">
-            <Button
-              variant="outline"
-              onClick={() => setIsDeleteDialogOpen(false)}
-            >
-              Cancelar
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={() => {
-                setIsDeleteDialogOpen(false);
+      {canUpdate && updateMutation && (
+        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+          <DialogContent className="sm:max-w-125">
+            <DialogHeader>
+              <DialogTitle>Editar Perfil</DialogTitle>
+              <DialogDescription>
+                Atualize suas informações de perfil. Deixe os campos em branco
+                para não alterá-los.
+              </DialogDescription>
+            </DialogHeader>
+            <AppForm
+              schema={updateUserSchema}
+              fields={updateUserFields}
+              mutation={{
+                ...updateMutation,
+                mutate: (data) => {
+                  updateMutation.mutate(data, {
+                    onSuccess: handleUpdateSuccess,
+                  });
+                },
               }}
-            >
-              Excluir Conta
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+              defaultValues={updateUserDefaultValues}
+              btnText={updateUserBtnText}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {canDelete && deleteMutation && (
+        <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+          <DialogContent className="sm:max-w-106.25">
+            <DialogHeader>
+              <DialogTitle>Excluir Conta</DialogTitle>
+              <DialogDescription>
+                Deseja realmente excluir a conta em questão? Esta ação é
+                irreversível e removerá os dados deste usuário.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="gap-2 sm:gap-0">
+              <Button
+                variant="outline"
+                onClick={() => setIsDeleteDialogOpen(false)}
+              >
+                Cancelar
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => {
+                  deleteMutation.mutate(undefined, {
+                    onSuccess: () => setIsDeleteDialogOpen(false),
+                  });
+                }}
+                disabled={deleteMutation.isPending}
+              >
+                {deleteMutation.isPending ? "Excluindo..." : "Excluir Conta"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {isDeleted && (
+        <Dialog
+          open={isRestoreDialogOpen}
+          onOpenChange={setIsRestoreDialogOpen}
+        >
+          <DialogContent className="sm:max-w-106.25">
+            <DialogHeader>
+              <DialogTitle>Restaurar Conta</DialogTitle>
+              <DialogDescription>
+                Deseja realmente restaurar esta conta? O usuário voltará para a
+                lista de contas ativas.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="gap-2 sm:gap-0">
+              <Button
+                variant="outline"
+                onClick={() => setIsRestoreDialogOpen(false)}
+              >
+                Cancelar
+              </Button>
+              <Button
+                onClick={() => {
+                  restoreMutation?.mutate(undefined, {
+                    onSuccess: () => setIsRestoreDialogOpen(false),
+                  });
+                }}
+                disabled={!canRestore || restoreMutation?.isPending}
+              >
+                {restoreMutation?.isPending
+                  ? "Restaurando..."
+                  : "Restaurar Conta"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   );
 }

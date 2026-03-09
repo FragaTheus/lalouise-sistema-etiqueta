@@ -1,4 +1,6 @@
 import { LucideIcon } from "lucide-react";
+import { UseMutationResult } from "@tanstack/react-query";
+import { UpdateUserPayload } from "@/api/api.perfil";
 
 export interface ItemInfoField {
   key: string;
@@ -18,4 +20,9 @@ export interface AppItemInfoProps {
   title: string;
   subtitle?: string;
   sections: ItemInfoSection[];
+  updateMutation?: UseMutationResult<void, Error, Partial<UpdateUserPayload>>;
+  deleteMutation?: UseMutationResult<void, Error, void, unknown>;
+  restoreMutation?: UseMutationResult<void, Error, void, unknown>;
+  isProfile?: boolean;
+  isDeleted?: boolean;
 }

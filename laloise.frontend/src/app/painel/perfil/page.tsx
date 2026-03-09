@@ -6,10 +6,12 @@ import { AppItemInfoProps } from "@/components/app-item-info-layout/app-item-dat
 import { DataError } from "@/components/data-error";
 import { ItemInfoLoadingSkeleton } from "@/components/loading-skeleton";
 import useProfile from "@/hooks/use-profile";
+import useUpdateAccount from "@/hooks/use-update-account";
 import { Users } from "lucide-react";
 
 export default function AccountPerfil() {
   const { data: profileData, isLoading, error, refetch } = useProfile();
+  const updateAccountMutation = useUpdateAccount();
 
   if (isLoading) {
     return <ItemInfoLoadingSkeleton />;
@@ -27,6 +29,8 @@ export default function AccountPerfil() {
     icon: Users,
     title: profileData.nickname,
     subtitle: profileData.email,
+    isProfile: true,
+    updateMutation: updateAccountMutation,
     sections: [
       {
         fields: [

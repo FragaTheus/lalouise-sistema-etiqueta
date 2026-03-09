@@ -2,7 +2,7 @@
 
 import ListPageLayout from "@/components/layouts/list-layout/list-page-layout";
 import { useListPagination } from "@/hooks/use-list-pagination";
-import { useUsersAccounts } from "@/hooks/accounts-hooks/use-users-accounts";
+import { useUsersDeletedAccounts } from "@/hooks/accounts-hooks/use-users-deleted-accounts";
 import { useListFilters } from "@/hooks/use-filter";
 import { ColumnDef } from "@tanstack/react-table";
 import { ListLoadingSkeleton } from "@/components/loading-skeleton";
@@ -16,25 +16,14 @@ const COLUMNS: ColumnDef<UserSummary>[] = [
   { accessorKey: "role", header: "Role", meta: { hideOnMobile: true } },
 ];
 
-const ROLE_FILTERS = [
-  { label: "Admin", value: "ADMIN" },
-  { label: "User", value: "USER" },
-];
-
-function AccountClient() {
+function DeletedAccountsClient() {
   const { offset, pageSize } = useListPagination();
-  const { search, filters } = useListFilters({
-    filterParam: "role",
-    filterOptions: ROLE_FILTERS,
-  });
+  const { search } = useListFilters({});
 
-  const role = filters.length > 0 ? filters[0] : null;
-
-  const { data, isLoading, error, refetch } = useUsersAccounts({
+  const { data, isLoading, error, refetch } = useUsersDeletedAccounts({
     page: offset / pageSize,
     size: pageSize,
     search: search || null,
-    role,
   });
 
   const users = data?.content || [];
@@ -51,22 +40,20 @@ function AccountClient() {
   return (
     <ListPageLayout
       createHref="/painel/contas/cadastrar"
-      actionHref="/painel/contas"
+      actionHref="/painel/contas/deletadas"
       placeholder="Busque por nome ou email"
-      filterParam="role"
-      filterOptions={ROLE_FILTERS}
       data={users}
       columns={COLUMNS}
       totalItems={totalItems}
-      caption="Lista de contas"
+      caption="Lista de contas deletadas"
     />
   );
 }
 
-export default function Accounts() {
+export default function DeletedAccounts() {
   return (
     <AccountsClientWrapper>
-      <AccountClient />
+      <DeletedAccountsClient />
     </AccountsClientWrapper>
   );
 }
