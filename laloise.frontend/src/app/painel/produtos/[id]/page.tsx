@@ -5,15 +5,15 @@ import AppItemInfo from "@/components/app-item-info-layout/app-intem-info";
 import { AppItemInfoProps } from "@/components/app-item-info-layout/app-item-data";
 import { DataError } from "@/components/data-error";
 import { ItemInfoLoadingSkeleton } from "@/components/loading-skeleton";
-import { useUsersProfile } from "@/hooks/accounts-hooks/use-users-profile";
-import useUsersUpdate from "@/hooks/accounts-hooks/use-users-update";
-import { updateUserSchema } from "@/constants/schemas/updateProfileSchema";
+import { useProduct } from "@/hooks/products-hooks/use-product";
+import useUpdateProduct from "@/hooks/products-hooks/use-update-product";
+import useDeleteProduct from "@/hooks/products-hooks/use-delete-product";
+import { updateProductSchema } from "@/constants/schemas/create-product-schema";
 import {
-  updateUserFields,
-  updateUserDefaultValues,
-  updateUserBtnText,
-} from "@/constants/form-fields/update-profile-form-field";
-import { Users } from "lucide-react";
+  createProductFields,
+  createProductDefaultValues,
+} from "@/constants/form-fields/create-product-form-fields";
+import { Package } from "lucide-react";
 import { useParams } from "next/navigation";
 
 function formatBackendDateTime(value?: string | null) {
@@ -49,17 +49,20 @@ function formatBackendDateTime(value?: string | null) {
   return value;
 }
 
-export default function AccountInfo() {
+export default function ProductInfo() {
   const params = useParams();
-  const userIdParam = params?.id;
-  const userId = Array.isArray(userIdParam) ? userIdParam[0] : userIdParam;
+  const productIdParam = params?.id;
+  const productId = Array.isArray(productIdParam)
+    ? productIdParam[0]
+    : productIdParam;
 
-  const { data, isLoading, error, refetch } = useUsersProfile(userId);
-  const updateUserMutation = useUsersUpdate(userId);
+  const { data, isLoading, error, refetch } = useProduct(productId);
+  const updateProductMutation = useUpdateProduct(productId);
+  const deleteProductMutation = useDeleteProduct(productId);
 
-  if (!userId) {
+  if (!productId) {
     return (
-      <DataError error={new Error("ID do usuário não encontrado na URL")} />
+      <DataError error={new Error("ID do produto não encontrado na URL")} />
     );
   }
 
@@ -75,40 +78,29 @@ export default function AccountInfo() {
     return <DataError error={null} onRetry={() => refetch()} />;
   }
 
-  const userItemConfig: AppItemInfoProps = {
-    icon: Users,
-    title: data.nickname,
+  const productItemConfig: AppItemInfoProps = {
+    icon: Package,
+    title: data.name,
     subtitle: `ID: ${data.id}`,
     isProfile: false,
-    updateMutation: updateUserMutation,
+    updateMutation: updateProductMutation,
+    deleteMutation: deleteProductMutation,
     editConfig: {
-      title: "Editar Perfil",
+      title: "Editar Produto",
       description:
-        "Atualize as informações de perfil. Deixe os campos em branco para não alterá-los.",
-      schema: updateUserSchema,
-      fields: updateUserFields,
-      defaultValues: updateUserDefaultValues,
-      btnText: updateUserBtnText,
+        "Atualize os dados do produto. Deixe os campos em branco para não alterá-los.",
+      schema: updateProductSchema,
+      fields: createProductFields,
+      defaultValues: createProductDefaultValues,
+      btnText: "Salvar Alterações",
     },
     sections: [
       {
         fields: [
           {
-            key: "email",
-            label: "Email",
-            value: data.email,
-          },
-          {
-            key: "role",
-            label: "Função",
-            value: data.role,
-            isBadge: true,
-            badgeColor: "secondary",
-          },
-          {
-            key: "lastLoginAt",
-            label: "Último Acesso",
-            value: formatBackendDateTime(data.lastLoginAt),
+            key: "description",
+            label: "Descrição",
+            value: data.description,
           },
         ],
       },
@@ -134,7 +126,7 @@ export default function AccountInfo() {
     <div className="flex-1 flex items-center justify-center p-4">
       <div className="w-full max-w-7xl flex flex-col gap-2">
         <AppFormPageLayoutRouterBack />
-        <AppItemInfo {...userItemConfig} />
+        <AppItemInfo {...productItemConfig} />
       </div>
     </div>
   );

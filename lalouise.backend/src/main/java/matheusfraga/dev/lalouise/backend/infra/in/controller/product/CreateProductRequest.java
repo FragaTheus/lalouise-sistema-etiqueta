@@ -16,6 +16,7 @@ public record CreateProductRequest(
         )
         String name,
 
+        @NotBlank(message = "Descrição do produto nao pode ser vazia")
         @Size(max = 200, message = "Descrição do produto nao pode ter mais que 200 caracteres")
         @Pattern(
                 regexp = "^[\\p{L}\\s]*$",
@@ -25,3 +26,4 @@ public record CreateProductRequest(
 
 ) {
 }
+

@@ -31,12 +31,6 @@ import { Button } from "@/components/ui/button";
 import { Edit, MoreVertical, RotateCcw, Trash2 } from "lucide-react";
 import { useState } from "react";
 import AppForm from "@/components/app-form/app-form";
-import { updateUserSchema } from "@/constants/schemas/updateProfileSchema";
-import {
-  updateUserBtnText,
-  updateUserDefaultValues,
-  updateUserFields,
-} from "@/constants/form-fields/update-profile-form-field";
 
 export default function AppItemInfo({
   icon: Icon,
@@ -46,6 +40,7 @@ export default function AppItemInfo({
   updateMutation,
   deleteMutation,
   restoreMutation,
+  editConfig,
   isProfile = false,
   isDeleted = false,
 }: AppItemInfoProps) {
@@ -135,7 +130,7 @@ export default function AppItemInfo({
                     disabled={!canRestore}
                   >
                     <RotateCcw className="w-4 h-4" />
-                    Restaurar conta
+                    Restaurar item
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               ) : (
@@ -152,7 +147,7 @@ export default function AppItemInfo({
                       onClick={() => setIsDeleteDialogOpen(true)}
                     >
                       <Trash2 className="w-4 h-4" />
-                      Excluir conta
+                      Excluir item
                     </DropdownMenuItem>
                   )}
                 </DropdownMenuContent>
@@ -166,19 +161,16 @@ export default function AppItemInfo({
         </CardContent>
       </Card>
 
-      {canUpdate && updateMutation && (
+      {canUpdate && updateMutation && editConfig && (
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
           <DialogContent className="sm:max-w-125">
             <DialogHeader>
-              <DialogTitle>Editar Perfil</DialogTitle>
-              <DialogDescription>
-                Atualize suas informações de perfil. Deixe os campos em branco
-                para não alterá-los.
-              </DialogDescription>
+              <DialogTitle>{editConfig.title}</DialogTitle>
+              <DialogDescription>{editConfig.description}</DialogDescription>
             </DialogHeader>
             <AppForm
-              schema={updateUserSchema}
-              fields={updateUserFields}
+              schema={editConfig.schema}
+              fields={editConfig.fields}
               mutation={{
                 ...updateMutation,
                 mutate: (data) => {
@@ -187,8 +179,8 @@ export default function AppItemInfo({
                   });
                 },
               }}
-              defaultValues={updateUserDefaultValues}
-              btnText={updateUserBtnText}
+              defaultValues={editConfig.defaultValues}
+              btnText={editConfig.btnText}
             />
           </DialogContent>
         </Dialog>
@@ -198,10 +190,9 @@ export default function AppItemInfo({
         <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
           <DialogContent className="sm:max-w-106.25">
             <DialogHeader>
-              <DialogTitle>Excluir Conta</DialogTitle>
+              <DialogTitle>Excluir Item</DialogTitle>
               <DialogDescription>
-                Deseja realmente excluir a conta em questão? Esta ação é
-                irreversível e removerá os dados deste usuário.
+                Deseja realmente excluir este item? Esta ação é irreversível.
               </DialogDescription>
             </DialogHeader>
             <DialogFooter className="gap-2 sm:gap-0">
@@ -220,7 +211,7 @@ export default function AppItemInfo({
                 }}
                 disabled={deleteMutation.isPending}
               >
-                {deleteMutation.isPending ? "Excluindo..." : "Excluir Conta"}
+                {deleteMutation.isPending ? "Excluindo..." : "Excluir Item"}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -234,10 +225,9 @@ export default function AppItemInfo({
         >
           <DialogContent className="sm:max-w-106.25">
             <DialogHeader>
-              <DialogTitle>Restaurar Conta</DialogTitle>
+              <DialogTitle>Restaurar Item</DialogTitle>
               <DialogDescription>
-                Deseja realmente restaurar esta conta? O usuário voltará para a
-                lista de contas ativas.
+                Deseja realmente restaurar este item para a lista de ativos?
               </DialogDescription>
             </DialogHeader>
             <DialogFooter className="gap-2 sm:gap-0">
@@ -257,7 +247,7 @@ export default function AppItemInfo({
               >
                 {restoreMutation?.isPending
                   ? "Restaurando..."
-                  : "Restaurar Conta"}
+                  : "Restaurar Item"}
               </Button>
             </DialogFooter>
           </DialogContent>

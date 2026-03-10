@@ -1,6 +1,19 @@
 import { LucideIcon } from "lucide-react";
 import { UseMutationResult } from "@tanstack/react-query";
-import { UpdateUserPayload } from "@/api/api.perfil";
+import { ZodType } from "zod";
+import { FormFieldConfig } from "@/components/app-form/app-form-types";
+
+export interface AppItemEditConfig {
+  title: string;
+  description: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  schema: ZodType<any, any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  fields: FormFieldConfig<any>[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  defaultValues: Record<string, any>;
+  btnText: string;
+}
 
 export interface ItemInfoField {
   key: string;
@@ -20,9 +33,11 @@ export interface AppItemInfoProps {
   title: string;
   subtitle?: string;
   sections: ItemInfoSection[];
-  updateMutation?: UseMutationResult<void, Error, Partial<UpdateUserPayload>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  updateMutation?: UseMutationResult<void, Error, any>;
   deleteMutation?: UseMutationResult<void, Error, void, unknown>;
   restoreMutation?: UseMutationResult<void, Error, void, unknown>;
+  editConfig?: AppItemEditConfig;
   isProfile?: boolean;
   isDeleted?: boolean;
 }

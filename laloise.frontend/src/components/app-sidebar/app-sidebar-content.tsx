@@ -48,8 +48,8 @@ export default function AppSidebarContent({ groups }: AppSidebarContentProps) {
               </SidebarMenuButton>
             </Link>
           </motion.div>
-          <Collapsible className="bg-transparent mt-2">
-            {groups.map((groups, index) => (
+          <div className="flex flex-col gap-2 mt-2">
+            {groups.map((group, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, x: -20 }}
@@ -60,14 +60,16 @@ export default function AppSidebarContent({ groups }: AppSidebarContentProps) {
                   ease: "easeOut",
                 }}
               >
-                <AppSidebarGroups
-                  TriggerIcon={groups.TriggerIcon}
-                  triggerText={groups.triggerText}
-                  items={groups.items}
-                />
+                <Collapsible className="bg-transparent">
+                  <AppSidebarGroups
+                    TriggerIcon={group.TriggerIcon}
+                    triggerText={group.triggerText}
+                    items={group.items}
+                  />
+                </Collapsible>
               </motion.div>
             ))}
-          </Collapsible>
+          </div>
         </SidebarGroupContent>
       </SidebarGroup>
     </SidebarContent>
