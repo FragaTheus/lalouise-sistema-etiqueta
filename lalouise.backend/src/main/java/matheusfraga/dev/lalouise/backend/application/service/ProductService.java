@@ -25,34 +25,55 @@ public class ProductService {
     }
 
     @Transactional
-    public void createProduct(String name) {
+    public void createProduct(String name, String description) {
         if (repository.existsByNameIgnoreCase(name)) {
             throw new ProductAlreadyExistsException();
         }
-        Product product = new Product(name);
+        Product product = new Product(name, description);
         repository.save(product);
     }
 
     @Transactional
-    public void updateProduct(UUID id, String newName) {
+    public void updateProduct(UUID id, String newName, String description) {
         Product product = getProduct(id);
 
-        if (repository.existsByNameIgnoreCase(newName)) {
-            throw new ProductAlreadyExistsException();
+        boolean hasName = newName != null && !newName.isBlank();
+        boolean hasDescription = description != null && !description.isBlank();
+
+        if (!hasName && !hasDescription) {
+            throw new NoDataForUpdateException();
         }
 
-        product.setName(newName);
+        if (hasName) {
+            boolean changingName = !product.getName().equalsIgnoreCase(newName);
+            if (changingName && repository.existsByNameIgnoreCase(newName)) {
+                throw new ProductAlreadyExistsException();
+            }
+            product.setName(newName);
+        }
+
+        if (hasDescription) {
+            product.setDescription(description);
+        }
     }
 
     @Transactional
     public void deleteProduct(UUID id) {
-        if (!repository.existsById(id)) {
-            throw new ProductNotFoundException();
-        }
-        repository.deleteById(id);
+        Product product = getProduct(id);
+        product.setActive(false);
     }
 
-    public Page<Product> getAllProducts(String name, Pageable pageable) {
-        return repository.findAllByFilter(name, pageable);
+    public Page<Product> getAllProducts(String search, Pageable pageable) {
+        return repository.findAllByFilter(search, pageable);
+    }
+
+    public Page<Product> getDeletedProducts(String search, Pageable pageable) {
+        return repository.findAllDeletedProductsFilter(search, pageable);
+    }
+
+    @Transactional
+    public void restoreProduct(UUID id) {
+        Product product = getProduct(id);
+        product.setActive(true);
     }
 }

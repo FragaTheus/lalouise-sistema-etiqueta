@@ -22,22 +22,21 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductInfo> getProduct(@PathVariable UUID id) {
         var product = service.getProduct(id);
-        var info = new ProductInfo(product.getId(), product.getName());
-        return ResponseEntity.ok(info);
+        return ResponseEntity.ok(ProductMapper.toProductInfo(product));
     }
 
     @GetMapping
     public ResponseEntity<Page<ProductSummary>> getAllProducts
-            (@RequestParam(value = "name", required = false) String name,
+            (@RequestParam(value = "search", required = false) String search,
              @PageableDefault(size =  10, sort = "name") Pageable pageable) {
-        var page = service.getAllProducts(name, pageable);
-        var summaries = page.map(product -> new ProductSummary(product.getId(), product.getName()));
+        var page = service.getAllProducts(search, pageable);
+        var summaries = page.map(product -> new ProductSummary(product.getId(), product.getName(), product.getDescription()));
         return ResponseEntity.ok(summaries);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateProduct(@PathVariable UUID id,@Valid @RequestBody ProductRequest request) {
-        service.updateProduct(id, request.name());
+    public ResponseEntity<Void> updateProduct(@PathVariable UUID id,@Valid @RequestBody UpdateProductRequest request) {
+        service.updateProduct(id, request.name(), request.description());
         return ResponseEntity.noContent().build();
     }
 
@@ -48,9 +47,24 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@Valid @RequestBody ProductRequest request){
-        service.createProduct(request.name());
+    public ResponseEntity<Void> create(@Valid @RequestBody CreateProductRequest request){
+        service.createProduct(request.name(), request.description());
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/deleted")
+    public ResponseEntity<Page<ProductSummary>> getAllDeletedProducts
+            (@RequestParam(value = "search", required = false) String search,
+             @PageableDefault(size =  10, sort = "name") Pageable pageable) {
+        var page = service.getDeletedProducts(search, pageable);
+        var summaries = page.map(product -> new ProductSummary(product.getId(), product.getName(), product.getDescription()));
+        return ResponseEntity.ok(summaries);
+    }
+
+    @PostMapping("/{id}/restore")
+    public ResponseEntity<Void> restoreProduct(@PathVariable UUID id) {
+        service.restoreProduct(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

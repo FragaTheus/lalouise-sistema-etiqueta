@@ -13,9 +13,25 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     @Query("""
         SELECT p FROM Product p
-        WHERE (:name IS NULL OR LOWER(p.name)  LIKE LOWER(CONCAT('%', :name, '%')) )
+        WHERE p.isActive = true
+          AND (
+                :search IS NULL
+                OR LOWER(p.name) LIKE LOWER(CONCAT('%', :search, '%'))
+                OR LOWER(p.description) LIKE LOWER(CONCAT('%', :search, '%'))
+          )
     """)
-    Page<Product> findAllByFilter(@Param("name")String name, Pageable pageable);
+    Page<Product> findAllByFilter(@Param("search") String search, Pageable pageable);
+
+    @Query("""
+        SELECT p FROM Product p
+        WHERE p.isActive = false
+          AND (
+                :search IS NULL
+                OR LOWER(p.name) LIKE LOWER(CONCAT('%', :search, '%'))
+                OR LOWER(p.description) LIKE LOWER(CONCAT('%', :search, '%'))
+          )
+    """)
+    Page<Product> findAllDeletedProductsFilter(@Param("search") String search, Pageable pageable);
 
     boolean existsByNameIgnoreCase(String name);
 }
