@@ -1,3 +1,5 @@
+import CreateProductIndexPageWrapper from "@/features/products/wrappers/create-product-index-page-wrapper";
+
 export default function CreateProduct() {
-  return <h1>Cadastrar Produto</h1>;
+  return <CreateProductIndexPageWrapper />;
 }

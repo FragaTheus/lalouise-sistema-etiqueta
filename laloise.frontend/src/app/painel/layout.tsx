@@ -1,6 +1,6 @@
-import AppHeader from "@/components/app-header";
-import AppSidebar from "@/components/app-sidebar/app-sidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import AppHeader from "@/shared/components/app-header";
+import AppSidebar from "@/shared/components/app-sidebar/app-sidebar";
+import { SidebarProvider } from "@/shared/components/ui/sidebar";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 export default function DashboardLayout({

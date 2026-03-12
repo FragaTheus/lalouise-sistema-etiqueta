@@ -1,5 +1,5 @@
-import AppDashboardLayout from "@/components/layouts/app-dashboard-layout/app-dashboard-layout";
-import { Button } from "@/components/ui/button";
+import AppDashboardLayout from "@/shared/components/layouts/app-dashboard-layout/app-dashboard-layout";
+import { Button } from "@/shared/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,12 +7,12 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/shared/components/ui/card";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { dashboardCardProps } from "@/constants/dashboard-cards-props";
-import { StaggerContainer, StaggerItem } from "@/animations/animations";
+import { dashboardCardProps } from "@/features/dashboard/constants/dashboard-cards-props";
+import { StaggerContainer, StaggerItem } from "@/shared/animations/animations";
 
 export default function Dashboard() {
   return (

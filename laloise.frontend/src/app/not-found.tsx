@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/components/ui/button";
 import Image from "next/image";
-import notFoundIcon from "@/assets/notfound-icon.svg";
+import notFoundIcon from "@/shared/assets/notfound-icon.svg";
 
 export default function NotFound() {
   return (
