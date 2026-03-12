@@ -7,6 +7,7 @@ import { DataError } from "@/shared/components/data-error";
 import { ItemInfoLoadingSkeleton } from "@/shared/components/loading-skeleton";
 import { useUsersProfile } from "@/features/accounts/hooks/use-users-profile";
 import useUsersUpdate from "@/features/accounts/hooks/use-users-update";
+import useUsersDelete from "@/features/accounts/hooks/use-users-delete";
 import { updateUserSchema } from "@/features/profile/constants/schemas/updateProfileSchema";
 import {
   updateUserFields,
@@ -56,6 +57,7 @@ export default function AccountDetailPageWrapper() {
 
   const { data, isLoading, error, refetch } = useUsersProfile(userId);
   const updateUserMutation = useUsersUpdate(userId);
+  const deleteUserMutation = useUsersDelete(userId);
 
   if (!userId) {
     return (
@@ -81,6 +83,7 @@ export default function AccountDetailPageWrapper() {
     subtitle: `ID: ${data.id}`,
     isProfile: false,
     updateMutation: updateUserMutation,
+    deleteMutation: deleteUserMutation,
     editConfig: {
       title: "Editar Perfil",
       description:
