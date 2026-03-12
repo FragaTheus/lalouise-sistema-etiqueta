@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
   Field,
   FieldContent,
@@ -17,8 +17,15 @@ import { LoaderIcon } from "lucide-react";
 import { AppFormProps } from "./app-form-types";
 import { Input } from "../ui/input";
 import { SlideInFromBottom, FadeIn } from "@/shared/animations/animations";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
-export default function AppForm<TSchema extends z.ZodType<any, any>>({
+export default function AppForm<TSchema extends z.ZodTypeAny>({
   legend,
   schema,
   fields,
@@ -27,6 +34,7 @@ export default function AppForm<TSchema extends z.ZodType<any, any>>({
   btnText,
 }: AppFormProps<TSchema>) {
   const {
+    control,
     register,
     formState: { errors },
     handleSubmit,
@@ -60,14 +68,51 @@ export default function AppForm<TSchema extends z.ZodType<any, any>>({
                 >
                   <Field>
                     <FieldLabel>{fieldConfig.label}</FieldLabel>
-                    <FieldContent>
-                      <Input
-                        type={fieldConfig.type}
-                        placeholder={fieldConfig.placeholder}
-                        className="transition-all duration-200 focus:ring-2 focus:ring-primary/50"
-                        {...register(fieldConfig.name as any)}
+                    {fieldConfig.kind === "select" ? (
+                      <Controller
+                        control={control}
+                        name={fieldConfig.name}
+                        render={({ field }) => (
+                          <>
+                            <FieldContent>
+                              <Select
+                                value={field.value ?? undefined}
+                                onValueChange={field.onChange}
+                              >
+                                <SelectTrigger
+                                  onBlur={field.onBlur}
+                                  className="w-full transition-all duration-200 focus:ring-2 focus:ring-primary/50"
+                                >
+                                  <SelectValue
+                                    placeholder={fieldConfig.placeholder}
+                                  />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {fieldConfig.options.map((option) => (
+                                    <SelectItem
+                                      key={option.value}
+                                      value={option.value}
+                                      disabled={option.disabled}
+                                    >
+                                      {option.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FieldContent>
+                          </>
+                        )}
                       />
-                    </FieldContent>
+                    ) : (
+                      <FieldContent>
+                        <Input
+                          type={fieldConfig.type}
+                          placeholder={fieldConfig.placeholder}
+                          className="transition-all duration-200 focus:ring-2 focus:ring-primary/50"
+                          {...register(fieldConfig.name)}
+                        />
+                      </FieldContent>
+                    )}
                     {fieldError?.message && (
                       <FadeIn delay={0.05}>
                         <FieldError>{String(fieldError.message)}</FieldError>

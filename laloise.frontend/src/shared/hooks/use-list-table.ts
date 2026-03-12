@@ -9,6 +9,14 @@ import { useEffect, useState } from "react";
 
 const MOBILE_BREAKPOINT = 768;
 
+type TableColumnMeta = {
+  hideOnMobile?: boolean;
+};
+
+type TableColumnWithAccessor = {
+  accessorKey?: string;
+};
+
 interface UseListTableConfig<T> {
   data: T[];
   columns: ColumnDef<T>[];
@@ -33,13 +41,15 @@ export function useListTable<T>({
   const columnVisibility: VisibilityState = isMobile
     ? Object.fromEntries(
         columns
-          .filter((col) => (col.meta as any)?.hideOnMobile)
-          .map((col) => [col.id ?? (col as any).accessorKey, false])
+          .filter((col) => (col.meta as TableColumnMeta | undefined)?.hideOnMobile)
+          .map((col) => [col.id ?? (col as TableColumnWithAccessor).accessorKey, false])
+          .filter(([columnId]) => Boolean(columnId))
       )
     : {};
 
   const totalPages = Math.ceil(totalItems / pageSize);
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,

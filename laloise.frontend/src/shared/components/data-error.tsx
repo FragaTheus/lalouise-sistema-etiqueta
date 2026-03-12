@@ -9,6 +9,15 @@ interface DataErrorProps {
   onRetry?: () => void;
 }
 
+type HttpError = Error & {
+  response?: {
+    status?: number;
+    data?: {
+      message?: string;
+    };
+  };
+};
+
 function getErrorMessage(error: Error | null): {
   status: number | string;
   message: string;
@@ -23,7 +32,7 @@ function getErrorMessage(error: Error | null): {
     };
   }
 
-  const axiosError = error as any;
+  const axiosError = error as HttpError;
   const status = axiosError?.response?.status || "Erro";
   const backendMessage =
     axiosError?.response?.data?.message || error.message || "Erro desconhecido";

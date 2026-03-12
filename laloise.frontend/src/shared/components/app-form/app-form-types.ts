@@ -1,19 +1,40 @@
 import { UseMutationResult } from "@tanstack/react-query";
-import { FieldPath, FieldValues } from "react-hook-form";
+import { DefaultValues, FieldPath, FieldValues } from "react-hook-form";
 import z from "zod";
 
-export interface FormFieldConfig<TFormValues extends FieldValues> {
+export interface FormSelectOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
+}
+
+interface BaseFormFieldConfig<TFormValues extends FieldValues> {
   name: FieldPath<TFormValues>;
   label: string;
-  type?: string;
   placeholder?: string;
 }
 
-export interface AppFormProps<TSchema extends z.ZodType<any, any>> {
+interface InputFormFieldConfig<TFormValues extends FieldValues>
+  extends BaseFormFieldConfig<TFormValues> {
+  kind?: "input";
+  type?: string;
+}
+
+interface SelectFormFieldConfig<TFormValues extends FieldValues>
+  extends BaseFormFieldConfig<TFormValues> {
+  kind: "select";
+  options: FormSelectOption[];
+}
+
+export type FormFieldConfig<TFormValues extends FieldValues> =
+  | InputFormFieldConfig<TFormValues>
+  | SelectFormFieldConfig<TFormValues>;
+
+export interface AppFormProps<TSchema extends z.ZodTypeAny> {
   legend?: string;
   schema: TSchema;
-  fields: FormFieldConfig<any>[];
-  mutation: UseMutationResult<any, Error, z.infer<TSchema>>;
-  defaultValues: any;
+  fields: FormFieldConfig<z.infer<TSchema>>[];
+  mutation: UseMutationResult<unknown, Error, z.infer<TSchema>>;
+  defaultValues: DefaultValues<z.infer<TSchema>>;
   btnText: string;
 }
