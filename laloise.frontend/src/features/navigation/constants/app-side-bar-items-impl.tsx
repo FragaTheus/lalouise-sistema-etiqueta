@@ -9,6 +9,7 @@ import {
   Trash2Icon,
   UsersIcon,
   Package,
+  Building2,
 } from "lucide-react";
 
 const sidebarUserItensImpl = [
@@ -52,6 +53,24 @@ const sidebarProductItensImpl = [
   },
 ] satisfies ItemsProps[];
 
+const sidebarSectorItensImpl = [
+  {
+    itemHref: "/painel/setores/cadastrar",
+    ItemIcon: PlusIcon,
+    itemText: "Criar Setor",
+  },
+  {
+    itemHref: "/painel/setores",
+    ItemIcon: Building2,
+    itemText: "Setores",
+  },
+  {
+    itemHref: "/painel/setores/deletados",
+    ItemIcon: Trash2Icon,
+    itemText: "Setores Deletados",
+  },
+] satisfies ItemsProps[];
+
 export const appSideBarGroupsLabelImpl = [
   {
     TriggerIcon: UsersIcon,
@@ -62,5 +81,10 @@ export const appSideBarGroupsLabelImpl = [
     TriggerIcon: Package,
     triggerText: "Produtos",
     items: sidebarProductItensImpl,
+  },
+  {
+    TriggerIcon: Building2,
+    triggerText: "Setores",
+    items: sidebarSectorItensImpl,
   },
 ] satisfies AppSideBarGroupItems[];

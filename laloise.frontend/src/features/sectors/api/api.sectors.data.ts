@@ -31,7 +31,9 @@ export interface SectorInfo {
   id: string;
   name: string;
   description: string;
+  responsibleId?: string;
   responsibleName: string;
+  storages?: StorageType[];
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
