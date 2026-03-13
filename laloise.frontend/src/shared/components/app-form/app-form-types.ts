@@ -24,6 +24,7 @@ interface SelectFormFieldConfig<TFormValues extends FieldValues>
   extends BaseFormFieldConfig<TFormValues> {
   kind: "select";
   options: FormSelectOption[];
+  mapValueToArray?: boolean;
 }
 
 export type FormFieldConfig<TFormValues extends FieldValues> =

@@ -76,8 +76,19 @@ export default function AppForm<TSchema extends z.ZodTypeAny>({
                           <>
                             <FieldContent>
                               <Select
-                                value={field.value ?? undefined}
-                                onValueChange={field.onChange}
+                                value={
+                                  fieldConfig.mapValueToArray
+                                    ? field.value?.[0]
+                                    : (field.value ?? undefined)
+                                }
+                                onValueChange={(value) => {
+                                  if (fieldConfig.mapValueToArray) {
+                                    field.onChange([value]);
+                                    return;
+                                  }
+
+                                  field.onChange(value);
+                                }}
                               >
                                 <SelectTrigger
                                   onBlur={field.onBlur}
