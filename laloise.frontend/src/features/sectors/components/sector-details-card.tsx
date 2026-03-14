@@ -1,4 +1,7 @@
+"use client";
+
 import { SectorInfo } from "@/features/sectors/api/api.sectors.data";
+import { useSectorStorages } from "@/features/sectors/hooks/use-sector-storages";
 import {
   Card,
   CardAction,
@@ -66,6 +69,10 @@ export default function SectorDetailsCard({
   children,
 }: SectorDetailsCardProps) {
   const statusLabel = sector.isActive ? "Ativo" : "Inativo";
+  const { data: allStorages } = useSectorStorages();
+
+  const storages =
+    sector.storages && sector.storages.length > 0 ? sector.storages : allStorages;
 
   return (
     <Card className="w-full max-w-7xl">
@@ -92,9 +99,9 @@ export default function SectorDetailsCard({
         <InfoItem
           label="Storages"
           value={
-            sector.storages?.length ? (
+            storages?.length ? (
               <div className="flex flex-wrap gap-2">
-                {sector.storages.map((storage) => (
+                {storages.map((storage) => (
                   <span
                     key={storage}
                     className="rounded-full border border-primary/20 bg-primary/5 px-2 py-0.5 text-xs"
