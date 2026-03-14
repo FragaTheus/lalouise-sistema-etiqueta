@@ -1,15 +1,10 @@
-import AppFormPageLayout from "@/shared/components/layouts/form-page-layout/app-form-layout";
-import sectorImgSrc from "@/shared/assets/sector-icon.svg";
-import CreateSectorClientWrapper from "@/features/sectors/wrappers/create-sector-client-wrapper";
+import CreateSectorForm from "@/features/sectors/components/create-sector-form";
+import CreateSectorFormLayout from "@/features/sectors/components/create-sector-form-layout";
 
 export default function CreateSectorPageWrapper() {
   return (
-    <AppFormPageLayout
-      cardTitle="Novo Setor"
-      cardDescription="Preencha as informações para criar um novo setor"
-      cardImgSrc={sectorImgSrc}
-    >
-      <CreateSectorClientWrapper />
-    </AppFormPageLayout>
+    <CreateSectorFormLayout>
+      <CreateSectorForm />
+    </CreateSectorFormLayout>
   );
 }
