@@ -17,7 +17,6 @@ import matheusfraga.dev.lalouise.backend.domain.exception.sector.StorageTypeNotA
 import matheusfraga.dev.lalouise.backend.domain.repository.LabelLotSequenceRepository;
 import matheusfraga.dev.lalouise.backend.domain.repository.LabelRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -37,7 +36,6 @@ public class LabelService {
     private final ProductService productService;
     private final SectorService sectorService;
     private final ValidityService validityService;
-    private final AccountService accountService;
     private final PrintJobService printJobService;
     private final ZplService zplService;
 
@@ -71,6 +69,7 @@ public class LabelService {
 
         CreateLabelCommand createCommand = CreateLabelCommand.builder()
                 .productId(productId)
+                .sectorId(command.sectorId())
                 .storageType(command.storageType())
                 .copies(command.copies())
                 .build();
@@ -131,14 +130,9 @@ public class LabelService {
     }
 
     //Métodos auxiliares
-    private Account getResponsible(){
-        String accountEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        return accountService.getUserByEmail(accountEmail);
-    }
-
     private Label createLabel(CreateLabelCommand command, String lote) {
-        Account responsible = getResponsible();
-        Sector sector = sectorService.getSector(responsible.getId());
+        Sector sector = sectorService.getSector(command.sectorId());
+        Account responsible = sector.getResponsible();
 
         var product = productService.getProduct(command.productId());
         if (!sector.getStorages().contains(command.storageType())) throw new StorageTypeNotAllowedInSectorException();
