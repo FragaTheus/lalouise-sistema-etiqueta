@@ -8,6 +8,7 @@ import java.util.UUID;
 @Builder
 public record CreateLabelCommand(
         UUID productId,
+        UUID sectorId,
         StorageType storageType,
         Integer copies
 ) {
