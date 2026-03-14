@@ -1,17 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { LoaderIcon } from "lucide-react";
 import { UserSummary } from "@/features/accounts/api/api.accounts.data";
-import { SectorInfo } from "@/features/sectors/api/api.sectors.data";
+import {
+  SectorInfo,
+  UpdateSectorRequest,
+} from "@/features/sectors/api/api.sectors.data";
 import CreateSectorResponsibleDialog from "@/features/sectors/components/create-sector-responsible-dialog";
 import CreateSectorStoragesCheckbox from "@/features/sectors/components/create-sector-storages-checkbox";
-import {
-  updateSectorSchema,
-  UpdateSectorSchemaRequest,
-} from "@/features/sectors/constants/schemas/update-sector-schema";
 import useUpdateSector from "@/features/sectors/hooks/use-update-sector";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -24,7 +22,6 @@ import {
 import {
   Field,
   FieldContent,
-  FieldError,
   FieldGroup,
   FieldLabel,
   FieldSet,
@@ -64,10 +61,9 @@ export default function UpdateSectorDialog({
     register,
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { dirtyFields },
     setValue,
-  } = useForm<UpdateSectorSchemaRequest>({
-    resolver: zodResolver(updateSectorSchema),
+  } = useForm<UpdateSectorRequest>({
     mode: "onBlur",
     defaultValues: {
       name: sector.name,
@@ -86,8 +82,34 @@ export default function UpdateSectorDialog({
     });
   };
 
-  const handleFormSubmit = (formData: UpdateSectorSchemaRequest) => {
-    mutation.mutate(formData, {
+  const handleFormSubmit = (formData: UpdateSectorRequest) => {
+    const payload = Object.entries(formData).reduce(
+      (accumulator, [key, value]) => {
+        const isDirty = Boolean(
+          dirtyFields[key as keyof UpdateSectorRequest],
+        );
+
+        if (!isDirty) {
+          return accumulator;
+        }
+
+        if (typeof value === "string" && value.trim() === "") {
+          return accumulator;
+        }
+
+        if (value === undefined) {
+          return accumulator;
+        }
+
+        return {
+          ...accumulator,
+          [key]: value,
+        };
+      },
+      {} as Partial<UpdateSectorRequest>,
+    );
+
+    mutation.mutate(payload, {
       onSuccess: () => {
         onOpenChange(false);
       },
@@ -117,9 +139,6 @@ export default function UpdateSectorDialog({
                     {...register("name")}
                   />
                 </FieldContent>
-                {errors.name?.message && (
-                  <FieldError>{String(errors.name.message)}</FieldError>
-                )}
               </Field>
 
               <Field>
@@ -132,9 +151,6 @@ export default function UpdateSectorDialog({
                     {...register("description")}
                   />
                 </FieldContent>
-                {errors.description?.message && (
-                  <FieldError>{String(errors.description.message)}</FieldError>
-                )}
               </Field>
 
               <Field>
@@ -158,9 +174,6 @@ export default function UpdateSectorDialog({
                     );
                   }}
                 />
-                {errors.storages?.message && (
-                  <FieldError>{String(errors.storages.message)}</FieldError>
-                )}
               </Field>
 
               <Field>
@@ -172,11 +185,6 @@ export default function UpdateSectorDialog({
                   />
                   <Input type="hidden" {...register("responsibleId")} />
                 </FieldContent>
-                {errors.responsibleId?.message && (
-                  <FieldError>
-                    {String(errors.responsibleId.message)}
-                  </FieldError>
-                )}
               </Field>
 
               <Field className="flex-row justify-end gap-2">
