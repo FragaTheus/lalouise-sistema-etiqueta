@@ -72,7 +72,9 @@ export default function SectorDetailsCard({
   const { data: allStorages } = useSectorStorages();
 
   const storages =
-    sector.storages && sector.storages.length > 0 ? sector.storages : allStorages;
+    sector.storages && sector.storages.length > 0
+      ? sector.storages
+      : allStorages;
 
   return (
     <Card className="w-full max-w-7xl">
@@ -91,10 +93,6 @@ export default function SectorDetailsCard({
         <InfoItem
           label="Responsável"
           value={sector.responsibleName || "Não informado"}
-        />
-        <InfoItem
-          label="ID do responsável"
-          value={sector.responsibleId || "Não informado"}
         />
         <InfoItem
           label="Storages"
