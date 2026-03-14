@@ -1,11 +1,8 @@
-export const storageTypeValues = [
-  "AMBIENTE",
-  "REFRIGERADO",
-  "CONGELADO",
-  "HIPER_CONGELADO",
-] as const;
+import { storageTypeValues } from "../../../shared/constants/storage-types";
+import type { StorageType } from "../../../shared/constants/storage-types";
 
-export type StorageType = (typeof storageTypeValues)[number];
+export { storageTypeValues };
+export type { StorageType };
 
 export interface CreateSectorRequest {
   name: string;

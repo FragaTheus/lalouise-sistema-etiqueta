@@ -6,6 +6,7 @@ import {
   GroupIcon,
   PlusIcon,
   ShieldIcon,
+  TagsIcon,
   Trash2Icon,
   UsersIcon,
   Package,
@@ -71,6 +72,14 @@ const sidebarSectorItensImpl = [
   },
 ] satisfies ItemsProps[];
 
+const sidebarLabelItensImpl = [
+  {
+    itemHref: "/painel/etiquetas",
+    ItemIcon: TagsIcon,
+    itemText: "Etiquetas",
+  },
+] satisfies ItemsProps[];
+
 export const appSideBarGroupsLabelImpl = [
   {
     TriggerIcon: UsersIcon,
@@ -86,5 +95,10 @@ export const appSideBarGroupsLabelImpl = [
     TriggerIcon: Building2,
     triggerText: "Setores",
     items: sidebarSectorItensImpl,
+  },
+  {
+    TriggerIcon: TagsIcon,
+    triggerText: "Etiquetas",
+    items: sidebarLabelItensImpl,
   },
 ] satisfies AppSideBarGroupItems[];

@@ -5,7 +5,6 @@ import CardDetailsLayout from "@/features/sectors/layouts/card-details-layout";
 import SectorActiveActions from "@/features/sectors/components/sector-active-actions";
 import SectorInactiveActions from "@/features/sectors/components/sector-inactive-actions";
 import { useSector } from "@/features/sectors/hooks/use-sector";
-import AppRouterBack from "@/shared/components/app-router-back";
 import { DataError } from "@/shared/components/data-error";
 import { ItemInfoLoadingSkeleton } from "@/shared/components/loading-skeleton";
 
