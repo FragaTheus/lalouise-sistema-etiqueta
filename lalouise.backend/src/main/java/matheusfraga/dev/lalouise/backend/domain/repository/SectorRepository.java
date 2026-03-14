@@ -4,6 +4,8 @@ import lombok.NonNull;
 import matheusfraga.dev.lalouise.backend.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.domain.entity.Sector;
 import matheusfraga.dev.lalouise.backend.domain.enums.StorageType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,7 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface SectorRepository extends JpaRepository<Sector, UUID>{
+public interface SectorRepository extends JpaRepository<Sector, UUID> {
 
     boolean existsByNameIgnoreCase(String name);
 
@@ -26,9 +28,25 @@ public interface SectorRepository extends JpaRepository<Sector, UUID>{
 
     @Query("""
         SELECT s FROM Sector s
-        WHERE (:name IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%',:name,'%')))
+        WHERE s.isActive = true
+          AND (
+                :search IS NULL
+                OR LOWER(s.name) LIKE LOWER(CONCAT('%', :search, '%'))
+                OR LOWER(s.description) LIKE LOWER(CONCAT('%', :search, '%'))
+          )
         """)
-    List<Sector> findAllByFilter(@Param("name") String name);
+    Page<Sector> findAllByFilter(@Param("search") String search, Pageable pageable);
+
+    @Query("""
+        SELECT s FROM Sector s
+        WHERE s.isActive = false
+          AND (
+                :search IS NULL
+                OR LOWER(s.name) LIKE LOWER(CONCAT('%', :search, '%'))
+                OR LOWER(s.description) LIKE LOWER(CONCAT('%', :search, '%'))
+          )
+        """)
+    Page<Sector> findAllDeletedByFilter(@Param("search") String search, Pageable pageable);
 
     @Query("""
         SELECT s.storages 
@@ -37,5 +55,4 @@ public interface SectorRepository extends JpaRepository<Sector, UUID>{
         WHERE s.id = :sectorId
         """)
     List<StorageType> findAllStoragesBySectorId(@Param("sectorId") UUID sectorId);
-
 }

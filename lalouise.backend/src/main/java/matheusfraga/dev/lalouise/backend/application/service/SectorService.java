@@ -10,6 +10,8 @@ import matheusfraga.dev.lalouise.backend.domain.enums.StorageType;
 import matheusfraga.dev.lalouise.backend.domain.exception.sector.*;
 import matheusfraga.dev.lalouise.backend.domain.exception.user.NoDataForUpdateException;
 import matheusfraga.dev.lalouise.backend.domain.repository.SectorRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +31,12 @@ public class SectorService {
                 .orElseThrow(SectorNotFoundException::new);
     }
 
-    public List<Sector> getAllSectors(String name) {
-        return repository.findAllByFilter(name);
+    public Page<Sector> getAllSectors(String search, Pageable pageable) {
+        return repository.findAllByFilter(search, pageable);
+    }
+
+    public Page<Sector> getDeletedSectors(String search, Pageable pageable) {
+        return repository.findAllDeletedByFilter(search, pageable);
     }
 
     @Transactional
@@ -38,7 +44,6 @@ public class SectorService {
         validateSectorNameUnique(command.name());
 
         Account responsible = accountService.getUserById(command.responsibleId());
-        validateResponsibleAvailable(responsible);
 
         Sector sector = new Sector(
                 command.name(),
@@ -66,34 +71,25 @@ public class SectorService {
     }
 
     @Transactional
-    public void deleteSector(UUID id) {
-        if (!repository.existsById(id)) {
-            throw new SectorNotFoundException();
-        }
-        repository.deleteById(id);
+    public void deactivateSector(UUID id) {
+        Sector sector = getSector(id);
+        sector.deactivate();
+        repository.save(sector);
     }
 
-    public List<StorageType> getStoragesFromAuthenticatedUser() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        Account account = (Account) authentication.getPrincipal();
-        UUID userId = account.getId();
-
-        Sector sector = repository.findByResponsibleId(userId)
-                .orElseThrow(SectorNotFoundException::new);
-
-        return repository.findAllStoragesBySectorId(sector.getId());
+    @Transactional
+    public void reactivateSector(UUID id) {
+        Sector sector = getSector(id);
+        sector.reactivate();
+        repository.save(sector);
     }
 
-    private List<StorageType> getSectorStorages(UUID sectorId) {
-        if (!repository.existsById(sectorId)) {
-            throw new SectorNotFoundException();
-        }
-
+    public List<StorageType> getStoragesFromAuthenticatedUser(UUID sectorId) {
         return repository.findAllStoragesBySectorId(sectorId);
     }
 
-    public Sector getSectorByResponsible(UUID responsibleId) {
+
+    public Sector e(UUID responsibleId) {
         return repository.findByResponsibleId(responsibleId).orElseThrow(SectorNotFoundException::new);
     }
 
@@ -135,7 +131,6 @@ public class SectorService {
 
         if (!newResponsibleId.equals(sector.getResponsible().getId())) {
             Account newResponsible = accountService.getUserById(newResponsibleId);
-            validateResponsibleAvailable(newResponsible);
             sector.setResponsible(newResponsible);
         }
     }
@@ -143,12 +138,6 @@ public class SectorService {
     private void validateSectorNameUnique(String name) {
         if (repository.existsByNameIgnoreCase(name)) {
             throw new SectorAlreadyExistsException();
-        }
-    }
-
-    private void validateResponsibleAvailable(Account responsible) {
-        if (repository.existsByResponsible(responsible)) {
-            throw new UserAlreadyHasSectorException();
         }
     }
 

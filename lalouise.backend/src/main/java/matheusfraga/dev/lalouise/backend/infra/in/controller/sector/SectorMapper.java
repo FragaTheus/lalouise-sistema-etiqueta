@@ -20,6 +20,10 @@ public final class SectorMapper {
                 .name(sector.getName())
                 .description(sector.getDescription())
                 .responsibleName(sector.getResponsible().getNickname())
+                .isActive(sector.isActive())
+                .createdAt(sector.getCreatedAt())
+                .updatedAt(sector.getUpdatedAt())
+                .deletedAt(sector.getDeletedAt())
                 .build();
     }
 
@@ -37,6 +41,7 @@ public final class SectorMapper {
         return SectorSummary.builder()
                 .id(sector.getId())
                 .name(sector.getName())
+                .description(sector.getDescription())
                 .build();
     }
 
@@ -48,5 +53,4 @@ public final class SectorMapper {
                 .responsibleId(request.responsibleId())
                 .build();
     }
-
 }

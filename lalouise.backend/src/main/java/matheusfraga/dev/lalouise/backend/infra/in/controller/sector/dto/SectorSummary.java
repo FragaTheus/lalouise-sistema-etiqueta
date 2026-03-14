@@ -5,5 +5,5 @@ import lombok.Builder;
 import java.util.UUID;
 
 @Builder
-public record SectorSummary(UUID id, String name) {
+public record SectorSummary(UUID id, String name, String description) {
 }

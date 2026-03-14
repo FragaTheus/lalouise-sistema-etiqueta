@@ -42,9 +42,12 @@ public class LabelService {
     @Transactional
     public Label createLabel(CreateLabelCommand command) {
 
+
+        //Alterar metodo de pegar sertor via responsavel e implementar pegar setor pelo id do setor no comando.
+        //Devemos pegar o responsavel a partir do setor
         Account responsible = getResponsible();
 
-        Sector sector = sectorService.getSectorByResponsible(responsible.getId());
+        Sector sector = sectorService.getSector(responsible.getId());
 
         var product = productService.getProduct(command.productId());
         if (!sector.getStorages().contains(command.storageType())) throw new StorageTypeNotAllowedInSectorException();

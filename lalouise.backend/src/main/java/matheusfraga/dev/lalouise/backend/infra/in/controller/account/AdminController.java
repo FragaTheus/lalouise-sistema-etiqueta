@@ -89,8 +89,10 @@ public class AdminController {
         return ResponseEntity.ok(response);
     }
 
-
-
-
+    @PatchMapping("/{id}/restore")
+    public ResponseEntity<Void> restoreUser(@PathVariable UUID id) {
+        accountService.reactivateAccount(id);
+        return ResponseEntity.ok().build();
+    }
 
 }

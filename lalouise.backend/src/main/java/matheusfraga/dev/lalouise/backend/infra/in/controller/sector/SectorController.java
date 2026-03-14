@@ -8,6 +8,9 @@ import matheusfraga.dev.lalouise.backend.infra.in.controller.sector.dto.CreateSe
 import matheusfraga.dev.lalouise.backend.infra.in.controller.sector.dto.SectorInfo;
 import matheusfraga.dev.lalouise.backend.infra.in.controller.sector.dto.SectorSummary;
 import matheusfraga.dev.lalouise.backend.infra.in.controller.sector.dto.UpdateSectorRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,47 +26,61 @@ public class SectorController {
     private final SectorService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity<SectorInfo> getSectorInfo(@PathVariable UUID id){
+    public ResponseEntity<SectorInfo> getSectorInfo(@PathVariable UUID id) {
         var sector = service.getSector(id);
         var response = SectorMapper.toSectorInfo(sector);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@Valid @RequestBody CreateSectorRequest request){
+    public ResponseEntity<Void> create(@Valid @RequestBody CreateSectorRequest request) {
         var command = SectorMapper.toCreateSectorCommand(request);
         service.createSector(command);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> update
-            (@PathVariable UUID id, @Valid @RequestBody UpdateSectorRequest request)
-    {
+    public ResponseEntity<Void> update(
+            @PathVariable UUID id,
+            @Valid @RequestBody UpdateSectorRequest request) {
         var command = SectorMapper.toUpdateSectorInputCommand(id, request);
         service.updateSector(command);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id){
-        service.deleteSector(id);
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        service.deactivateSector(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<SectorSummary>> getAllSectors(
-            @RequestParam(name = "name", required = false) String name,
-            @RequestParam(name = "storages", required = false) StorageType storage
-            ){
-        var summaries =  service.getAllSectors(name).stream().map(SectorMapper::toSectorSummary).toList();
+    public ResponseEntity<Page<SectorSummary>> getAllSectors(
+            @RequestParam(name = "search", required = false) String search,
+            @PageableDefault(size = 10, sort = "name") Pageable pageable) {
+        var page = service.getAllSectors(search, pageable);
+        var summaries = page.map(SectorMapper::toSectorSummary);
         return ResponseEntity.ok(summaries);
     }
 
-    @GetMapping("/storages")
-    public ResponseEntity<List<StorageType>> getAllStorages(){
-        var response = service.getStoragesFromAuthenticatedUser();
-        return ResponseEntity.ok(response);
+    @GetMapping("/deleted")
+    public ResponseEntity<Page<SectorSummary>> getDeletedSectors(
+            @RequestParam(name = "search", required = false) String search,
+            @PageableDefault(size = 10, sort = "name") Pageable pageable) {
+        var page = service.getDeletedSectors(search, pageable);
+        var summaries = page.map(SectorMapper::toSectorSummary);
+        return ResponseEntity.ok(summaries);
     }
 
+    @PostMapping("/{id}/restore")
+    public ResponseEntity<Void> restore(@PathVariable UUID id) {
+        service.reactivateSector(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{sectorId}/storages")
+    public ResponseEntity<List<StorageType>> getAllStorages(@PathVariable UUID sectorId) {
+        var response = service.getStoragesFromAuthenticatedUser(sectorId);
+        return ResponseEntity.ok(response);
+    }
 }
