@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -51,7 +52,7 @@ class AdminControllerTest {
                 "Senha@123"
         );
 
-        mockMvc.perform(post("/api/v1/accounts")
+        mockMvc.perform(post("/api/v1/admins")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
@@ -69,7 +70,7 @@ class AdminControllerTest {
                 "Admin@123"
         );
 
-        mockMvc.perform(post("/api/v1/accounts/admins")
+        mockMvc.perform(post("/api/v1/admins/create-admins")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
@@ -83,7 +84,7 @@ class AdminControllerTest {
         UUID id = UUID.randomUUID();
         var request = new UpdateUserRequest("NovoNickname", "Senha@654", "Senha@654");
 
-        mockMvc.perform(patch("/api/v1/accounts/{id}", id)
+        mockMvc.perform(patch("/api/v1/admins/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk());
@@ -95,15 +96,15 @@ class AdminControllerTest {
     @DisplayName("Deve buscar um usuário por ID e retornar 200 com UserInfo")
     void shouldGetUserById() throws Exception {
         UUID id = UUID.randomUUID();
-        // Mockando a entidade de retorno (precisa de uma conta real ou mockada)
         Account account = mock(Account.class);
         when(account.getNickname()).thenReturn("Matheus");
         when(account.getEmail()).thenReturn("matheus@email.com");
         when(account.getRole()).thenReturn(Role.USER);
+        when(account.isActive()).thenReturn(true);
 
         when(accountService.getUserById(id)).thenReturn(account);
 
-        mockMvc.perform(get("/api/v1/accounts/{id}", id))
+        mockMvc.perform(get("/api/v1/admins/{id}", id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nickname").value("Matheus"))
                 .andExpect(jsonPath("$.email").value("matheus@email.com"))
@@ -117,13 +118,13 @@ class AdminControllerTest {
         when(account.getId()).thenReturn(UUID.randomUUID());
         when(account.getNickname()).thenReturn("Matheus");
 
-        when(accountService.getAllUsers(any())).thenReturn(List.of(account));
+        when(accountService.getAllUsers(any())).thenReturn(new PageImpl<>(List.of(account)));
 
-        mockMvc.perform(get("/api/v1/accounts")
+        mockMvc.perform(get("/api/v1/admins")
                         .param("nickname", "Matheus")
                         .param("role", "USER"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].nickname").value("Matheus"))
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath("$.content[0].nickname").value("Matheus"))
+                .andExpect(jsonPath("$.content.length()").value(1));
     }
 }

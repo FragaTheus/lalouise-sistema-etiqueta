@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -129,10 +131,10 @@ class SectorControllerTest {
         when(sector.getId()).thenReturn(UUID.randomUUID());
         when(sector.getName()).thenReturn("Setor A");
 
-        when(sectorService.getAllSectors(any())).thenReturn(List.of(sector));
+        when(sectorService.getAllSectors(eq(null), any())).thenReturn(new PageImpl<>(List.of(sector)));
 
         mockMvc.perform(get("/api/v1/sectors"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value("Setor A"));
+                .andExpect(jsonPath("$.content[0].name").value("Setor A"));
     }
 }

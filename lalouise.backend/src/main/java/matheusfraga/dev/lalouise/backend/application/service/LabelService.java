@@ -8,18 +8,16 @@ import matheusfraga.dev.lalouise.backend.application.command.label.CreateLabelOv
 import matheusfraga.dev.lalouise.backend.application.command.label.PageFilterQueryCommand;
 import matheusfraga.dev.lalouise.backend.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.domain.entity.Label;
+import matheusfraga.dev.lalouise.backend.domain.entity.LabelLotSequence;
 import matheusfraga.dev.lalouise.backend.domain.entity.Sector;
 import matheusfraga.dev.lalouise.backend.domain.enums.LabelStatus;
-import matheusfraga.dev.lalouise.backend.domain.enums.StorageType;
 import matheusfraga.dev.lalouise.backend.domain.exception.label.LabelAlreadyDiscardedException;
 import matheusfraga.dev.lalouise.backend.domain.exception.label.LabelNotFoundException;
 import matheusfraga.dev.lalouise.backend.domain.exception.sector.StorageTypeNotAllowedInSectorException;
+import matheusfraga.dev.lalouise.backend.domain.repository.LabelLotSequenceRepository;
 import matheusfraga.dev.lalouise.backend.domain.repository.LabelRepository;
-import matheusfraga.dev.lalouise.backend.infra.security.UserDetailsImpl;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -31,7 +29,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LabelService {
 
+    private static final String LOTE_PREFIX = "L";
+    private static final int LOTE_PADDING = 6;
+
     private final LabelRepository labelRepository;
+    private final LabelLotSequenceRepository labelLotSequenceRepository;
     private final ProductService productService;
     private final SectorService sectorService;
     private final ValidityService validityService;
@@ -41,30 +43,7 @@ public class LabelService {
 
     @Transactional
     public Label createLabel(CreateLabelCommand command) {
-
-
-        //Alterar metodo de pegar sertor via responsavel e implementar pegar setor pelo id do setor no comando.
-        //Devemos pegar o responsavel a partir do setor
-        Account responsible = getResponsible();
-
-        Sector sector = sectorService.getSector(responsible.getId());
-
-        var product = productService.getProduct(command.productId());
-        if (!sector.getStorages().contains(command.storageType())) throw new StorageTypeNotAllowedInSectorException();
-
-        LocalDate today = LocalDate.now();
-        var expirationDate = validityService.calculateExpirationDate(command.storageType(), today);
-        var initialStatus = validityService.determineStatus(expirationDate);
-
-        Label label = new Label(
-                product, sector, responsible, today, expirationDate, initialStatus
-        );
-        Label savedLabel = labelRepository.save(label);
-
-        String zpl = zplService.generate(savedLabel);
-        printJobService.queue(zpl, command.copies());
-
-        return savedLabel;
+        return createLabel(command, generateNextLote());
     }
 
     public Page<Label> findByFilters(PageFilterQueryCommand command) {
@@ -88,6 +67,7 @@ public class LabelService {
         oldLabel.setStatus(LabelStatus.DESCARTADA);
 
         var productId = oldLabel.getProduct().getId();
+        var lote = resolveLoteForReprint(oldLabel);
 
         CreateLabelCommand createCommand = CreateLabelCommand.builder()
                 .productId(productId)
@@ -95,7 +75,7 @@ public class LabelService {
                 .copies(command.copies())
                 .build();
 
-        return createLabel(createCommand);
+        return createLabel(createCommand, lote);
     }
 
     public Label getLabel(UUID id) {
@@ -156,4 +136,40 @@ public class LabelService {
         return accountService.getUserByEmail(accountEmail);
     }
 
+    private Label createLabel(CreateLabelCommand command, String lote) {
+        Account responsible = getResponsible();
+        Sector sector = sectorService.getSector(responsible.getId());
+
+        var product = productService.getProduct(command.productId());
+        if (!sector.getStorages().contains(command.storageType())) throw new StorageTypeNotAllowedInSectorException();
+
+        LocalDate today = LocalDate.now();
+        var expirationDate = validityService.calculateExpirationDate(command.storageType(), today);
+        var initialStatus = validityService.determineStatus(expirationDate);
+
+        Label label = new Label(
+                product, sector, responsible, today, expirationDate, initialStatus, lote
+        );
+        Label savedLabel = labelRepository.save(label);
+
+        String zpl = zplService.generate(savedLabel);
+        printJobService.queue(zpl, command.copies());
+
+        return savedLabel;
+    }
+
+    private String generateNextLote() {
+        Long sequence = labelLotSequenceRepository.saveAndFlush(LabelLotSequence.create()).getId();
+        return LOTE_PREFIX + String.format("%0" + LOTE_PADDING + "d", sequence);
+    }
+
+    private String resolveLoteForReprint(Label oldLabel) {
+        if (oldLabel.getLote() != null && !oldLabel.getLote().isBlank()) {
+            return oldLabel.getLote();
+        }
+
+        String lote = generateNextLote();
+        oldLabel.assignLoteIfMissing(lote);
+        return lote;
+    }
 }

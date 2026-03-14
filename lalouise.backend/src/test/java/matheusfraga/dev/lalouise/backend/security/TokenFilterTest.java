@@ -1,5 +1,6 @@
 package matheusfraga.dev.lalouise.backend.security;
 
+import jakarta.servlet.http.Cookie;
 import matheusfraga.dev.lalouise.backend.domain.entity.Account;
 import matheusfraga.dev.lalouise.backend.domain.enums.Role;
 import matheusfraga.dev.lalouise.backend.domain.repository.AccountRepository;
@@ -39,15 +40,15 @@ class TokenFilterTest {
 
         String token = tokenService.generateToken(new UserDetailsImpl(user));
 
-        mockMvc.perform(get("/api/v1/accounts")
-                        .header("Authorization", "Bearer " + token))
+        mockMvc.perform(get("/api/v1/admins")
+                        .cookie(new Cookie("Jwt", token)))
                 .andExpect(status().isOk());
     }
 
     @Test
     @DisplayName("Deve barrar acesso (403) quando não houver token")
     void shouldDenyAccessWithoutToken() throws Exception {
-        mockMvc.perform(get("/api/v1/accounts"))
+        mockMvc.perform(get("/api/v1/admins"))
                 .andExpect(status().isForbidden());
     }
 }

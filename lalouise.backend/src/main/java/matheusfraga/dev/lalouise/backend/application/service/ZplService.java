@@ -48,7 +48,10 @@ public class ZplService {
         zpl.append(String.format("^FO30,135^A0N,25,25^FD%s^FS\n",
                 sanitize(label.getProduct().getName())));
 
-        zpl.append(String.format("^FO30,170^A0N,25,25^FDVal: %s^FS\n",
+        zpl.append(String.format("^FO30,170^A0N,22,22^FDLote: %s^FS\n",
+                sanitize(label.getLote())));
+
+        zpl.append(String.format("^FO30,200^A0N,25,25^FDVal: %s^FS\n",
                 label.getExpirationDate().format(formatter)));
 
         String qrData = buildQRCodeData(label);

@@ -12,6 +12,7 @@ public record LabelMapper() {
     public static LabelSummary toLabelSummary(Label label){
         return LabelSummary.builder()
                 .id(label.getId())
+                .lote(label.getLote())
                 .product(label.getProduct().getName())
                 .sector(label.getSector().getName())
                 .status(label.getStatus())
@@ -23,6 +24,7 @@ public record LabelMapper() {
                 .product(label.getProduct().getName())
                 .sector(label.getSector().getName())
                 .responsible(label.getResponsible().getNickname())
+                .lote(label.getLote())
                 .issueDate(label.getIssueDate())
                 .expirationDate(label.getExpirationDate())
                 .status(label.getStatus())
@@ -32,6 +34,7 @@ public record LabelMapper() {
     public static LabelReprintResponse toLabelReprintResponse(Label label){
         return LabelReprintResponse.builder()
                 .id(label.getId())
+                .lote(label.getLote())
                 .productId(label.getProduct().getId())
                 .productName(label.getProduct().getName())
                 .expirationDate(label.getExpirationDate())

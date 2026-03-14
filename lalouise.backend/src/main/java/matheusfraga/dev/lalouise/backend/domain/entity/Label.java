@@ -41,16 +41,20 @@ public class Label {
     @Column(nullable = false)
     private LabelStatus status;
 
-    public Label(Product product, Sector sector, Account responsible, LocalDate issueDate,LocalDate expirationDate, LabelStatus status) {
+    @Column(nullable = false, length = 20)
+    private String lote;
+
+    public Label(Product product, Sector sector, Account responsible, LocalDate issueDate, LocalDate expirationDate, LabelStatus status, String lote) {
         this.product = product;
         this.sector = sector;
         this.responsible = responsible;
         this.issueDate = issueDate;
         this.expirationDate = expirationDate;
         this.status = status;
+        this.lote = lote;
     }
 
-    public Label(UUID labelId, Product product, Sector sector, Account responsible, LocalDate issueDate,LocalDate expirationDate, LabelStatus labelStatus) {
+    public Label(UUID labelId, Product product, Sector sector, Account responsible, LocalDate issueDate, LocalDate expirationDate, LabelStatus labelStatus, String lote) {
         this.id = labelId;
         this.product = product;
         this.sector = sector;
@@ -58,5 +62,12 @@ public class Label {
         this.issueDate = issueDate;
         this.expirationDate = expirationDate;
         this.status = labelStatus;
+        this.lote = lote;
+    }
+
+    public void assignLoteIfMissing(String lote) {
+        if (this.lote == null || this.lote.isBlank()) {
+            this.lote = lote;
+        }
     }
 }

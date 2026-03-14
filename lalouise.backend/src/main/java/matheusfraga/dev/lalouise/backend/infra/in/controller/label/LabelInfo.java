@@ -10,6 +10,7 @@ public record LabelInfo(
         String product,
         String sector,
         String responsible,
+        String lote,
         LocalDate issueDate,
         LocalDate expirationDate,
         LabelStatus status

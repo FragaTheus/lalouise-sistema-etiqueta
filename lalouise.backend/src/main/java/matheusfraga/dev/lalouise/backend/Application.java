@@ -4,6 +4,7 @@ import matheusfraga.dev.lalouise.backend.application.service.PrintJobService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -18,10 +19,9 @@ public class Application {
 	}
 
 	@Bean
+	@ConditionalOnBean(PrintJobService.class)
 	public CommandLineRunner init(PrintJobService service) {
-		return args -> {
-			service.queue("TESTE ZPL", 1);
-		};
+		return args -> service.queue("TESTE ZPL", 1);
 	}
 
 }

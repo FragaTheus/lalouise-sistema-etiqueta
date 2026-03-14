@@ -18,6 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 class SectorRepositoryTest {
 
+    private static final String HASHED_PASSWORD = "$2a$12$R9h/lIPz0bouIzCu6slgOKS7LeBnMh9Gj31I/yI.8vH7/P.T8/L5.";
+
     @Autowired
     private SectorRepository repository;
 
@@ -27,11 +29,9 @@ class SectorRepositoryTest {
     @Test
     @DisplayName("Deve buscar todos os tipos de armazenamento de um setor")
     void shouldFindAllStoragesBySectorId() {
-        // Criar responsável
-        var responsible = new Account("Nick", "res@test.com", "123", Role.USER);
+        var responsible = new Account("Nick", "res@test.com", HASHED_PASSWORD, Role.USER);
         entityManager.persist(responsible);
 
-        // Criar setor com storages
         var storages = List.of(StorageType.AMBIENTE, StorageType.REFRIGERADO);
         var sector = new Sector("Setor A", "Desc", responsible, storages);
         var savedSector = entityManager.persist(sector);
@@ -44,7 +44,7 @@ class SectorRepositoryTest {
     @Test
     @DisplayName("Deve verificar se responsável já possui um setor")
     void shouldCheckIfResponsibleExists() {
-        var responsible = new Account("Nick", "res@test.com", "123", Role.USER);
+        var responsible = new Account("Nick", "res@test.com", HASHED_PASSWORD, Role.USER);
         entityManager.persist(responsible);
 
         var sector = new Sector("Setor A", "Desc", responsible, List.of(StorageType.HIPER_CONGELADO));

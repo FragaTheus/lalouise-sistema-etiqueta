@@ -6,5 +6,11 @@ import matheusfraga.dev.lalouise.backend.domain.enums.LabelStatus;
 import java.util.UUID;
 
 @Builder
-public record LabelSummary(UUID id, String sector, String product, LabelStatus status) {
+public record LabelSummary(
+        UUID id,
+        String lote,
+        String sector,
+        String product,
+        LabelStatus status
+) {
 }

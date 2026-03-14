@@ -52,7 +52,6 @@ class SectorServiceTest {
 
             when(repository.existsByNameIgnoreCase(command.name())).thenReturn(false);
             when(accountService.getUserById(command.responsibleId())).thenReturn(account);
-            when(repository.existsByResponsible(account)).thenReturn(false);
 
             // Act
             sectorService.createSector(command);
@@ -117,24 +116,26 @@ class SectorServiceTest {
         }
 
         @Test
-        @DisplayName("Deve deletar setor com sucesso")
-        void shouldDeleteSector() {
+        @DisplayName("Deve desativar setor com sucesso")
+        void shouldDeactivateSector() {
             var id = UUID.randomUUID();
-            when(repository.existsById(id)).thenReturn(true);
+            var sector = mock(Sector.class);
+            when(repository.findById(id)).thenReturn(Optional.of(sector));
 
-            sectorService.deleteSector(id);
+            sectorService.deactivateSector(id);
 
-            verify(repository).deleteById(id);
+            verify(sector).deactivate();
+            verify(repository).save(sector);
         }
 
         @Test
-        @DisplayName("Deve lançar erro ao tentar deletar setor que não existe")
-        void shouldThrowErrorOnDeleteNonExistent() {
+        @DisplayName("Deve lançar erro ao tentar desativar setor que não existe")
+        void shouldThrowErrorOnDeactivateNonExistent() {
             var id = UUID.randomUUID();
-            when(repository.existsById(id)).thenReturn(false);
+            when(repository.findById(id)).thenReturn(Optional.empty());
 
-            assertThrows(SectorNotFoundException.class, () -> sectorService.deleteSector(id));
-            verify(repository, never()).deleteById(any());
+            assertThrows(SectorNotFoundException.class, () -> sectorService.deactivateSector(id));
+            verify(repository, never()).save(any());
         }
     }
 }
