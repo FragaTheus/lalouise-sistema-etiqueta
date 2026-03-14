@@ -27,9 +27,16 @@ interface SelectFormFieldConfig<TFormValues extends FieldValues>
   mapValueToArray?: boolean;
 }
 
+interface CheckboxGroupFieldConfig<TFormValues extends FieldValues>
+  extends BaseFormFieldConfig<TFormValues> {
+  kind: "checkbox-group";
+  options: FormSelectOption[];
+}
+
 export type FormFieldConfig<TFormValues extends FieldValues> =
   | InputFormFieldConfig<TFormValues>
-  | SelectFormFieldConfig<TFormValues>;
+  | SelectFormFieldConfig<TFormValues>
+  | CheckboxGroupFieldConfig<TFormValues>;
 
 export interface AppFormProps<TSchema extends z.ZodTypeAny> {
   legend?: string;

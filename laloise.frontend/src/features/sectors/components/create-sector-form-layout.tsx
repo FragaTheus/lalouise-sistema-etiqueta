@@ -9,7 +9,7 @@ export default function CreateSectorFormLayout({
   children,
 }: CreateSectorFormLayoutProps) {
   return (
-    <div className="flex-1 px-4 py-2 lg:p-12 items-center justify-center flex flex-col w-full mt-8 lg:mt-0">
+    <div className="flex-1 px-4 py-3 lg:p-8 items-center justify-center flex flex-col w-full mt-10 mb-4 lg:mt-0">
       <AppImageCard
         title="Novo Setor"
         description="Preencha as informações para criar um novo setor"

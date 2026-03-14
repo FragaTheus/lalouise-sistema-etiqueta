@@ -33,10 +33,8 @@ export const createSectorFields: FormFieldConfig<CreateSectorSchemaRequest>[] = 
   {
     name: "storages",
     label: "Tipo de Armazenamento",
-    kind: "select",
+    kind: "checkbox-group",
     options: storageOptions,
-    mapValueToArray: true,
-    placeholder: "Selecione o tipo",
   },
   {
     name: "responsibleId",
@@ -71,10 +69,8 @@ export const updateSectorFields: FormFieldConfig<UpdateSectorSchemaRequest>[] = 
   {
     name: "storages",
     label: "Tipo de Armazenamento",
-    kind: "select",
+    kind: "checkbox-group",
     options: storageOptions,
-    mapValueToArray: true,
-    placeholder: "Selecione o tipo",
   },
   {
     name: "responsibleId",

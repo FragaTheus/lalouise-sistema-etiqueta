@@ -10,6 +10,8 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 import { useSectorStorages } from "@/features/sectors/hooks/use-sector-storages";
+import { ItemInfoLoadingSkeleton } from "@/shared/components/loading-skeleton";
+import { DataError } from "@/shared/components/data-error";
 
 interface SectorStorageDetailsProps {
   responsibleId?: string;
@@ -49,16 +51,10 @@ export default function SectorStorageDetails({
             </DialogDescription>
           </DialogHeader>
 
-          {isLoading && (
-            <p className="text-sm text-muted-foreground">
-              Carregando storages...
-            </p>
-          )}
+          {isLoading && <ItemInfoLoadingSkeleton />}
 
           {isError && (
-            <p className="text-sm text-destructive">
-              Não foi possível carregar os storages.
-            </p>
+            <DataError error={new Error("Erro ao carregar storages")} />
           )}
 
           {!isLoading && !isError && (

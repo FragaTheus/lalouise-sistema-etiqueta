@@ -114,6 +114,65 @@ export default function AppForm<TSchema extends z.ZodTypeAny>({
                           </>
                         )}
                       />
+                    ) : fieldConfig.kind === "checkbox-group" ? (
+                      <Controller
+                        control={control}
+                        name={fieldConfig.name}
+                        render={({ field }) => {
+                          const selectedValues: string[] = Array.isArray(
+                            field.value,
+                          )
+                            ? (field.value as string[])
+                            : [];
+
+                          return (
+                            <FieldContent>
+                              <div
+                                data-slot="checkbox-group"
+                                className="grid gap-2"
+                              >
+                                {fieldConfig.options.map((option) => {
+                                  const isChecked = selectedValues.includes(
+                                    option.value,
+                                  );
+
+                                  return (
+                                    <label
+                                      key={option.value}
+                                      className="flex items-center gap-2 rounded-md border px-3 py-2 text-sm has-checked:border-primary has-checked:bg-primary/5"
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        className="size-4 accent-primary"
+                                        checked={isChecked}
+                                        disabled={option.disabled}
+                                        onBlur={field.onBlur}
+                                        onChange={(event) => {
+                                          if (event.target.checked) {
+                                            field.onChange([
+                                              ...selectedValues,
+                                              option.value,
+                                            ]);
+                                            return;
+                                          }
+
+                                          field.onChange(
+                                            selectedValues.filter(
+                                              (selectedValue) =>
+                                                selectedValue !== option.value,
+                                            ),
+                                          );
+                                        }}
+                                      />
+                                      <span>{option.label}</span>
+                                    </label>
+                                  );
+                                })}
+                              </div>
+                            </FieldContent>
+                          );
+                        }}
+                      />
                     ) : (
                       <FieldContent>
                         <Input

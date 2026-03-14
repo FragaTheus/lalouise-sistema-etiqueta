@@ -94,13 +94,21 @@ export default function CreateSectorResponsibleDialog({
 
           <div className="max-h-80 overflow-y-auto space-y-2">
             {isLoading && (
-              <p className="text-sm text-muted-foreground">Buscando usuários...</p>
+              <p className="text-sm text-muted-foreground">
+                Buscando usuários...
+              </p>
             )}
 
             {isError && (
               <div className="flex items-center justify-between gap-2 rounded-md border p-3">
-                <p className="text-sm text-destructive">Erro ao carregar usuários.</p>
-                <Button type="button" variant="outline" onClick={() => refetch()}>
+                <p className="text-sm text-destructive">
+                  Erro ao carregar usuários.
+                </p>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => refetch()}
+                >
                   Tentar novamente
                 </Button>
               </div>
@@ -121,7 +129,9 @@ export default function CreateSectorResponsibleDialog({
                   onClick={() => handleSelectResponsible(user)}
                   className="w-full rounded-md border px-3 py-2 text-left transition-colors hover:bg-primary/5"
                 >
-                  <p className="text-sm font-medium text-foreground">{user.nickname}</p>
+                  <p className="text-sm font-medium text-foreground">
+                    {user.nickname}
+                  </p>
                   <p className="text-xs text-muted-foreground">{user.email}</p>
                 </button>
               ))}
