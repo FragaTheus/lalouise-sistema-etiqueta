@@ -1,5 +1,5 @@
-import SectorDetailPageWrapper from "@/features/sectors/wrappers/sector-detail-page-wrapper";
+import SectorDetailsPageWrapper from "@/features/sectors/wrappers/sector-details-page-wrapper";
 
 export default function SectorInfo() {
-  return <SectorDetailPageWrapper />;
+  return <SectorDetailsPageWrapper />;
 }

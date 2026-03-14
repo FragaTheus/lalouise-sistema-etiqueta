@@ -1,5 +1,5 @@
-import DeletedSectorDetailPageWrapper from "@/features/sectors/wrappers/deleted-sector-detail-page-wrapper";
+import DeletedSectorDetailsPageWrapper from "@/features/sectors/wrappers/deleted-sector-details-page-wrapper";
 
 export default function DeletedSectorInfo() {
-  return <DeletedSectorDetailPageWrapper />;
+  return <DeletedSectorDetailsPageWrapper />;
 }
