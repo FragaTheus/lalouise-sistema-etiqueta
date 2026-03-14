@@ -8,7 +8,6 @@ import matheusfraga.dev.lalouise.backend.domain.enums.LabelStatus;
 import matheusfraga.dev.lalouise.backend.domain.enums.StorageType;
 import matheusfraga.dev.lalouise.backend.domain.repository.LabelLotSequenceRepository;
 import matheusfraga.dev.lalouise.backend.domain.repository.LabelRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,8 +15,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -42,8 +39,6 @@ class LabelServiceTest {
     @Mock
     private ValidityService validityService;
     @Mock
-    private AccountService accountService;
-    @Mock
     private PrintJobService printJobService;
     @Mock
     private ZplService zplService;
@@ -51,27 +46,19 @@ class LabelServiceTest {
     @InjectMocks
     private LabelService labelService;
 
-    @AfterEach
-    void tearDown() {
-        SecurityContextHolder.clearContext();
-    }
-
     @Test
     @DisplayName("Deve gerar lote sequencial ao criar nova etiqueta")
     void shouldGenerateSequentialLoteWhenCreatingNewLabel() {
         UUID productId = UUID.randomUUID();
-        UUID responsibleId = UUID.randomUUID();
+        UUID sectorId = UUID.randomUUID();
         Account responsible = mock(Account.class);
         Sector sector = mock(Sector.class);
         Product product = mock(Product.class);
         LabelLotSequence sequence = mock(LabelLotSequence.class);
         LocalDate expirationDate = LocalDate.now().plusDays(3);
 
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user@lalouise.com", null));
-
-        when(accountService.getUserByEmail("user@lalouise.com")).thenReturn(responsible);
-        when(responsible.getId()).thenReturn(responsibleId);
-        when(sectorService.getSector(responsibleId)).thenReturn(sector);
+        when(sectorService.getSector(sectorId)).thenReturn(sector);
+        when(sector.getResponsible()).thenReturn(responsible);
         when(sector.getStorages()).thenReturn(List.of(StorageType.REFRIGERADO));
         when(productService.getProduct(productId)).thenReturn(product);
         when(validityService.calculateExpirationDate(eq(StorageType.REFRIGERADO), any(LocalDate.class))).thenReturn(expirationDate);
@@ -83,6 +70,7 @@ class LabelServiceTest {
 
         Label created = labelService.createLabel(CreateLabelCommand.builder()
                 .productId(productId)
+                .sectorId(sectorId)
                 .storageType(StorageType.REFRIGERADO)
                 .copies(2)
                 .build());
@@ -100,7 +88,7 @@ class LabelServiceTest {
     void shouldKeepSameLoteOnReprint() {
         UUID productId = UUID.randomUUID();
         UUID oldLabelId = UUID.randomUUID();
-        UUID responsibleId = UUID.randomUUID();
+        UUID sectorId = UUID.randomUUID();
         Account responsible = mock(Account.class);
         Sector sector = mock(Sector.class);
         Product oldProduct = mock(Product.class);
@@ -108,11 +96,8 @@ class LabelServiceTest {
         Label oldLabel = mock(Label.class);
         LocalDate expirationDate = LocalDate.now().plusDays(1);
 
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user@lalouise.com", null));
-
-        when(accountService.getUserByEmail("user@lalouise.com")).thenReturn(responsible);
-        when(responsible.getId()).thenReturn(responsibleId);
-        when(sectorService.getSector(responsibleId)).thenReturn(sector);
+        when(sectorService.getSector(sectorId)).thenReturn(sector);
+        when(sector.getResponsible()).thenReturn(responsible);
         when(sector.getStorages()).thenReturn(List.of(StorageType.AMBIENTE));
         when(productService.getProduct(productId)).thenReturn(product);
         when(validityService.calculateExpirationDate(eq(StorageType.AMBIENTE), any(LocalDate.class))).thenReturn(expirationDate);
@@ -127,6 +112,7 @@ class LabelServiceTest {
 
         Label created = labelService.createLabelOverOldLabel(CreateLabelOverOldLabelCommand.builder()
                 .oldLabelId(oldLabelId)
+                .sectorId(sectorId)
                 .storageType(StorageType.AMBIENTE)
                 .copies(1)
                 .build());
