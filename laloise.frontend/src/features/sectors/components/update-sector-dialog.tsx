@@ -85,9 +85,7 @@ export default function UpdateSectorDialog({
   const handleFormSubmit = (formData: UpdateSectorRequest) => {
     const payload = Object.entries(formData).reduce(
       (accumulator, [key, value]) => {
-        const isDirty = Boolean(
-          dirtyFields[key as keyof UpdateSectorRequest],
-        );
+        const isDirty = Boolean(dirtyFields[key as keyof UpdateSectorRequest]);
 
         if (!isDirty) {
           return accumulator;

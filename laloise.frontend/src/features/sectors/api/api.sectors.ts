@@ -69,7 +69,7 @@ export const restoreSector = async (id: string): Promise<void> => {
   await api.post(`/sectors/${id}/restore`);
 };
 
-export const getStorages = async (): Promise<StorageType[]> => {
-  const { data } = await api.get<StorageType[]>("/sectors/storages");
+export const getStorages = async (sectorId: string): Promise<StorageType[]> => {
+  const { data } = await api.get<StorageType[]>(`/sectors/${sectorId}/storages`);
   return data;
 };

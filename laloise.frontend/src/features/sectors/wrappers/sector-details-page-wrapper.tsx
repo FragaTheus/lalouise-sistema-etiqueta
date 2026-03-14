@@ -37,7 +37,6 @@ export default function SectorDetailsPageWrapper() {
   return (
     <div className="flex-1 flex items-center justify-center p-4">
       <div className="w-full max-w-7xl flex flex-col gap-2">
-        <AppRouterBack />
         <CardDetailsLayout sector={data}>
           {data.isActive ? (
             <SectorActiveActions sector={data} />

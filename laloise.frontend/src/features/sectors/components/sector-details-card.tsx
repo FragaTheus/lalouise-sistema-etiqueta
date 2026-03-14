@@ -69,12 +69,7 @@ export default function SectorDetailsCard({
   children,
 }: SectorDetailsCardProps) {
   const statusLabel = sector.isActive ? "Ativo" : "Inativo";
-  const { data: allStorages } = useSectorStorages();
-
-  const storages =
-    sector.storages && sector.storages.length > 0
-      ? sector.storages
-      : allStorages;
+  const { data: storages } = useSectorStorages({ sectorId: sector.id });
 
   return (
     <Card className="w-full max-w-7xl">

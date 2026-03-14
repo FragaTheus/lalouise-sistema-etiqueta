@@ -64,17 +64,31 @@ export default function ListLayoutContent<T extends { id: string }>({
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id} className="max-w-37.5">
-                  <span className="block truncate">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </span>
-                </TableCell>
-              ))}
+          {table.getRowModel().rows.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id} className="max-w-37.5">
+                    <span className="block truncate">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </span>
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell
+                colSpan={table.getAllColumns().length}
+                className="h-24 text-center text-muted-foreground"
+              >
+                Nenhum item encontrado
+              </TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </CardContent>
