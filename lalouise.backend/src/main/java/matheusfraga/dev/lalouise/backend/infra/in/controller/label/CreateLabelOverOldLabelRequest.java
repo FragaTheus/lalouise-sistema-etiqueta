@@ -10,6 +10,9 @@ import java.util.UUID;
 public record CreateLabelOverOldLabelRequest(
 
         @NotNull
+        UUID sectorId,
+
+        @NotNull
         StorageType storageType,
 
         @Min(1)

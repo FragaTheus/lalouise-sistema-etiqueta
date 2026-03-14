@@ -15,6 +15,9 @@ public record CreateLabelRequest(
         UUID productId,
 
         @NotNull
+        UUID sectorId,
+
+        @NotNull
         StorageType storageType,
 
         @Min(1)

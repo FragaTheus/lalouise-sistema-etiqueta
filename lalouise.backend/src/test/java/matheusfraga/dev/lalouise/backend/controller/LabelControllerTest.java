@@ -49,7 +49,8 @@ class LabelControllerTest {
     @DisplayName("Deve retornar 201 ao criar uma etiqueta com sucesso")
     void shouldReturnCreatedWhenCreateLabelIsValid() throws Exception {
         UUID prodId = UUID.randomUUID();
-        var request = new CreateLabelRequest(prodId, StorageType.REFRIGERADO, 2);
+        UUID sectorId = UUID.randomUUID();
+        var request = new CreateLabelRequest(prodId, sectorId, StorageType.REFRIGERADO, 2);
 
         when(labelService.createLabel(any(CreateLabelCommand.class))).thenReturn(mock(Label.class));
 
@@ -65,7 +66,8 @@ class LabelControllerTest {
     @DisplayName("Deve retornar 201 ao solicitar a reimpressão")
     void shouldReturnCreatedWhenReprintIsSuccessful() throws Exception {
         UUID oldLabelId = UUID.randomUUID();
-        var request = new CreateLabelOverOldLabelRequest(StorageType.AMBIENTE, 3);
+        UUID sectorId = UUID.randomUUID();
+        var request = new CreateLabelOverOldLabelRequest(sectorId, StorageType.AMBIENTE, 3);
 
         when(labelService.createLabelOverOldLabel(any(CreateLabelOverOldLabelCommand.class))).thenReturn(mock(Label.class));
 

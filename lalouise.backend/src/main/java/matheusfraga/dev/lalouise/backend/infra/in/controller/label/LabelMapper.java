@@ -45,6 +45,7 @@ public record LabelMapper() {
     public static CreateLabelCommand toCreateLabelCommand(CreateLabelRequest request){
         return CreateLabelCommand.builder()
                 .productId(request.productId())
+                .sectorId(request.sectorId())
                 .storageType(request.storageType())
                 .copies(request.copies())
                 .build();
@@ -56,6 +57,7 @@ public record LabelMapper() {
     ){
         return CreateLabelOverOldLabelCommand.builder()
                 .oldLabelId(oldLabelId)
+                .sectorId(request.sectorId())
                 .storageType(request.storageType())
                 .copies(request.copies())
                 .build();
