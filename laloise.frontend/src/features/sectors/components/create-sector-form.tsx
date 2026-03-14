@@ -15,16 +15,13 @@ import {
   FieldSet,
 } from "@/shared/components/ui/field";
 import {
-  StorageType,
-  storageTypeValues,
-} from "@/features/sectors/api/api.sectors.data";
-import {
   createSectorSchema,
   CreateSectorSchemaRequest,
 } from "@/features/sectors/constants/schemas/create-sector-schema";
 import useCreateSector from "@/features/sectors/hooks/use-create-sector";
 import { UserSummary } from "@/features/accounts/api/api.accounts.data";
 import CreateSectorResponsibleDialog from "@/features/sectors/components/create-sector-responsible-dialog";
+import CreateSectorStoragesCheckbox from "@/features/sectors/components/create-sector-storages-checkbox";
 
 const createSectorDefaultValues: CreateSectorSchemaRequest = {
   name: "",
@@ -32,15 +29,6 @@ const createSectorDefaultValues: CreateSectorSchemaRequest = {
   storages: [],
   responsibleId: "",
 };
-
-function getStorageLabel(storage: StorageType) {
-  return storage.replaceAll("_", " ");
-}
-
-const storageOptions = storageTypeValues.map((storageType) => ({
-  label: getStorageLabel(storageType),
-  value: storageType,
-}));
 
 export default function CreateSectorForm() {
   const [selectedResponsible, setSelectedResponsible] =
@@ -114,50 +102,17 @@ export default function CreateSectorForm() {
                 control={control}
                 name="storages"
                 render={({ field }) => {
-                  const selectedValues: string[] = Array.isArray(field.value)
+                  const selectedValues = Array.isArray(field.value)
                     ? field.value
                     : [];
 
                   return (
                     <FieldContent>
-                      <div data-slot="checkbox-group" className="grid gap-2">
-                        {storageOptions.map((option) => {
-                          const isChecked = selectedValues.includes(
-                            option.value,
-                          );
-
-                          return (
-                            <label
-                              key={option.value}
-                              className="flex items-center gap-2 rounded-md border px-3 py-2 text-sm has-checked:border-primary has-checked:bg-primary/5"
-                            >
-                              <input
-                                type="checkbox"
-                                className="size-4 accent-primary"
-                                checked={isChecked}
-                                onBlur={field.onBlur}
-                                onChange={(event) => {
-                                  if (event.target.checked) {
-                                    field.onChange([
-                                      ...selectedValues,
-                                      option.value,
-                                    ]);
-                                    return;
-                                  }
-
-                                  field.onChange(
-                                    selectedValues.filter(
-                                      (selectedValue) =>
-                                        selectedValue !== option.value,
-                                    ),
-                                  );
-                                }}
-                              />
-                              <span>{option.label}</span>
-                            </label>
-                          );
-                        })}
-                      </div>
+                      <CreateSectorStoragesCheckbox
+                        selectedStorages={selectedValues}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                      />
                     </FieldContent>
                   );
                 }}
