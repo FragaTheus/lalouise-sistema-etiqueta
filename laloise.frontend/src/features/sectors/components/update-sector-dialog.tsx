@@ -173,7 +173,9 @@ export default function UpdateSectorDialog({
                   <Input type="hidden" {...register("responsibleId")} />
                 </FieldContent>
                 {errors.responsibleId?.message && (
-                  <FieldError>{String(errors.responsibleId.message)}</FieldError>
+                  <FieldError>
+                    {String(errors.responsibleId.message)}
+                  </FieldError>
                 )}
               </Field>
 

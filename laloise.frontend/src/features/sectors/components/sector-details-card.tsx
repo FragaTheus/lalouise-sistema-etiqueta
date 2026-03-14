@@ -21,7 +21,7 @@ function formatBackendDateTime(value?: string | null) {
   }
 
   const localDateTimeMatch = value.match(
-    /^(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})(?::(\d{2}))?/, 
+    /^(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})(?::(\d{2}))?/,
   );
 
   if (localDateTimeMatch) {
@@ -72,15 +72,23 @@ export default function SectorDetailsCard({
       <CardHeader className="flex items-center justify-between w-full">
         <div>
           <CardTitle>{sector.name}</CardTitle>
-          <CardDescription>{sector.description || "Sem descrição"}</CardDescription>
+          <CardDescription>
+            {sector.description || "Sem descrição"}
+          </CardDescription>
           <CardDescription className="mt-1">ID: {sector.id}</CardDescription>
         </div>
         {children ? <CardAction>{children}</CardAction> : null}
       </CardHeader>
 
       <CardContent className="grid grid-cols-1 gap-3 md:grid-cols-2">
-        <InfoItem label="Responsável" value={sector.responsibleName || "Não informado"} />
-        <InfoItem label="ID do responsável" value={sector.responsibleId || "Não informado"} />
+        <InfoItem
+          label="Responsável"
+          value={sector.responsibleName || "Não informado"}
+        />
+        <InfoItem
+          label="ID do responsável"
+          value={sector.responsibleId || "Não informado"}
+        />
         <InfoItem
           label="Storages"
           value={

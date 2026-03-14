@@ -40,8 +40,8 @@ export default function RestoreSectorDialog({
         <DialogHeader>
           <DialogTitle>Restaurar setor</DialogTitle>
           <DialogDescription>
-            Deseja restaurar o setor <strong>{sectorName}</strong>? Ele voltará a
-            ficar disponível nas listagens ativas.
+            Deseja restaurar o setor <strong>{sectorName}</strong>? Ele voltará
+            a ficar disponível nas listagens ativas.
           </DialogDescription>
         </DialogHeader>
 

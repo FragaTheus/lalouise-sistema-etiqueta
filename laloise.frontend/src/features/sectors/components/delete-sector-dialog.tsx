@@ -40,8 +40,8 @@ export default function DeleteSectorDialog({
         <DialogHeader>
           <DialogTitle>Excluir setor</DialogTitle>
           <DialogDescription>
-            Tem certeza que deseja excluir o setor <strong>{sectorName}</strong>?
-            Essa ação poderá ser desfeita pela tela de setores deletados.
+            Tem certeza que deseja excluir o setor <strong>{sectorName}</strong>
+            ? Essa ação poderá ser desfeita pela tela de setores deletados.
           </DialogDescription>
         </DialogHeader>
 
