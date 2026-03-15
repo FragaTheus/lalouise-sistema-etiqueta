@@ -48,8 +48,8 @@ function LabelsClient() {
 
   return (
     <ListPageLayout
-      createHref="/painel/etiquetas"
-      actionHref="/painel/etiquetas"
+      createHref="/painel/etiquetas/imprimir"
+      actionHref="/painel/etiquetas/imprimir"
       placeholder="Busque por produto"
       data={labels}
       columns={COLUMNS}

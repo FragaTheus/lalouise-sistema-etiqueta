@@ -18,6 +18,10 @@ export interface UpdateSectorRequest {
   responsibleId?: string;
 }
 
+export interface RestoreSectorRequest {
+  responsibleId: string;
+}
+
 export interface SectorSummary {
   id: string;
   name: string;

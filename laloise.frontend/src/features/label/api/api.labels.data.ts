@@ -4,7 +4,6 @@ export type LabelStatus = string;
 
 export interface PrintLabelRequest {
   productId: string;
-  sectorId: string;
   storageType: StorageType;
   copies: number;
 }

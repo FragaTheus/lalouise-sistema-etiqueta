@@ -74,6 +74,11 @@ const sidebarSectorItensImpl = [
 
 const sidebarLabelItensImpl = [
   {
+    itemHref: "/painel/etiquetas/imprimir",
+    ItemIcon: PlusIcon,
+    itemText: "Imprimir Etiqueta",
+  },
+  {
     itemHref: "/painel/etiquetas",
     ItemIcon: TagsIcon,
     itemText: "Etiquetas",

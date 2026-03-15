@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { SearchIcon } from "lucide-react";
-import { UserSummary } from "@/features/accounts/api/api.accounts.data";
-import { useUsersAccounts } from "@/features/accounts/hooks/use-users-accounts";
+import { useLabelProducts } from "@/features/label/hooks/use-label-products";
+import type { ProductSummary } from "@/features/products/api/api.products.data";
 import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
@@ -14,17 +14,15 @@ import {
 } from "@/shared/components/ui/dialog";
 import { Input } from "@/shared/components/ui/input";
 
-interface CreateSectorResponsibleDialogProps {
-  selectedResponsible: UserSummary | null;
-  onSelectResponsible: (user: UserSummary) => void;
-  isRestoreMode?: boolean;
+interface PrintLabelProductDialogProps {
+  selectedProduct: ProductSummary | null;
+  onSelectProduct: (product: ProductSummary) => void;
 }
 
-export default function CreateSectorResponsibleDialog({
-  selectedResponsible,
-  onSelectResponsible,
-  isRestoreMode = false,
-}: CreateSectorResponsibleDialogProps) {
+export default function PrintLabelProductDialog({
+  selectedProduct,
+  onSelectProduct,
+}: PrintLabelProductDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -33,40 +31,31 @@ export default function CreateSectorResponsibleDialog({
     const timeoutId = window.setTimeout(() => {
       setDebouncedSearch(searchValue.trim());
     }, 300);
-
-    return () => {
-      window.clearTimeout(timeoutId);
-    };
+    return () => window.clearTimeout(timeoutId);
   }, [searchValue]);
 
-  const { data, isLoading, isError, refetch } = useUsersAccounts({
+  const { data, isLoading, isError, refetch } = useLabelProducts({
     page: 0,
-    size: 20,
     search: debouncedSearch || null,
   });
 
-  const users = useMemo(() => data?.content ?? [], [data]);
+  const products = useMemo(() => data?.content ?? [], [data]);
 
-  const handleSelectResponsible = (user: UserSummary) => {
-    onSelectResponsible(user);
+  const handleSelect = (product: ProductSummary) => {
+    onSelectProduct(product);
     setIsOpen(false);
   };
 
   return (
     <>
       <div className="space-y-3">
-        {selectedResponsible ? (
+        {selectedProduct ? (
           <p className="rounded-md border bg-primary/5 px-3 py-2 text-sm text-foreground">
-            {isRestoreMode
-              ? "Novo responsável selecionado"
-              : "Responsável selecionado"}
-            : {selectedResponsible.nickname}
+            Produto selecionado: {selectedProduct.name}
           </p>
         ) : (
           <p className="rounded-md border border-dashed px-3 py-2 text-sm text-muted-foreground">
-            {isRestoreMode
-              ? "Nenhum novo responsável selecionado"
-              : "Nenhum responsável selecionado"}
+            Nenhum produto selecionado
           </p>
         )}
 
@@ -76,31 +65,25 @@ export default function CreateSectorResponsibleDialog({
           className="w-fit"
           onClick={() => setIsOpen(true)}
         >
-          {selectedResponsible
-            ? isRestoreMode
-              ? "Trocar novo responsável"
-              : "Trocar responsável"
-            : isRestoreMode
-              ? "Selecionar novo responsável"
-              : "Adicionar responsável"}
+          {selectedProduct ? "Trocar produto" : "Selecionar produto"}
         </Button>
       </div>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="sm:max-w-125">
           <DialogHeader>
-            <DialogTitle>Selecionar responsável</DialogTitle>
+            <DialogTitle>Selecionar produto</DialogTitle>
             <DialogDescription>
-              Busque por nome ou email e selecione um usuário responsável.
+              Busque pelo nome e selecione o produto para a etiqueta.
             </DialogDescription>
           </DialogHeader>
 
           <div className="relative">
             <SearchIcon className="text-primary absolute left-2 top-1/2 size-4 -translate-y-1/2" />
             <Input
-              placeholder="Buscar por nome ou email"
+              placeholder="Buscar por nome"
               value={searchValue}
-              onChange={(event) => setSearchValue(event.target.value)}
+              onChange={(e) => setSearchValue(e.target.value)}
               className="pl-8"
             />
           </div>
@@ -108,14 +91,14 @@ export default function CreateSectorResponsibleDialog({
           <div className="max-h-80 overflow-y-auto space-y-2">
             {isLoading && (
               <p className="text-sm text-muted-foreground">
-                Buscando usuários...
+                Buscando produtos...
               </p>
             )}
 
             {isError && (
               <div className="flex items-center justify-between gap-2 rounded-md border p-3">
                 <p className="text-sm text-destructive">
-                  Erro ao carregar usuários.
+                  Erro ao carregar produtos.
                 </p>
                 <Button
                   type="button"
@@ -127,25 +110,29 @@ export default function CreateSectorResponsibleDialog({
               </div>
             )}
 
-            {!isLoading && !isError && users.length === 0 && (
+            {!isLoading && !isError && products.length === 0 && (
               <p className="text-sm text-muted-foreground">
-                Nenhum usuário encontrado para o termo pesquisado.
+                Nenhum produto encontrado para o termo pesquisado.
               </p>
             )}
 
             {!isLoading &&
               !isError &&
-              users.map((user) => (
+              products.map((product) => (
                 <button
-                  key={user.id}
+                  key={product.id}
                   type="button"
-                  onClick={() => handleSelectResponsible(user)}
+                  onClick={() => handleSelect(product)}
                   className="w-full rounded-md border px-3 py-2 text-left transition-colors hover:bg-primary/5"
                 >
                   <p className="text-sm font-medium text-foreground">
-                    {user.nickname}
+                    {product.name}
                   </p>
-                  <p className="text-xs text-muted-foreground">{user.email}</p>
+                  {product.description && (
+                    <p className="text-xs text-muted-foreground">
+                      {product.description}
+                    </p>
+                  )}
                 </button>
               ))}
           </div>

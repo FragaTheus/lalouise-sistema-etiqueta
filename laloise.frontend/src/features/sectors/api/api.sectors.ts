@@ -3,6 +3,7 @@ import {
   CreateSectorRequest,
   GetSectorsParams,
   PageResponse,
+  RestoreSectorRequest,
   SectorInfo,
   SectorSummary,
   StorageType,
@@ -65,8 +66,11 @@ export const getDeletedSectors = async ({
   return data;
 };
 
-export const restoreSector = async (id: string): Promise<void> => {
-  await api.post(`/sectors/${id}/restore`);
+export const restoreSector = async (
+  id: string,
+  data: RestoreSectorRequest,
+): Promise<void> => {
+  await api.patch(`/sectors/${id}/restore`, data);
 };
 
 export const getStorages = async (sectorId: string): Promise<StorageType[]> => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import { SidebarMenuButton, useSidebar } from "../ui/sidebar";
 import Link from "next/link";
@@ -26,7 +26,7 @@ export default function AppSidebarGroups({
         <SidebarMenuButton size={"sm"} className="bg-transparent">
           <TriggerIcon className="text-secondary" />
           <span className="font-semibold text-foreground">{triggerText}</span>
-          <ChevronDown className="ml-auto group-data-[state=open]/collapsible:rotate-180 transition-transform duration-300 text-secondary" />
+          <ChevronRight className="ml-auto group-data-[state=open]/collapsible:rotate-90 transition-transform duration-300 text-secondary" />
         </SidebarMenuButton>
       </CollapsibleTrigger>
       <CollapsibleContent
