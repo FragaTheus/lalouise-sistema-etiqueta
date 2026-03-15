@@ -1,7 +1,8 @@
 import axios, { AxiosError } from "axios";
 import { HandlerResponse } from "./api.error";
 
-const API_BASE_URL = "http://localhost:8080/api/v1";
+//const API_BASE_URL = "http://localhost:8080/api/v1";
+const API_BASE_URL = "https://lalouise-backend-latest.onrender.com/api/v1";
 
 
 
