@@ -16,6 +16,25 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## API proxy (iOS cookie-safe)
+
+This project uses a same-origin proxy route at `src/app/api/[...path]/route.ts`.
+
+- Frontend calls `/api/*`
+- Proxy forwards to `${BACKEND_URL}/api/v1/*`
+
+Create your local env file before running:
+
+```bash
+cp .env.example .env.local
+```
+
+Default backend:
+
+```env
+BACKEND_URL=https://lalouise-backend-latest.onrender.com
+```
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

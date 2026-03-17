@@ -1,8 +1,1 @@
-{
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "https://lalouise-backend-latest.onrender.com/api/$1"
-    }
-  ]
-}
+{}

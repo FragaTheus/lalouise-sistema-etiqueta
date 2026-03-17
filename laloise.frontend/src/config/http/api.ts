@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { HandlerResponse } from "./api.error";
 
-const API_BASE_URL = `/api/v1`;
+const API_BASE_URL = `/api`;
 
 
 export const api = axios.create({
