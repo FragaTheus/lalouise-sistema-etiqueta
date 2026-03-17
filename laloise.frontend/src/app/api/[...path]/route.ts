@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 
-const BACKEND_URL = process.env.BACKEND_URL ?? "https://lalouise-backend-latest.onrender.com";
+const BACKEND_URL =
+  process.env.BACKEND_URL ?? "https://lalouise-backend-latest.onrender.com";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -24,39 +25,51 @@ function getForwardHeaders(request: NextRequest) {
 }
 
 async function proxyRequest(request: NextRequest, path: string[]) {
-  const targetUrl = buildTargetUrl(request, path);
-  const headers = getForwardHeaders(request);
-  const method = request.method;
+  try {
+    const targetUrl = buildTargetUrl(request, path);
+    const headers = getForwardHeaders(request);
+    const method = request.method;
+    const hasBody = method !== "GET" && method !== "HEAD";
+    const bodyBuffer = hasBody ? await request.arrayBuffer() : undefined;
+    const body = bodyBuffer && bodyBuffer.byteLength > 0 ? bodyBuffer : undefined;
 
-  const upstreamResponse = await fetch(targetUrl, {
-    method,
-    headers,
-    body: method === "GET" || method === "HEAD" ? undefined : request.body,
-    redirect: "manual",
-    cache: "no-store",
-  });
+    const upstreamResponse = await fetch(targetUrl, {
+      method,
+      headers,
+      body,
+      redirect: "manual",
+      cache: "no-store",
+    });
 
-  const responseHeaders = new Headers(upstreamResponse.headers);
-  const proxyResponse = new Response(upstreamResponse.body, {
-    status: upstreamResponse.status,
-    statusText: upstreamResponse.statusText,
-    headers: responseHeaders,
-  });
+    const responseHeaders = new Headers(upstreamResponse.headers);
+    const proxyResponse = new Response(upstreamResponse.body, {
+      status: upstreamResponse.status,
+      statusText: upstreamResponse.statusText,
+      headers: responseHeaders,
+    });
 
-  const setCookieFromUpstream =
-    typeof upstreamResponse.headers.getSetCookie === "function"
-      ? upstreamResponse.headers.getSetCookie()
-      : [];
+    const setCookieFromUpstream =
+      typeof upstreamResponse.headers.getSetCookie === "function"
+        ? upstreamResponse.headers.getSetCookie()
+        : [];
 
-  if (setCookieFromUpstream.length > 0) {
-    proxyResponse.headers.delete("set-cookie");
+    if (setCookieFromUpstream.length > 0) {
+      proxyResponse.headers.delete("set-cookie");
 
-    for (const cookie of setCookieFromUpstream) {
-      proxyResponse.headers.append("set-cookie", cookie);
+      for (const cookie of setCookieFromUpstream) {
+        proxyResponse.headers.append("set-cookie", cookie);
+      }
     }
-  }
 
-  return proxyResponse;
+    return proxyResponse;
+  } catch (error) {
+    console.error("Proxy error:", error);
+
+    return Response.json(
+      { message: "Falha ao comunicar com o backend." },
+      { status: 502 },
+    );
+  }
 }
 
 type RouteContext = {
