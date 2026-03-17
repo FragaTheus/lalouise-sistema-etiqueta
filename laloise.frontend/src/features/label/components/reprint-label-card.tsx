@@ -1,6 +1,12 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/shared/components/ui/card";
 import { DataError } from "@/shared/components/data-error";
 import { ItemInfoLoadingSkeleton } from "@/shared/components/loading-skeleton";
 import { useLabelReprintData } from "@/features/label/hooks/use-label-reprint-data";
