@@ -16,7 +16,7 @@ export default function useLogin(){
 
         onSuccess: (user) => {
             setUSer(user);
-            toast.success(`Bem vindo de volta! ${user.nickname}. Redirecionando para o painel...`)
+            toast.success(`Que bom ter voce por aqui! ${user.nickname}.`)
             router.push("/painel")
         },
 
