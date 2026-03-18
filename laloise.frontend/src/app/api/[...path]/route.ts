@@ -17,7 +17,7 @@ const HOP_BY_HOP_HEADERS = new Set([
   "proxy-authenticate",
   "host",
   "content-length",
-  "content-encoding", // ← Vercel descomprime gzip automaticamente, repassar quebra o cliente
+  "content-encoding", 
 ]);
 
 function buildTargetUrl(request: NextRequest, path: string[]) {
@@ -83,7 +83,6 @@ async function proxyRequest(request: NextRequest, path: string[]) {
       }
     }
 
-    // Bufferiza o body — evita crash ao streamar resposta gzip na Vercel
     const responseBody = await upstreamResponse.arrayBuffer();
     responseHeaders.set("content-length", String(responseBody.byteLength));
 

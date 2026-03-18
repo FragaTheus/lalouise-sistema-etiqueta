@@ -50,7 +50,7 @@ function AccountClient() {
 
   return (
     <ListPageLayout
-      createHref="/painel/contas/cadastrar"
+      createHref="/painel/contas/cadastrar/usuarios"
       actionHref="/painel/contas"
       placeholder="Busque por nome ou email"
       filterParam="role"

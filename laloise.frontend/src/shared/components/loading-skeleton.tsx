@@ -60,7 +60,7 @@ export function ListLoadingSkeleton() {
 export function ItemInfoLoadingSkeleton() {
   return (
     <div className="flex-1 flex items-center justify-center p-4 max-w-screen">
-      <div className="w-full lg:max-w-7xl flex flex-col gap-2 max-w-xs">
+      <div className="w-full lg:max-w-7xl flex flex-col gap-2 max-w-xs mt-8 lg:mt-0">
         <Skeleton className="h-9 w-20 bg-gray-200" />
 
         <Card className="border shadow-sm">
@@ -88,10 +88,6 @@ export function ItemInfoLoadingSkeleton() {
                 <div className="flex flex-col gap-2">
                   <Skeleton className="h-4 w-16 bg-gray-200" />
                   <Skeleton className="h-6 w-24 rounded-full bg-gray-200" />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Skeleton className="h-4 w-20 bg-gray-200" />
-                  <Skeleton className="h-5 w-32 bg-gray-200" />
                 </div>
               </div>
 

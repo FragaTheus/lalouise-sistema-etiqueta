@@ -134,7 +134,7 @@ export default function AccountDetailPageWrapper() {
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center p-4">
+    <div className="flex-1 flex items-center justify-center p-4 mt-8 lg:mt-0">
       <div className="w-full max-w-7xl flex flex-col gap-2">
         <AppFormPageLayoutRouterBack />
         <AppItemInfo {...userItemConfig} />
