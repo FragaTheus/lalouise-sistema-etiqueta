@@ -31,7 +31,7 @@ export function ListLoadingSkeleton() {
           </div>
 
           <div className="space-y-4">
-            {Array.from({ length: 5 }).map((_, index) => (
+            {Array.from({ length: 2 }).map((_, index) => (
               <div
                 key={index}
                 className="grid grid-cols-1 lg:grid-cols-4 gap-4 py-4 border-b last:border-b-0"
@@ -60,7 +60,7 @@ export function ListLoadingSkeleton() {
 export function ItemInfoLoadingSkeleton() {
   return (
     <div className="flex-1 flex items-center justify-center p-4 max-w-screen">
-      <div className="w-full lg:max-w-7xl flex flex-col gap-2 max-w-xs mt-8 lg:mt-0">
+      <div className="w-full lg:max-w-7xl flex flex-col gap-2 max-w-xs mt-10 lg:mt-0">
         <Skeleton className="h-9 w-20 bg-gray-200" />
 
         <Card className="border shadow-sm">
@@ -80,10 +80,6 @@ export function ItemInfoLoadingSkeleton() {
                 <div className="flex flex-col gap-2">
                   <Skeleton className="h-4 w-16 bg-gray-200" />
                   <Skeleton className="h-5 w-40 bg-gray-200" />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Skeleton className="h-4 w-16 bg-gray-200" />
-                  <Skeleton className="h-6 w-24 rounded-full bg-gray-200" />
                 </div>
                 <div className="flex flex-col gap-2">
                   <Skeleton className="h-4 w-16 bg-gray-200" />
