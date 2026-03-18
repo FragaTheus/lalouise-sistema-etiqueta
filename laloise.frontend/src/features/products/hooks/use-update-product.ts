@@ -24,7 +24,7 @@ export default function useUpdateProduct(id?: string) {
 			queryClient.invalidateQueries({ queryKey: ["product", id] });
 			queryClient.invalidateQueries({ queryKey: ["products"] });
 			toast.success("Produto atualizado com sucesso!");
-			router.refresh
+			router.refresh();
 		},
 
 		onError: (error) => {

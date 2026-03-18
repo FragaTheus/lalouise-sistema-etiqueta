@@ -24,8 +24,9 @@ export default function useRestoreSector(id?: string) {
       queryClient.invalidateQueries({ queryKey: ["sectors"] });
       queryClient.invalidateQueries({ queryKey: ["sectors-deleted"] });
       queryClient.invalidateQueries({ queryKey: ["sector", id] });
-      toast.success("Setor restaurado com sucesso! Redirecionando para o painel...");
-      router.push("/painel");
+      toast.success("Setor restaurado com sucesso!");
+      router.refresh();
+      router.push("/painel/setores");
     },
 
     onError: (error) => {

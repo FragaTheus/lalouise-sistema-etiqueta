@@ -16,8 +16,8 @@ export default function useCreateSector() {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["sectors"] });
-      toast.success("Setor cadastrado com sucesso! Redirecionando para o painel...");
-      router.push("/painel");
+      toast.success("Setor cadastrado com sucesso!");
+      router.push("/painel/setores");
     },
 
     onError: (error) => {

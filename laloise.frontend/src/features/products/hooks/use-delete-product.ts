@@ -23,7 +23,7 @@ export default function useDeleteProduct(id?: string) {
 			queryClient.invalidateQueries({ queryKey: ["products"] });
 			queryClient.invalidateQueries({ queryKey: ["product", id] });
 			toast.success("Produto excluído com sucesso!");
-			router.push("/contas/produtos");
+			router.push("/painel/produtos");
 		},
 
 		onError: (error) => {

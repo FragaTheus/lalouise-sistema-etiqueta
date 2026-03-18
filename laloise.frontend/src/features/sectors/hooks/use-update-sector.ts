@@ -23,8 +23,8 @@ export default function useUpdateSector(id?: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["sector", id] });
       queryClient.invalidateQueries({ queryKey: ["sectors"] });
-      toast.success("Setor atualizado com sucesso! Redirecionando para o painel...");
-      router.push("/painel");
+      toast.success("Setor atualizado com sucesso!");
+      router.refresh();
     },
 
     onError: (error) => {

@@ -22,8 +22,8 @@ export default function useDeleteSector(id?: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["sectors"] });
       queryClient.invalidateQueries({ queryKey: ["sector", id] });
-      toast.success("Setor excluído com sucesso! Redirecionando para o painel...");
-      router.push("/painel");
+      toast.success("Setor excluído com sucesso!");
+      router.push("/painel/setores");
     },
 
     onError: (error) => {

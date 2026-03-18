@@ -24,6 +24,7 @@ export default function useUsersRestore(id?: string) {
 			queryClient.invalidateQueries({ queryKey: ["users-deleted"] });
 			queryClient.invalidateQueries({ queryKey: ["user-profile", id] });
 			toast.success("Usuário restaurado com sucesso!");
+			router.refresh();
 			router.push("/painel/contas");
 		},
 
