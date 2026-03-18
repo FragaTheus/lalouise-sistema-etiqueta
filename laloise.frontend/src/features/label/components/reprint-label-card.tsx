@@ -84,7 +84,6 @@ export default function ReprintLabelCard() {
           </CardHeader>
 
           <CardContent className="space-y-6">
-            {/* Seção de dados fixos da etiqueta original */}
             <div className="border-t pt-4">
               <h3 className="text-sm font-semibold text-foreground mb-4">
                 Dados da Etiqueta Original
@@ -107,7 +106,6 @@ export default function ReprintLabelCard() {
               </div>
             </div>
 
-            {/* Seção de formulário para novos dados */}
             <div className="border-t pt-4">
               <h3 className="text-sm font-semibold text-foreground mb-4">
                 Dados da Nova Etiqueta

@@ -17,16 +17,13 @@ const HOP_BY_HOP_HEADERS = new Set([
   "proxy-authenticate",
   "host",
   "content-length",
-  "content-encoding", 
 ]);
 
 function buildTargetUrl(request: NextRequest, path: string[]) {
-  const targetPath = path.join("/");
-  const query = request.nextUrl.search;
-  return `${BACKEND_URL}/api/v1/${targetPath}${query}`;
+  return `${BACKEND_URL}/api/v1/${path.join("/")}${request.nextUrl.search}`;
 }
 
-function getForwardHeaders(request: NextRequest, bodyBuffer?: ArrayBuffer) {
+function getForwardHeaders(request: NextRequest) {
   const headers = new Headers();
 
   for (const [key, value] of request.headers.entries()) {
@@ -35,106 +32,68 @@ function getForwardHeaders(request: NextRequest, bodyBuffer?: ArrayBuffer) {
     }
   }
 
-  if (bodyBuffer && bodyBuffer.byteLength > 0) {
-    headers.set("content-length", String(bodyBuffer.byteLength));
-  }
-
   headers.set("x-forwarded-host", request.headers.get("host") ?? "");
   headers.set("x-forwarded-proto", request.nextUrl.protocol.replace(":", ""));
 
   return headers;
 }
 
-async function proxyRequest(request: NextRequest, path: string[]) {
-  try {
-    const targetUrl = buildTargetUrl(request, path);
-    const method = request.method;
-    const hasBody = method !== "GET" && method !== "HEAD";
+function getResponseHeaders(upstreamResponse: Response) {
+  const headers = new Headers();
 
-    const bodyBuffer = hasBody ? await request.arrayBuffer() : undefined;
-    const body = bodyBuffer && bodyBuffer.byteLength > 0 ? bodyBuffer : undefined;
-    const headers = getForwardHeaders(request, body ? bodyBuffer : undefined);
-
-    const upstreamResponse = await fetch(targetUrl, {
-      method,
-      headers,
-      body: body ?? null,
-      redirect: "manual",
-      cache: "no-store",
-    } as RequestInit & { duplex: string });
-
-    const responseHeaders = new Headers();
-
-    for (const [key, value] of upstreamResponse.headers.entries()) {
-      if (!HOP_BY_HOP_HEADERS.has(key.toLowerCase())) {
-        responseHeaders.set(key, value);
-      }
+  for (const [key, value] of upstreamResponse.headers.entries()) {
+    if (!HOP_BY_HOP_HEADERS.has(key.toLowerCase())) {
+      headers.set(key, value);
     }
-
-    const setCookies =
-      typeof upstreamResponse.headers.getSetCookie === "function"
-        ? upstreamResponse.headers.getSetCookie()
-        : [];
-
-    if (setCookies.length > 0) {
-      responseHeaders.delete("set-cookie");
-      for (const cookie of setCookies) {
-        responseHeaders.append("set-cookie", cookie);
-      }
-    }
-
-    const responseBody = await upstreamResponse.arrayBuffer();
-    responseHeaders.set("content-length", String(responseBody.byteLength));
-
-    return new Response(responseBody, {
-      status: upstreamResponse.status,
-      statusText: upstreamResponse.statusText,
-      headers: responseHeaders,
-    });
-  } catch (error) {
-    console.error("Proxy error:", error);
-    return Response.json(
-      { message: "Falha ao comunicar com o backend." },
-      { status: 502 },
-    );
   }
+
+  const setCookies =
+    typeof upstreamResponse.headers.getSetCookie === "function"
+      ? upstreamResponse.headers.getSetCookie()
+      : [];
+
+  if (setCookies.length > 0) {
+    headers.delete("set-cookie");
+    for (const cookie of setCookies) {
+      headers.append("set-cookie", cookie);
+    }
+  }
+
+  return headers;
+}
+
+async function proxyRequest(request: NextRequest, path: string[]) {
+  const hasBody = request.method !== "GET" && request.method !== "HEAD";
+
+  const upstreamResponse = await fetch(buildTargetUrl(request, path), {
+    method: request.method,
+    headers: getForwardHeaders(request),
+    body: hasBody ? request.body : undefined,
+    redirect: "manual",
+    cache: "no-store",
+    duplex: "half",
+  } as RequestInit & { duplex: "half" });
+
+  return new Response(upstreamResponse.body, {
+    status: upstreamResponse.status,
+    statusText: upstreamResponse.statusText,
+    headers: getResponseHeaders(upstreamResponse),
+  });
 }
 
 type RouteContext = {
   params: Promise<{ path: string[] }>;
 };
 
-export async function GET(request: NextRequest, context: RouteContext) {
+async function handleRequest(request: NextRequest, context: RouteContext) {
   const { path } = await context.params;
   return proxyRequest(request, path);
 }
 
-export async function POST(request: NextRequest, context: RouteContext) {
-  const { path } = await context.params;
-  return proxyRequest(request, path);
-}
-
-export async function PUT(request: NextRequest, context: RouteContext) {
-  const { path } = await context.params;
-  return proxyRequest(request, path);
-}
-
-export async function PATCH(request: NextRequest, context: RouteContext) {
-  const { path } = await context.params;
-  return proxyRequest(request, path);
-}
-
-export async function DELETE(request: NextRequest, context: RouteContext) {
-  const { path } = await context.params;
-  return proxyRequest(request, path);
-}
-
-export async function OPTIONS(request: NextRequest, context: RouteContext) {
-  const { path } = await context.params;
-  return proxyRequest(request, path);
-}
-
-export async function HEAD(request: NextRequest, context: RouteContext) {
-  const { path } = await context.params;
-  return proxyRequest(request, path);
-}
+export const GET = handleRequest;
+export const POST = handleRequest;
+export const PUT = handleRequest;
+export const PATCH = handleRequest;
+export const DELETE = handleRequest;
+export const OPTIONS = handleRequest;
+export const HEAD = handleRequest;

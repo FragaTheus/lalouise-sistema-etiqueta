@@ -18,6 +18,6 @@ export function useProducts({
   return useQuery<PageResponse<ProductSummary>>({
     queryKey: ["products", page, size, search],
     queryFn: () => getProducts({ page, size, search }),
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5, 
   });
 }
