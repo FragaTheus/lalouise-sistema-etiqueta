@@ -195,13 +195,7 @@ export default function AppItemInfo({
                 Deseja realmente excluir este item? Esta ação é irreversível.
               </DialogDescription>
             </DialogHeader>
-            <DialogFooter className="gap-2 sm:gap-0">
-              <Button
-                variant="outline"
-                onClick={() => setIsDeleteDialogOpen(false)}
-              >
-                Cancelar
-              </Button>
+            <DialogFooter>
               <Button
                 variant="destructive"
                 onClick={() => {
@@ -230,13 +224,7 @@ export default function AppItemInfo({
                 Deseja realmente restaurar este item para a lista de ativos?
               </DialogDescription>
             </DialogHeader>
-            <DialogFooter className="gap-2 sm:gap-0">
-              <Button
-                variant="outline"
-                onClick={() => setIsRestoreDialogOpen(false)}
-              >
-                Cancelar
-              </Button>
+            <DialogFooter>
               <Button
                 onClick={() => {
                   restoreMutation?.mutate(undefined, {

@@ -17,8 +17,10 @@ const HOP_BY_HOP_HEADERS = new Set([
   "proxy-authenticate",
   "host",
   "content-length",
-  "content-encoding", 
+  "content-encoding",
 ]);
+
+const STATUS_WITHOUT_BODY = new Set([204, 205, 304]);
 
 function buildTargetUrl(request: NextRequest, path: string[]) {
   const targetPath = path.join("/");
@@ -83,8 +85,23 @@ async function proxyRequest(request: NextRequest, path: string[]) {
       }
     }
 
+    if (STATUS_WITHOUT_BODY.has(upstreamResponse.status)) {
+      return new Response(null, {
+        status: upstreamResponse.status,
+        statusText: upstreamResponse.statusText,
+        headers: responseHeaders,
+      });
+    }
+
     const responseBody = await upstreamResponse.arrayBuffer();
-    responseHeaders.set("content-length", String(responseBody.byteLength));
+
+    if (responseBody.byteLength === 0) {
+      return new Response(null, {
+        status: upstreamResponse.status,
+        statusText: upstreamResponse.statusText,
+        headers: responseHeaders,
+      });
+    }
 
     return new Response(responseBody, {
       status: upstreamResponse.status,
