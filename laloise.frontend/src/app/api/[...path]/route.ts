@@ -1,14 +1,12 @@
 import { NextRequest } from "next/server";
 
 const BACKEND_URL =
-  process.env.BACKEND_URL;
+  process.env.BACKEND_URL ?? "https://lalouise-backend-latest.onrender.com";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// Headers que não devem ser repassados entre proxies (hop-by-hop)
-// Nota: content-length NÃO está aqui — será recalculado ao bufferizar o body
-const REQUEST_HOP_BY_HOP = new Set([
+const HOP_BY_HOP_HEADERS = new Set([
   "connection",
   "keep-alive",
   "transfer-encoding",
@@ -18,37 +16,27 @@ const REQUEST_HOP_BY_HOP = new Set([
   "proxy-authorization",
   "proxy-authenticate",
   "host",
-  "content-length", // removido e recalculado após bufferizar o body
-]);
-
-// Nos headers de resposta ao cliente também removemos hop-by-hop
-const RESPONSE_HOP_BY_HOP = new Set([
-  "connection",
-  "keep-alive",
-  "transfer-encoding",
-  "te",
-  "trailer",
-  "upgrade",
-  "proxy-authenticate",
-  "host",
+  "content-length",
+  "content-encoding", 
 ]);
 
 function buildTargetUrl(request: NextRequest, path: string[]) {
-  return `${BACKEND_URL}/api/v1/${path.join("/")}${request.nextUrl.search}`;
+  const targetPath = path.join("/");
+  const query = request.nextUrl.search;
+  return `${BACKEND_URL}/api/v1/${targetPath}${query}`;
 }
 
-function buildForwardHeaders(request: NextRequest, bodyLength?: number) {
+function getForwardHeaders(request: NextRequest, bodyBuffer?: ArrayBuffer) {
   const headers = new Headers();
 
   for (const [key, value] of request.headers.entries()) {
-    if (!REQUEST_HOP_BY_HOP.has(key.toLowerCase())) {
+    if (!HOP_BY_HOP_HEADERS.has(key.toLowerCase())) {
       headers.set(key, value);
     }
   }
 
-  // Re-adiciona content-length correto após bufferizar o body
-  if (bodyLength !== undefined) {
-    headers.set("content-length", String(bodyLength));
+  if (bodyBuffer && bodyBuffer.byteLength > 0) {
+    headers.set("content-length", String(bodyBuffer.byteLength));
   }
 
   headers.set("x-forwarded-host", request.headers.get("host") ?? "");
@@ -57,88 +45,96 @@ function buildForwardHeaders(request: NextRequest, bodyLength?: number) {
   return headers;
 }
 
-function buildResponseHeaders(upstreamResponse: Response) {
-  const headers = new Headers();
-
-  for (const [key, value] of upstreamResponse.headers.entries()) {
-    if (!RESPONSE_HOP_BY_HOP.has(key.toLowerCase())) {
-      headers.set(key, value);
-    }
-  }
-
-  // Preserva múltiplos Set-Cookie corretamente
-  const setCookies =
-    typeof upstreamResponse.headers.getSetCookie === "function"
-      ? upstreamResponse.headers.getSetCookie()
-      : [];
-
-  if (setCookies.length > 0) {
-    headers.delete("set-cookie");
-    for (const cookie of setCookies) {
-      headers.append("set-cookie", cookie);
-    }
-  }
-
-  return headers;
-}
-
 async function proxyRequest(request: NextRequest, path: string[]) {
-  const targetUrl = buildTargetUrl(request, path);
-  const hasBody = request.method !== "GET" && request.method !== "HEAD";
-
-  let body: ArrayBuffer | undefined;
-  if (hasBody) {
-    // Bufferiza o body para garantir Content-Length correto no upstream
-    // e evitar problemas com streams já consumidos por middlewares
-    body = await request.arrayBuffer();
-  }
-
-  const headers = buildForwardHeaders(
-    request,
-    body !== undefined ? body.byteLength : undefined
-  );
-
-  let upstreamResponse: Response;
   try {
-    upstreamResponse = await fetch(targetUrl, {
-      method: request.method,
+    const targetUrl = buildTargetUrl(request, path);
+    const method = request.method;
+    const hasBody = method !== "GET" && method !== "HEAD";
+
+    const bodyBuffer = hasBody ? await request.arrayBuffer() : undefined;
+    const body = bodyBuffer && bodyBuffer.byteLength > 0 ? bodyBuffer : undefined;
+    const headers = getForwardHeaders(request, body ? bodyBuffer : undefined);
+
+    const upstreamResponse = await fetch(targetUrl, {
+      method,
       headers,
-      body: body,
+      body: body ?? null,
       redirect: "manual",
       cache: "no-store",
-    });
-  } catch (err) {
-    const message =
-      err instanceof Error ? err.message : "Upstream connection failed";
-    console.error(`[proxy] Falha ao conectar ao backend (${targetUrl}):`, message);
-    return new Response(
-      JSON.stringify({ status: 502, message: "Backend indisponível. Tente novamente em instantes." }),
-      {
-        status: 502,
-        headers: { "Content-Type": "application/json" },
+    } as RequestInit & { duplex: string });
+
+    const responseHeaders = new Headers();
+
+    for (const [key, value] of upstreamResponse.headers.entries()) {
+      if (!HOP_BY_HOP_HEADERS.has(key.toLowerCase())) {
+        responseHeaders.set(key, value);
       }
+    }
+
+    const setCookies =
+      typeof upstreamResponse.headers.getSetCookie === "function"
+        ? upstreamResponse.headers.getSetCookie()
+        : [];
+
+    if (setCookies.length > 0) {
+      responseHeaders.delete("set-cookie");
+      for (const cookie of setCookies) {
+        responseHeaders.append("set-cookie", cookie);
+      }
+    }
+
+    const responseBody = await upstreamResponse.arrayBuffer();
+    responseHeaders.set("content-length", String(responseBody.byteLength));
+
+    return new Response(responseBody, {
+      status: upstreamResponse.status,
+      statusText: upstreamResponse.statusText,
+      headers: responseHeaders,
+    });
+  } catch (error) {
+    console.error("Proxy error:", error);
+    return Response.json(
+      { message: "Falha ao comunicar com o servidor." },
+      { status: 502 },
     );
   }
-
-  return new Response(upstreamResponse.body, {
-    status: upstreamResponse.status,
-    statusText: upstreamResponse.statusText,
-    headers: buildResponseHeaders(upstreamResponse),
-  });
 }
 
 type RouteContext = {
   params: Promise<{ path: string[] }>;
 };
 
-async function handleRequest(request: NextRequest, context: RouteContext) {
+export async function GET(request: NextRequest, context: RouteContext) {
   const { path } = await context.params;
   return proxyRequest(request, path);
 }
 
-export const GET = handleRequest;
-export const POST = handleRequest;
-export const PUT = handleRequest;
-export const PATCH = handleRequest;
-export const DELETE = handleRequest;
-export const HEAD = handleRequest;
+export async function POST(request: NextRequest, context: RouteContext) {
+  const { path } = await context.params;
+  return proxyRequest(request, path);
+}
+
+export async function PUT(request: NextRequest, context: RouteContext) {
+  const { path } = await context.params;
+  return proxyRequest(request, path);
+}
+
+export async function PATCH(request: NextRequest, context: RouteContext) {
+  const { path } = await context.params;
+  return proxyRequest(request, path);
+}
+
+export async function DELETE(request: NextRequest, context: RouteContext) {
+  const { path } = await context.params;
+  return proxyRequest(request, path);
+}
+
+export async function OPTIONS(request: NextRequest, context: RouteContext) {
+  const { path } = await context.params;
+  return proxyRequest(request, path);
+}
+
+export async function HEAD(request: NextRequest, context: RouteContext) {
+  const { path } = await context.params;
+  return proxyRequest(request, path);
+}
