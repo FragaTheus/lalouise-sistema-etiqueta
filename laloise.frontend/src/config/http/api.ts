@@ -23,6 +23,13 @@ api.interceptors.response.use(
 
     const data = error.response.data;
 
+    console.error("[api] Full error response:", {
+      status: error.response.status,
+      statusText: error.response.statusText,
+      data: error.response.data,
+      headers: error.response.headers,
+    });
+
     if (data?.message) {
       console.error(`[api] Erro ${data.status}: ${data.message}`);
     } else {
