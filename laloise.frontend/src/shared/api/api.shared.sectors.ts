@@ -18,9 +18,10 @@ export const getMyStorages = async (): Promise<StorageType[]> => {
   );
 
   if (hasStoragesMePayload(data)) {
+    console.log(data)
     return data.storages;
   }
-
+    console.log(data)
   return data;
 };
 
