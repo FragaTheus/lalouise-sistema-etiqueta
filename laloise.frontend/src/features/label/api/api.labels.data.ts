@@ -9,7 +9,6 @@ export interface PrintLabelRequest {
 }
 
 export interface ReprintLabelRequest {
-  sectorId: string;
   storageType: StorageType;
   copies: number;
 }

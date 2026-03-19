@@ -1,8 +1,26 @@
 import api from "@/config/http/api";
 import type { StorageType } from "@/shared/constants/storage-types";
 
-export const getActiveSectorId = async (): Promise<string> => {
-  const { data } = await api.get<string>("/sectors/me");
+interface StoragesMeResponse {
+  sectorId: string;
+  storages: StorageType[];
+}
+
+function hasStoragesMePayload(
+  data: StorageType[] | StoragesMeResponse,
+): data is StoragesMeResponse {
+  return !Array.isArray(data);
+}
+
+export const getMyStorages = async (): Promise<StorageType[]> => {
+  const { data } = await api.get<StorageType[] | StoragesMeResponse>(
+    "/storages/me",
+  );
+
+  if (hasStoragesMePayload(data)) {
+    return data.storages;
+  }
+
   return data;
 };
 

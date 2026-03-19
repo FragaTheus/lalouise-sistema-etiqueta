@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useLabelSectorStorages } from "@/features/label/hooks/use-label-sector-storages";
+import { useLabelMyStorages } from "@/features/label/hooks/use-label-my-storages";
 import type { StorageType } from "@/shared/constants/storage-types";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -19,14 +19,36 @@ function getStorageLabel(storage: StorageType) {
 interface PrintLabelStorageDialogProps {
   selectedStorage: StorageType | null;
   onSelectStorage: (storage: StorageType) => void;
+  storages?: StorageType[];
+  isLoadingStorages?: boolean;
+  isErrorStorages?: boolean;
+  onRetryStorages?: () => void;
 }
 
 export default function PrintLabelStorageDialog({
   selectedStorage,
   onSelectStorage,
+  storages: externalStorages,
+  isLoadingStorages,
+  isErrorStorages,
+  onRetryStorages,
 }: PrintLabelStorageDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const { storages, isLoading, isError, refetch } = useLabelSectorStorages();
+  const {
+    storages: fetchedStorages,
+    isLoading: isFetchingStorages,
+    isError: hasStoragesError,
+    refetch,
+  } = useLabelMyStorages();
+
+  const storages = externalStorages ?? fetchedStorages;
+  const isLoading = isLoadingStorages ?? isFetchingStorages;
+  const isError = isErrorStorages ?? hasStoragesError;
+  const handleRetry =
+    onRetryStorages ??
+    (() => {
+      void refetch();
+    });
 
   useEffect(() => {
     if (storages.length === 1 && !selectedStorage) {
@@ -82,13 +104,11 @@ export default function PrintLabelStorageDialog({
             {isError && (
               <div className="flex items-center justify-between gap-2 rounded-md border p-3">
                 <p className="text-sm text-destructive">
-                  Erro ao carregar armazenamentos.
+                  Não foi possível carregar os armazenamentos do seu usuário.
+                  Verifique se há um setor vinculado ao responsável e tente
+                  novamente.
                 </p>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => refetch()}
-                >
+                <Button type="button" variant="outline" onClick={handleRetry}>
                   Tentar novamente
                 </Button>
               </div>

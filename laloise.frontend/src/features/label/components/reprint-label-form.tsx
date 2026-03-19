@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { LoaderIcon } from "lucide-react";
@@ -21,7 +21,7 @@ import {
 import useReprintLabel from "@/features/label/hooks/use-reprint-label";
 import type { StorageType } from "@/shared/constants/storage-types";
 import PrintLabelStorageDialog from "@/features/label/components/print-label-storage-dialog";
-import { useLabelSectorStorages } from "@/features/label/hooks/use-label-sector-storages";
+import { useLabelMyStorages } from "@/features/label/hooks/use-label-my-storages";
 import { useRouter } from "next/navigation";
 
 interface ReprintLabelFormProps {
@@ -35,10 +35,14 @@ export default function ReprintLabelForm({ labelId }: ReprintLabelFormProps) {
 
   const router = useRouter();
   const mutation = useReprintLabel(labelId);
-  const { sectorId } = useLabelSectorStorages();
+  const {
+    storages,
+    isLoading: isLoadingStorages,
+    isError: isErrorStorages,
+    refetch: refetchStorages,
+  } = useLabelMyStorages();
 
   const getDefaultValues = (): ReprintLabelSchemaRequest => ({
-    sectorId: sectorId || "",
     storageType: "AMBIENTE",
     copies: 1,
   });
@@ -54,15 +58,6 @@ export default function ReprintLabelForm({ labelId }: ReprintLabelFormProps) {
     mode: "onBlur",
     defaultValues: getDefaultValues(),
   });
-
-  useEffect(() => {
-    if (sectorId) {
-      setValue("sectorId", sectorId, {
-        shouldDirty: false,
-        shouldValidate: false,
-      });
-    }
-  }, [sectorId, setValue]);
 
   const handleSelectStorage = useCallback(
     (storage: StorageType) => {
@@ -88,8 +83,6 @@ export default function ReprintLabelForm({ labelId }: ReprintLabelFormProps) {
     <form onSubmit={handleSubmit(handleFormSubmit)}>
       <FieldSet>
         <FieldGroup className="gap-6 lg:gap-8">
-          <Input type="hidden" {...register("sectorId")} />
-
           <Field>
             <FieldLabel>Tipo de Armazenamento</FieldLabel>
             <Controller
@@ -99,6 +92,12 @@ export default function ReprintLabelForm({ labelId }: ReprintLabelFormProps) {
                 <FieldContent>
                   <PrintLabelStorageDialog
                     selectedStorage={selectedStorage}
+                    storages={storages}
+                    isLoadingStorages={isLoadingStorages}
+                    isErrorStorages={isErrorStorages}
+                    onRetryStorages={() => {
+                      void refetchStorages();
+                    }}
                     onSelectStorage={(storage) => {
                       field.onChange(storage);
                       handleSelectStorage(storage);

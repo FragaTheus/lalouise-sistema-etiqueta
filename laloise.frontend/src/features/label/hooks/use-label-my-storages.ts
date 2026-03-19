@@ -4,7 +4,7 @@ import { getMyStorages } from "@/shared/api/api.shared.sectors";
 import type { StorageType } from "@/shared/constants/storage-types";
 import { useQuery } from "@tanstack/react-query";
 
-export function useLabelSectorStorages() {
+export function useLabelMyStorages() {
   const storagesQuery = useQuery<StorageType[], Error>({
     queryKey: ["label-my-storages"],
     queryFn: getMyStorages,

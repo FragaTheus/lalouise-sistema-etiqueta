@@ -2,7 +2,6 @@ import { storageTypeValues } from "@/shared/constants/storage-types";
 import { z } from "zod";
 
 export const reprintLabelSchema = z.object({
-  sectorId: z.string().min(1, "Setor é obrigatório"),
   storageType: z.enum(storageTypeValues, {
     errorMap: () => ({ message: "Selecione um tipo de armazenamento" }),
   }),
