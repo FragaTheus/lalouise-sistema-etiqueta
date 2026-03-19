@@ -63,6 +63,11 @@ export const reprintLabel = async (
   oldLabelId: string,
   data: CreateLabelOverOldLabelRequest,
 ): Promise<void> => {
+  console.log(`[REPRINT] Sending data to /labels/${oldLabelId}/reprint:`, data);
+  console.log(`[REPRINT] Data types:`, {
+    storageType: typeof data.storageType,
+    copies: typeof data.copies,
+  });
   await api.post(`/labels/${oldLabelId}/reprint`, data);
   console.log(`Label ${oldLabelId} reprinted with new data:`, data);
 };
