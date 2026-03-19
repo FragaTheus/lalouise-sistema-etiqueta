@@ -10,6 +10,13 @@ import {
 } from "./api.labels.data";
 
 export const printLabel = async (data: PrintLabelRequest): Promise<void> => {
+  console.log("[PRINT] Sending data to /labels/print:", data);
+  console.log("[PRINT] Data types:", {
+    productId: typeof data.productId,
+    storageType: typeof data.storageType,
+    copies: typeof data.copies,
+  });
+  console.log("[PRINT] Full payload:", JSON.stringify(data, null, 2));
   await api.post("/labels/print", data);
   console.log("Label printed with data:", data);
 };
@@ -68,6 +75,7 @@ export const reprintLabel = async (
     storageType: typeof data.storageType,
     copies: typeof data.copies,
   });
+  console.log(`[REPRINT] Full payload:`, JSON.stringify(data, null, 2));
   await api.post(`/labels/${oldLabelId}/reprint`, data);
   console.log(`Label ${oldLabelId} reprinted with new data:`, data);
 };
