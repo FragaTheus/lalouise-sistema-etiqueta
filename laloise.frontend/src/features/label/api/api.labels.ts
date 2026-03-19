@@ -11,6 +11,7 @@ import {
 
 export const printLabel = async (data: PrintLabelRequest): Promise<void> => {
   await api.post("/labels/print", data);
+  console.log("Label printed with data:", data);
 };
 
 export const getLabels = async ({
@@ -47,6 +48,7 @@ export const getLabelReprintData = async (
   id: string,
 ): Promise<LabelReprintData> => {
   const { data } = await api.get<LabelReprintData>(`/labels/${id}/reprint-data`);
+  console.log("Reprint data:", data);
 
   return {
     id: data.id,
@@ -62,12 +64,6 @@ export const reprintLabel = async (
   data: ReprintLabelRequest,
 ): Promise<void> => {
   await api.post(`/labels/${oldLabelId}/reprint`, data);
+  console.log(`Label ${oldLabelId} reprinted with new data:`, data);
 };
 
-export const runLabelMaintenanceJobs = async (): Promise<void> => {
-  await api.post("/labels/maintenance/run-jobs");
-};
-
-export const cleanupLabelMaintenance = async (): Promise<void> => {
-  await api.delete("/labels/maintenance/cleanup");
-};
