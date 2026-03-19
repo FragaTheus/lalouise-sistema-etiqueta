@@ -84,12 +84,13 @@ public class SectorService {
         repository.save(sector);
     }
 
-    public List<StorageType> getStoragesFromAuthenticatedUser(UUID sectorId) {
+    public List<StorageType> getStoragesBySectorId(UUID sectorId) {
         return repository.findAllStoragesBySectorId(sectorId);
     }
 
-    public Account getResponsibleBySectorId(UUID sectorId) {
-        return getSector(sectorId).getResponsible();
+    public Sector getSectorByResponsibleId(UUID responsibleId) {
+        return repository.findByResponsibleId(responsibleId)
+                .orElseThrow(SectorNotFoundException::new);
     }
 
 

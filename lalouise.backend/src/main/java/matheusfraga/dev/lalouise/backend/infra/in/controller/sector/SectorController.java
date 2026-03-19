@@ -8,11 +8,13 @@ import matheusfraga.dev.lalouise.backend.infra.in.controller.sector.dto.CreateSe
 import matheusfraga.dev.lalouise.backend.infra.in.controller.sector.dto.SectorInfo;
 import matheusfraga.dev.lalouise.backend.infra.in.controller.sector.dto.SectorSummary;
 import matheusfraga.dev.lalouise.backend.infra.in.controller.sector.dto.UpdateSectorRequest;
+import matheusfraga.dev.lalouise.backend.infra.security.UserDetailsImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -80,7 +82,15 @@ public class SectorController {
 
     @GetMapping("/{sectorId}/storages")
     public ResponseEntity<List<StorageType>> getAllStorages(@PathVariable UUID sectorId) {
-        var response = service.getStoragesFromAuthenticatedUser(sectorId);
+        var response = service.getStoragesBySectorId(sectorId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("storages/me")
+    public ResponseEntity<List<StorageType>> getMyStorages(@AuthenticationPrincipal UserDetailsImpl principal) {
+        var userId = principal.getId();
+        var sector = service.getSectorByResponsibleId(userId);
+        var response = service.getStoragesBySectorId(sector.getId());
         return ResponseEntity.ok(response);
     }
 }
