@@ -85,6 +85,14 @@ public class GlobalExceptionHandler {
         return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
+    @ExceptionHandler(ResponsibleWithoutActiveSectorException.class)
+    public ResponseEntity<HandlerResponse<Void>> handleResponsibleWithoutActiveSectorException(
+            ResponsibleWithoutActiveSectorException ex
+    ){
+        var response = HandlerResponse.withoutData(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
     @ExceptionHandler(SameSectorNameException.class)
     public ResponseEntity<HandlerResponse<Void>> handleSameSectorNameException(SameSectorNameException ex){
         var response = HandlerResponse.withoutData(HttpStatus.CONFLICT.value(), ex.getMessage());

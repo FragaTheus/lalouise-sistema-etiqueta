@@ -69,7 +69,7 @@ public class LabelService {
 
         CreateLabelCommand createCommand = CreateLabelCommand.builder()
                 .productId(productId)
-                .sectorId(command.sectorId())
+                .userId(command.userId())
                 .storageType(command.storageType())
                 .copies(command.copies())
                 .build();
@@ -131,7 +131,7 @@ public class LabelService {
 
     //Métodos auxiliares
     private Label createLabel(CreateLabelCommand command, String lote) {
-        Sector sector = sectorService.getSector(command.sectorId());
+        Sector sector = sectorService.getSectorByResponsibleId(command.userId());
         Account responsible = sector.getResponsible();
 
         var product = productService.getProduct(command.productId());

@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -28,6 +30,7 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -49,12 +52,23 @@ class LabelControllerTest {
     @DisplayName("Deve retornar 201 ao criar uma etiqueta com sucesso")
     void shouldReturnCreatedWhenCreateLabelIsValid() throws Exception {
         UUID prodId = UUID.randomUUID();
-        UUID sectorId = UUID.randomUUID();
-        var request = new CreateLabelRequest(prodId, sectorId, StorageType.REFRIGERADO, 2);
+        UUID userId = UUID.randomUUID();
+
+        var principal = mock(matheusfraga.dev.lalouise.backend.infra.security.UserDetailsImpl.class);
+        when(principal.getId()).thenReturn(userId);
+
+        var request = new CreateLabelRequest(prodId, StorageType.REFRIGERADO, 2);
 
         when(labelService.createLabel(any(CreateLabelCommand.class))).thenReturn(mock(Label.class));
 
+        var auth = new UsernamePasswordAuthenticationToken(
+                principal,
+                null,
+                java.util.List.of(new SimpleGrantedAuthority("ROLE_USER"))
+        );
+
         mockMvc.perform(post("/api/v1/labels/print")
+                        .with(authentication(auth))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
@@ -66,12 +80,23 @@ class LabelControllerTest {
     @DisplayName("Deve retornar 201 ao solicitar a reimpressão")
     void shouldReturnCreatedWhenReprintIsSuccessful() throws Exception {
         UUID oldLabelId = UUID.randomUUID();
-        UUID sectorId = UUID.randomUUID();
-        var request = new CreateLabelOverOldLabelRequest(sectorId, StorageType.AMBIENTE, 3);
+        UUID userId = UUID.randomUUID();
+
+        var principal = mock(matheusfraga.dev.lalouise.backend.infra.security.UserDetailsImpl.class);
+        when(principal.getId()).thenReturn(userId);
+
+        var request = new CreateLabelOverOldLabelRequest(StorageType.AMBIENTE, 3);
 
         when(labelService.createLabelOverOldLabel(any(CreateLabelOverOldLabelCommand.class))).thenReturn(mock(Label.class));
 
+        var auth = new UsernamePasswordAuthenticationToken(
+                principal,
+                null,
+                java.util.List.of(new SimpleGrantedAuthority("ROLE_USER"))
+        );
+
         mockMvc.perform(post("/api/v1/labels/{oldLabelId}/reprint", oldLabelId)
+                        .with(authentication(auth))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());

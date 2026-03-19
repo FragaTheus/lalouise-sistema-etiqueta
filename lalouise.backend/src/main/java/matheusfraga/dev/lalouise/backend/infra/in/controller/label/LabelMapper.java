@@ -42,10 +42,10 @@ public record LabelMapper() {
 
     }
 
-    public static CreateLabelCommand toCreateLabelCommand(CreateLabelRequest request){
+    public static CreateLabelCommand toCreateLabelCommand(CreateLabelRequest request, UUID userId){
         return CreateLabelCommand.builder()
                 .productId(request.productId())
-                .sectorId(request.sectorId())
+                .userId(userId)
                 .storageType(request.storageType())
                 .copies(request.copies())
                 .build();
@@ -53,11 +53,12 @@ public record LabelMapper() {
 
     public static CreateLabelOverOldLabelCommand toCreateLabelOverOldLabelCommand(
             UUID oldLabelId,
-            CreateLabelOverOldLabelRequest request
+            CreateLabelOverOldLabelRequest request,
+            UUID userId
     ){
         return CreateLabelOverOldLabelCommand.builder()
                 .oldLabelId(oldLabelId)
-                .sectorId(request.sectorId())
+                .userId(userId)
                 .storageType(request.storageType())
                 .copies(request.copies())
                 .build();

@@ -4,14 +4,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import matheusfraga.dev.lalouise.backend.application.command.label.PageFilterQueryCommand;
 import matheusfraga.dev.lalouise.backend.application.service.LabelService;
-import matheusfraga.dev.lalouise.backend.application.service.ZplService;
 import matheusfraga.dev.lalouise.backend.domain.enums.LabelStatus;
+import matheusfraga.dev.lalouise.backend.infra.security.UserDetailsImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -24,8 +25,12 @@ public class LabelController {
     private final LabelService labelService;
 
     @PostMapping("/print")
-    public ResponseEntity<Void> create(@Valid @RequestBody CreateLabelRequest request) {
-        var command = LabelMapper.toCreateLabelCommand(request);
+    public ResponseEntity<Void> create(
+            @AuthenticationPrincipal UserDetailsImpl principal,
+            @Valid @RequestBody CreateLabelRequest request
+    ) {
+        UUID userId = principal.getId();
+        var command = LabelMapper.toCreateLabelCommand(request, userId);
         labelService.createLabel(command);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -70,11 +75,13 @@ public class LabelController {
 
     @PostMapping("/{oldLabelId}/reprint")
     public ResponseEntity<Void> reprint(
+            @AuthenticationPrincipal UserDetailsImpl principal,
             @PathVariable UUID oldLabelId,
             @Valid @RequestBody CreateLabelOverOldLabelRequest request
             ) {
-        var command = LabelMapper.toCreateLabelOverOldLabelCommand(oldLabelId, request);
-        var newLabel = labelService.createLabelOverOldLabel(command);
+        UUID userId = principal.getId();
+        var command = LabelMapper.toCreateLabelOverOldLabelCommand(oldLabelId, request, userId);
+        labelService.createLabelOverOldLabel(command);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

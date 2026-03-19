@@ -12,7 +12,6 @@ import matheusfraga.dev.lalouise.backend.domain.exception.user.NoDataForUpdateEx
 import matheusfraga.dev.lalouise.backend.domain.repository.SectorRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -90,7 +89,7 @@ public class SectorService {
 
     public Sector getSectorByResponsibleId(UUID responsibleId) {
         return repository.findByResponsibleId(responsibleId)
-                .orElseThrow(SectorNotFoundException::new);
+                .orElseThrow(ResponsibleWithoutActiveSectorException::new);
     }
 
 

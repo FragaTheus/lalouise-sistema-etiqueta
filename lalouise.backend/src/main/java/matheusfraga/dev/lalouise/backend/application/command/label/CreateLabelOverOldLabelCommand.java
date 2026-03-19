@@ -8,7 +8,7 @@ import java.util.UUID;
 @Builder
 public record CreateLabelOverOldLabelCommand(
         UUID oldLabelId,
-        UUID sectorId,
+        UUID userId,
         StorageType storageType,
         Integer copies
 ) {
