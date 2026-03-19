@@ -1,49 +1,50 @@
-plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.5.10'
-	id 'io.spring.dependency-management' version '1.1.7'
-}
-
-group = 'matheusfraga.dev'
-version = '0.0.1-SNAPSHOT'
-description = 'Demo project for Spring Boot'
-
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
+	plugins {
+		id 'java'
+		id 'org.springframework.boot' version '3.5.10'
+		id 'io.spring.dependency-management' version '1.1.7'
 	}
-}
 
-repositories {
-	mavenCentral()
-}
+	group = 'matheusfraga.dev'
+	version = '0.0.1-SNAPSHOT'
+	description = 'Demo project for Spring Boot'
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+	java {
+		toolchain {
+			languageVersion = JavaLanguageVersion.of(21)
+		}
+	}
 
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+	repositories {
+		mavenCentral()
+	}
 
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
+		implementation 'org.springframework.boot:spring-boot-starter-security'
 
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-	implementation 'org.springframework.boot:spring-boot-starter'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-    runtimeOnly 'com.h2database:h2'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+		implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-	implementation 'com.auth0:java-jwt:4.4.0'
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
 
-	testRuntimeOnly 'com.h2database:h2'
+		implementation 'org.springframework.boot:spring-boot-starter'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testImplementation 'org.springframework.security:spring-security-test'
+		testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	implementation 'org.springframework.boot:spring-boot-starter-amqp'
-	implementation 'com.fasterxml.jackson.core:jackson-databind'
-}
+		implementation 'com.auth0:java-jwt:4.4.0'
 
-tasks.named('test') {
-	useJUnitPlatform()
-}
+		implementation 'org.springframework.boot:spring-boot-starter-amqp'
+		implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+		runtimeOnly 'org.postgresql:postgresql'
+		runtimeOnly 'com.h2database:h2'
+
+	}
+
+	tasks.named('test') {
+		useJUnitPlatform()
+	}

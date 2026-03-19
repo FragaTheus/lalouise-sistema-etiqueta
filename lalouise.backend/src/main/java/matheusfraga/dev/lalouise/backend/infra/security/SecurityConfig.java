@@ -51,8 +51,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/api/v1/products/**").hasRole("ADMIN")
-                        .requestMatchers("/api/v1/sectors/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/accounts/admins/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

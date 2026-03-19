@@ -146,7 +146,7 @@ public class LabelService {
         );
         Label savedLabel = labelRepository.save(label);
 
-        String zpl = zplService.generate(savedLabel);
+        String zpl = zplService.generate(savedLabel, command.copies());
         printJobService.queue(zpl, command.copies());
 
         return savedLabel;

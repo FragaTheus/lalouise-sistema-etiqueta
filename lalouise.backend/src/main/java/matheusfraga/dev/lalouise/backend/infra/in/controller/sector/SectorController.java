@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,7 @@ public class SectorController {
 
     private final SectorService service;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<SectorInfo> getSectorInfo(@PathVariable UUID id) {
         var sector = service.getSector(id);
@@ -34,6 +36,7 @@ public class SectorController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Void> create(@Valid @RequestBody CreateSectorRequest request) {
         var command = SectorMapper.toCreateSectorCommand(request);
@@ -41,6 +44,7 @@ public class SectorController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}")
     public ResponseEntity<Void> update(
             @PathVariable UUID id,
@@ -50,6 +54,7 @@ public class SectorController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         service.deactivateSector(id);
@@ -65,6 +70,7 @@ public class SectorController {
         return ResponseEntity.ok(summaries);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/deleted")
     public ResponseEntity<Page<SectorSummary>> getDeletedSectors(
             @RequestParam(name = "search", required = false) String search,
@@ -74,6 +80,7 @@ public class SectorController {
         return ResponseEntity.ok(summaries);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{id}/restore")
     public ResponseEntity<Void> restore(@PathVariable UUID id) {
         service.reactivateSector(id);
@@ -86,11 +93,5 @@ public class SectorController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("storages/me")
-    public ResponseEntity<List<StorageType>> getMyStorages(@AuthenticationPrincipal UserDetailsImpl principal) {
-        var userId = principal.getId();
-        var sector = service.getSectorByResponsibleId(userId);
-        var response = service.getStoragesBySectorId(sector.getId());
-        return ResponseEntity.ok(response);
-    }
+
 }
