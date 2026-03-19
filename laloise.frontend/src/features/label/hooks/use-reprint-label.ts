@@ -2,7 +2,7 @@
 
 import { extractErrorMessage } from "@/config/http/api.error";
 import { reprintLabel } from "@/features/label/api/api.labels";
-import { ReprintLabelRequest } from "@/features/label/api/api.labels.data";
+import { CreateLabelOverOldLabelRequest } from "@/features/label/api/api.labels.data";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -10,7 +10,7 @@ export default function useReprintLabel(oldLabelId?: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: ReprintLabelRequest) => {
+    mutationFn: (data: CreateLabelOverOldLabelRequest) => {
       if (!oldLabelId) {
         throw new Error("ID da etiqueta não informado");
       }

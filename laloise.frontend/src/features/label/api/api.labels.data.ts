@@ -8,7 +8,7 @@ export interface PrintLabelRequest {
   copies: number;
 }
 
-export interface ReprintLabelRequest {
+export interface CreateLabelOverOldLabelRequest {
   storageType: StorageType;
   copies: number;
 }

@@ -6,7 +6,7 @@ import {
   LabelSummary,
   PageResponse,
   PrintLabelRequest,
-  ReprintLabelRequest,
+  CreateLabelOverOldLabelRequest,
 } from "./api.labels.data";
 
 export const printLabel = async (data: PrintLabelRequest): Promise<void> => {
@@ -61,7 +61,7 @@ export const getLabelReprintData = async (
 
 export const reprintLabel = async (
   oldLabelId: string,
-  data: ReprintLabelRequest,
+  data: CreateLabelOverOldLabelRequest,
 ): Promise<void> => {
   await api.post(`/labels/${oldLabelId}/reprint`, data);
   console.log(`Label ${oldLabelId} reprinted with new data:`, data);
