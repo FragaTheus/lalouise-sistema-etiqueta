@@ -29,11 +29,6 @@ const sidebarUserItensImpl = [
     ItemIcon: GroupIcon,
     itemText: "Usuarios",
   },
-  {
-    itemHref: "/painel/contas/deletadas",
-    ItemIcon: Trash2Icon,
-    itemText: "Usuarios Deletados",
-  },
 ] satisfies ItemsProps[];
 
 const sidebarProductItensImpl = [
@@ -46,11 +41,6 @@ const sidebarProductItensImpl = [
     itemHref: "/painel/produtos",
     ItemIcon: Package,
     itemText: "Produtos",
-  },
-  {
-    itemHref: "/painel/produtos/deletados",
-    ItemIcon: Trash2Icon,
-    itemText: "Produtos Deletados",
   },
 ] satisfies ItemsProps[];
 
@@ -65,11 +55,6 @@ const sidebarSectorItensImpl = [
     ItemIcon: Building2,
     itemText: "Setores",
   },
-  {
-    itemHref: "/painel/setores/deletados",
-    ItemIcon: Trash2Icon,
-    itemText: "Setores Deletados",
-  },
 ] satisfies ItemsProps[];
 
 const sidebarLabelItensImpl = [
@@ -82,6 +67,24 @@ const sidebarLabelItensImpl = [
     itemHref: "/painel/etiquetas",
     ItemIcon: TagsIcon,
     itemText: "Etiquetas",
+  },
+] satisfies ItemsProps[];
+
+const sidebarDeleteItensImpl = [
+  {
+    itemHref: "/painel/contas/deletadas",
+    ItemIcon: UsersIcon,
+    itemText: "Usuarios Deletados",
+  },
+  {
+    itemHref: "/painel/produtos/deletados",
+    ItemIcon: Package,
+    itemText: "Produtos Deletados",
+  },
+  {
+    itemHref: "/painel/setores/deletados",
+    ItemIcon: Building2,
+    itemText: "Setores Deletados",
   },
 ] satisfies ItemsProps[];
 
@@ -105,5 +108,10 @@ export const appSideBarGroupsLabelImpl = [
     TriggerIcon: TagsIcon,
     triggerText: "Etiquetas",
     items: sidebarLabelItensImpl,
+  },
+  {
+    TriggerIcon: Trash2Icon,
+    triggerText: "Deletados",
+    items: sidebarDeleteItensImpl,
   },
 ] satisfies AppSideBarGroupItems[];
