@@ -4,7 +4,7 @@ import { jwtVerify } from "jose";
 const SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
 export async function middleware(request: NextRequest) {
-  const token = request.cookies.get("jwt")?.value;
+  const token = request.cookies.get("Jwt")?.value;
   const { pathname } = request.nextUrl;
 
   if (!token) {
