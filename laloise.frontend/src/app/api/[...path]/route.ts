@@ -1,7 +1,6 @@
 import { NextRequest } from "next/server";
 
-const BACKEND_URL =
-  process.env.BACKEND_URL ?? "https://lalouise-backend-latest.onrender.com";
+const BACKEND_URL = process.env.BACKEND_URL;
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";

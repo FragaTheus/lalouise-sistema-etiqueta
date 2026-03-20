@@ -15,7 +15,6 @@ export const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error: AxiosError<HandlerResponse<null>>) => {
-    // Sem resposta do servidor: proxy ou rede inacessível
     if (!error.response) {
       console.error("[api] Network error — backend ou proxy indisponível:", error.message);
       return Promise.reject(error);

@@ -20,10 +20,10 @@ export type UpdateUserPayload = {
 };
 
 export async function getMe(): Promise<PerfilInfo> {
-    const response = await api.get<PerfilInfo>("/users/me");
+    const response = await api.get<PerfilInfo>("/me");
     return response.data;
 }
 
 export async function updatePerfilMe(request: UpdatePerfilRequest): Promise<void> {
-    await api.patch("/users/me", request);
+    await api.patch("/me", request);
 }

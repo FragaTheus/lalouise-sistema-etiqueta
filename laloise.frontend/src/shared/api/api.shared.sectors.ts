@@ -14,7 +14,7 @@ function hasStoragesMePayload(
 
 export const getMyStorages = async (): Promise<StorageType[]> => {
   const { data } = await api.get<StorageType[] | StoragesMeResponse>(
-    "/sectors/storages/me",
+    "/me/storages",
   );
 
   if (hasStoragesMePayload(data)) {
@@ -25,11 +25,3 @@ export const getMyStorages = async (): Promise<StorageType[]> => {
   return data;
 };
 
-export const getStoragesBySectorId = async (
-  sectorId: string,
-): Promise<StorageType[]> => {
-  const { data } = await api.get<StorageType[]>(
-    `/sectors/${sectorId}/storages`,
-  );
-  return data;
-};
