@@ -19,10 +19,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  const roles = payload.roles as string[];
+  const role = payload.role as string;
 
-  if (roles.includes("ROLE_ADMIN")) {
-    return NextResponse.next();
+  if (role === "ROLE_ADMIN") {
+   return NextResponse.next();
   }
 
   if (pathname !== "/painel/etiquetas/imprimir") {
